@@ -5,7 +5,6 @@ import {
   TextInput,
   FlatList,
   Button,
-  ImageBackground,
   Dimensions,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
@@ -53,24 +52,9 @@ function Recipes() {
     <>
       <StatusBar style="light" />
 
-      <LinearGradient
-        colors={[Colors.saumon, Colors.middlebrown, Colors.lightbrown]}
-        style={styles.appContainer}
-      >
-        <ImageBackground
-          source={require("../assets/images/booksBackground.jpg")}
-          style={styles.appBackground}
-          imageStyle={styles.backgroundImage}
-        >
-          <View style={styles.firstScreen}>
-            <View style={[styles.month, styles.book]}>
-              <Text>{fetchedMessage}</Text>
-              <Text>Månadens bok:</Text>
-              <BookClubEvent onCreateEvent />
-            </View>
-          </View>
-        </ImageBackground>
-      </LinearGradient>
+      <View style={styles.firstScreen}>
+        <View style={[styles.month, styles.book]}></View>
+      </View>
     </>
   );
 }
@@ -80,11 +64,10 @@ export default Recipes;
 const deviceWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
-  appContainer: {
-    flex: 1,
-    backgroundColor: "#A6C48A",
-  },
+  appContainer: {},
   firstScreen: {
+    flex: 1,
+    backgroundColor: Colors.blue,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 24,

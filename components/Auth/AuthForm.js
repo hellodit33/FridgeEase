@@ -8,13 +8,13 @@ import { notInitialized } from "react-redux/es/utils/useSyncExternalStore";
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   const [enteredEmail, setEnteredEmail] = useState("");
-  const [enteredConfirmEmail, setEnteredConfirmEmail] = useState("");
+
   const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
 
   const {
     email: emailIsInvalid,
-    confirmEmail: emailsDontMatch,
+
     password: passwordIsInvalid,
     confirmPassword: passwordsDontMatch,
   } = credentialsInvalid;
@@ -24,9 +24,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
       case "email":
         setEnteredEmail(enteredValue);
         break;
-      case "confirmEmail":
-        setEnteredConfirmEmail(enteredValue);
-        break;
+
       case "password":
         setEnteredPassword(enteredValue);
         break;
@@ -39,7 +37,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   function submitHandler() {
     onSubmit({
       email: enteredEmail,
-      confirmEmail: enteredConfirmEmail,
+
       password: enteredPassword,
       confirmPassword: enteredConfirmPassword,
     });
@@ -69,18 +67,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
           placeholder="exempel@gmail.com"
           placeholderTextColor={Colors.green}
         />
-        {!isLogin && (
-          <Input
-            style={styles.input}
-            label="Confirm Email Address"
-            onUpdateValue={updateInputValueHandler.bind(this, "confirmEmail")}
-            value={enteredConfirmEmail}
-            keyboardType="email-address"
-            isInvalid={emailsDontMatch}
-            placeholder="exempel@gmail.com"
-            placeholderTextColor={Colors.green}
-          />
-        )}
+
         <Input
           style={styles.input}
           label="Lösenord"
@@ -98,7 +85,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         )}
         {!isLogin && (
           <Input
-            label="Confirm Password"
+            label="Bekräfta ditt lösenord"
             onUpdateValue={updateInputValueHandler.bind(
               this,
               "confirmPassword"
@@ -112,7 +99,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         )}
         <View style={styles.buttons}>
           <FlatButton onPress={submitHandler} style={styles.flatbutton}>
-            {isLogin ? "Logga In" : "Bli medlem"}
+            {isLogin ? "Logga in" : "Bli medlem"}
           </FlatButton>
         </View>
       </View>

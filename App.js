@@ -10,9 +10,10 @@ import {
   View,
   FlatList,
   Button,
-  ImageBackground,
   Dimensions,
+  Image,
 } from "react-native";
+import Colors from "./constants/Colors";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
@@ -27,7 +28,6 @@ import Fridge from "./screens/Fridge";
 import Shopping from "./screens/Shopping";
 
 import ToReadContextProvider from "./store/context/toread-context";
-import Colors from "./constants/Colors";
 import IconButton from "./components/IconButton";
 
 import User from "./screens/User";
@@ -43,6 +43,7 @@ import QuoteDetails from "./screens/QuoteDetails";
 import Profile from "./screens/Profile";
 import RecipesDetails from "./screens/RecipesDetails";
 import RecipesOverview from "./screens/RecipesOverview";
+import { ColorSpace } from "react-native-reanimated";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -73,33 +74,31 @@ function BottomNav() {
 
   return (
     <BottomTabs.Navigator
+      initialRouteName="Fridge"
       screenOptions={({ navigation }) => ({
+        headerTitle: () => (
+          <Image style={styles.image} source={require("./assets/icon2.png")} />
+        ),
+        headerTitleAlign: "center",
+
         headerStyle: { backgroundColor: Colors.blue },
         headerTintColor: "white",
-        tabBarStyle: { backgroundColor: Colors.green },
+        tabBarStyle: { backgroundColor: Colors.blue },
         tabBarActiveTintColor: Colors.green,
         tabBarInactiveTintColor: Colors.green,
-        headerRight: () => (
-          <View style={styles.headerRight}>
-            <IconButton
-              icon="person"
-              size={20}
-              color={Colors.green}
-              onPress={() => {
-                navigation.navigate("User");
-              }}
-            />
-
-            <IconButton
-              icon="log-out"
-              size={20}
-              color={Colors.green}
-              onPress={authCtx.logout}
-            />
-          </View>
-        ),
+        tabBarActiveBackgroundColor: Colors.darkblue,
       })}
     >
+      <BottomTabs.Screen
+        name="Fridge"
+        component={Fridge}
+        options={{
+          title: "Mitt kylskåp",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="restaurant-outline" size={size} color={color} />
+          ),
+        }}
+      ></BottomTabs.Screen>
       <BottomTabs.Screen
         name="Recipes"
         component={Recipes}
@@ -107,20 +106,10 @@ function BottomNav() {
           title: "Recept",
           tabBarLabel: "Recept",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="food" size={size} color={color} />
+            <Ionicons name="pizza-outline" size={size} color={color} />
           ),
         }}
       />
-      <BottomTabs.Screen
-        name="Fridge"
-        component={Fridge}
-        options={{
-          title: "Mitt kylskåp",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="fridge" size={size} color={color} />
-          ),
-        }}
-      ></BottomTabs.Screen>
 
       <BottomTabs.Screen
         name="Shopping"
@@ -128,7 +117,7 @@ function BottomNav() {
         options={{
           title: "Inköpslista",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar" size={size} color={color} />
+            <Ionicons name="list-outline" size={size} color={color} />
           ),
         }}
       ></BottomTabs.Screen>
@@ -139,7 +128,7 @@ function BottomNav() {
         options={{
           title: "Min sida",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="book" size={size} color={color} />
+            <Ionicons name="person" size={size} color={color} />
           ),
         }}
       ></BottomTabs.Screen>
@@ -293,8 +282,10 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  headerRight: {
-    flexDirection: "row",
-    paddingRight: 5,
+  image: {
+    resizeMode: "contain",
+    width: 100,
+    height: 400,
+    flex: 1,
   },
 });

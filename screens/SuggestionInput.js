@@ -74,9 +74,7 @@ function SuggestionInput(props) {
               </PrimaryButton>
             </View>
             <View style={styles.button}>
-              <PrimaryButton onPress={props.closeModal}>
-                Avbryt ⬅️
-              </PrimaryButton>
+              <PrimaryButton>Avbryt ⬅️</PrimaryButton>
             </View>
           </View>
         </View>

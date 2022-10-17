@@ -91,14 +91,7 @@ function BookClubLocation({ onPickLocation }) {
     <View>
       <View style={styles.mapPreview}>{locationPreview}</View>
 
-      <View style={styles.actions}>
-        <OutlinedButton icon="location" onPress={geoLocationHandler}>
-          Ändra plats till bokklubben
-        </OutlinedButton>
-        <OutlinedButton onPress={pickOnMapHandler} icon="map">
-          Välj på kartan
-        </OutlinedButton>
-      </View>
+      <View style={styles.actions}></View>
     </View>
   );
 }
