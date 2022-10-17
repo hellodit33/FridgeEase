@@ -4,6 +4,15 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {
+  faHouseChimneyUser,
+  faUtensils,
+  faCartShopping,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import {} from "@fortawesome/free-solid-svg-icons";
+
 import {
   StyleSheet,
   Text,
@@ -94,8 +103,12 @@ function BottomNav() {
         component={Fridge}
         options={{
           title: "Mitt kylskåp",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="restaurant-outline" size={size} color={color} />
+          tabBarIcon: () => (
+            <FontAwesomeIcon
+              icon={faHouseChimneyUser}
+              color={Colors.green}
+              size={24}
+            />
           ),
         }}
       ></BottomTabs.Screen>
@@ -106,7 +119,7 @@ function BottomNav() {
           title: "Recept",
           tabBarLabel: "Recept",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="pizza-outline" size={size} color={color} />
+            <FontAwesomeIcon icon={faUtensils} color={Colors.green} size={24} />
           ),
         }}
       />
@@ -117,7 +130,11 @@ function BottomNav() {
         options={{
           title: "Inköpslista",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list-outline" size={size} color={color} />
+            <FontAwesomeIcon
+              icon={faCartShopping}
+              color={Colors.green}
+              size={24}
+            />
           ),
         }}
       ></BottomTabs.Screen>
@@ -128,7 +145,7 @@ function BottomNav() {
         options={{
           title: "Min sida",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
+            <FontAwesomeIcon icon={faUser} color={Colors.green} size={24} />
           ),
         }}
       ></BottomTabs.Screen>
