@@ -28,31 +28,30 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 
-import SuggestionItem from "./screens/SuggestionItem";
-import SuggestionInput from "./screens/SuggestionInput";
-import YearsScreen from "./screens/Shopping";
-import BooksOverviewScreen from "./screens/RecipesOverview";
-import Recipes from "./screens/Recipes";
-import Fridge from "./screens/Fridge";
-import Shopping from "./screens/Shopping";
+import SuggestionItem from "./src/screens/SuggestionItem";
+import SuggestionInput from "./src/screens/SuggestionInput";
+import Shopping from "./src/screens/Shopping";
+import RecipesOverview from "./src/screens/RecipesOverview";
+import Recipes from "./src/screens/Recipes";
+import Fridge from "./src/screens/Fridge";
 
-import ToReadContextProvider from "./store/context/toread-context";
-import IconButton from "./components/IconButton";
+import FavoritesContextProvider from "./store/context/favorites-context";
+import IconButton from "./src/components/IcoButton";
 
-import User from "./screens/User";
-import RateItem from "./screens/RateItem";
-import LoginScreen from "./screens/LoginScreen";
-import SignupScreen from "./screens/SignupScreen";
+import User from "./src/screens/User";
+import RateItem from "./src/screens/RateItem";
+import LoginScreen from "./src/screens/LoginScreen";
+import SignupScreen from "./src/screens/SignupScreen";
 import AuthContextProvider, { AuthContext } from "./store/context/auth-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import AddQuote from "./screens/AddQuote";
-import AllQuotes from "./screens/AllQuotes";
-import Map from "./screens/Map";
-import QuoteDetails from "./screens/QuoteDetails";
-import Profile from "./screens/Profile";
-import RecipesDetails from "./screens/RecipesDetails";
-import RecipesOverview from "./screens/RecipesOverview";
+import AddQuote from "./src/screens/AddQuote";
+import AllQuotes from "./src/screens/AllQuotes";
+import Map from "./src/screens/Map";
+import QuoteDetails from "./src/screens/QuoteDetails";
+import Profile from "./src/screens/Profile";
+import RecipesDetails from "./src/screens/RecipesDetails";
 import { ColorSpace } from "react-native-reanimated";
+import Header from "./src/components/Header";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -85,9 +84,6 @@ function BottomNav() {
     <BottomTabs.Navigator
       initialRouteName="Fridge"
       screenOptions={({ navigation }) => ({
-        headerTitle: () => (
-          <Image style={styles.image} source={require("./assets/icon2.png")} />
-        ),
         headerTitleAlign: "center",
 
         headerStyle: { backgroundColor: Colors.blue },
@@ -102,7 +98,8 @@ function BottomNav() {
         name="Fridge"
         component={Fridge}
         options={{
-          title: "Mitt kylskåp",
+          headerTitle: () => <Header title="Mitt kylskåp" />,
+          headerStyle: { backgroundColor: Colors.blue },
           tabBarIcon: () => (
             <FontAwesomeIcon
               icon={faHouseChimneyUser}
@@ -116,9 +113,8 @@ function BottomNav() {
         name="Recipes"
         component={Recipes}
         options={{
-          title: "Recept",
-          tabBarLabel: "Recept",
-          tabBarIcon: ({ color, size }) => (
+          headerTitle: () => <Header title="Recept" />,
+          tabBarIcon: () => (
             <FontAwesomeIcon icon={faUtensils} color={Colors.green} size={24} />
           ),
         }}
@@ -128,7 +124,7 @@ function BottomNav() {
         name="Shopping"
         component={Shopping}
         options={{
-          title: "Inköpslista",
+          headerTitle: () => <Header title="Min inköpslista" />,
           tabBarIcon: ({ color, size }) => (
             <FontAwesomeIcon
               icon={faCartShopping}
@@ -143,7 +139,7 @@ function BottomNav() {
         name="Profile"
         component={Profile}
         options={{
-          title: "Min sida",
+          headerTitle: () => <Header title="Min sida" />,
           tabBarIcon: ({ color, size }) => (
             <FontAwesomeIcon icon={faUser} color={Colors.green} size={24} />
           ),
@@ -156,7 +152,7 @@ function DrawerNavigator() {
   return (
     <Drawer.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: "purple" },
+        headerStyle: { backgroundColor: Colors.blue },
         headerTintColor: "grey",
         sceneContainerStyle: { backgroundColor: "white" },
         drawerContentStyle: { backgroundColor: "white" },
@@ -193,15 +189,16 @@ function AuthenticatedStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: Colors.green },
-        headerTintColor: "white",
-        contentStyle: { backgroundColor: Colors.green },
+        headerStyle: { backgroundColor: Colors.blue },
+
+        contentStyle: { backgroundColor: Colors.blue },
       }}
     >
       <Stack.Screen
         name="BottomTabss"
         component={BottomNav}
         options={{
+          headerStyle: { backgroundColor: Colors.blue },
           headerShown: false,
         }}
       />
@@ -258,12 +255,12 @@ function AuthenticatedStack() {
 function Navigation() {
   const authCtx = useContext(AuthContext);
   return (
-    <ToReadContextProvider>
+    <FavoritesContextProvider>
       <NavigationContainer>
         {!authCtx.isAuthenticated && <AuthStack />}
         {authCtx.isAuthenticated && <AuthenticatedStack />}
       </NavigationContainer>
-    </ToReadContextProvider>
+    </FavoritesContextProvider>
   );
 }
 
@@ -299,10 +296,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  image: {
-    resizeMode: "contain",
-    width: 100,
-    height: 400,
-    flex: 1,
+  root: {
+    backgroundColor: Colors.blue,
   },
 });
