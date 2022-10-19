@@ -5,6 +5,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+
+import { store } from "./store/redux/store";
+import { Provider } from "react-redux";
+
 import {
   faHouseChimneyUser,
   faUtensils,
@@ -288,9 +292,11 @@ export default function App() {
   return (
     <>
       <StatusBar style="dark" />
-      <AuthContextProvider>
-        <Root />
-      </AuthContextProvider>
+      <Provider store={store}>
+        <AuthContextProvider>
+          <Root />
+        </AuthContextProvider>
+      </Provider>
     </>
   );
 }

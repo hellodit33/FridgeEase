@@ -10,8 +10,6 @@ import {
 import { StatusBar } from "expo-status-bar";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
-import { AppLoading } from "expo";
-import * as Font from "expo-font";
 
 import SuggestionItem from "./SuggestionItem";
 import SuggestionInput from "./SuggestionInput";

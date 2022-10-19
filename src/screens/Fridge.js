@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Colors from "../../constants/Colors";
+import { useFonts } from "expo-font";
 
 import {
   View,
@@ -186,11 +187,9 @@ function Fridge() {
               paddingLeft: 5,
               marginRight: 12,
               fontSize: 18,
-              fontFamily: "inter-bold",
               fontWeight: "bold",
               color: Colors.green,
               textDecorationStyle: "solid",
-
               textDecorationColor: Colors.darkpink,
               textDecorationLine:
                 selectedCategory?.id == item.id ? "underline" : "none",
@@ -277,6 +276,17 @@ function Fridge() {
       />
     );
   }
+  const [loaded] = useFonts({
+    alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
+    Intermedium: require("../../assets/fonts/Inter-Medium.ttf"),
+    Interbold: require("../../assets/fonts/Inter-Bold.ttf"),
+    Interlight: require("../../assets/fonts/Inter-Light.ttf"),
+  });
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <View>
       <View style={styles.main}>{renderFoodCategories()}</View>
@@ -326,12 +336,14 @@ const styles = StyleSheet.create({
   main: {
     backgroundColor: Colors.blue,
     paddingTop: 5,
+    fontFamily: "Interbold",
 
     justifyContent: "center",
     alignItems: "center",
   },
   fridge: {
     backgroundColor: Colors.blue,
+    fontFamily: "Intermedium",
   },
   addFood: {
     backgroundColor: "white",
@@ -342,6 +354,7 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: Colors.green,
     flexDirection: "row",
+    fontFamily: "Interlight",
   },
   addFoodInput: {
     fontSize: 15,
