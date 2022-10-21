@@ -52,10 +52,14 @@ import AddQuote from "./src/screens/AddQuote";
 import AllQuotes from "./src/screens/AllQuotes";
 import Map from "./src/screens/Map";
 import QuoteDetails from "./src/screens/QuoteDetails";
-import Profile from "./src/screens/Profile";
+import FavoriteRecipes from "./src/screens/FavoriteRecipes";
 import RecipesDetails from "./src/screens/RecipesDetails";
 import { ColorSpace } from "react-native-reanimated";
 import Header from "./src/components/Header";
+import FoodDetails from "./src/components/FoodDetails";
+import Diets from "./src/screens/Diets";
+
+import Allergies from "./src/screens/Allergies";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -141,7 +145,7 @@ function BottomNav() {
 
       <BottomTabs.Screen
         name="Profile"
-        component={Profile}
+        component={User}
         options={{
           headerTitle: () => <Header title="Min sida" />,
           tabBarIcon: ({ color, size }) => (
@@ -242,15 +246,33 @@ function AuthenticatedStack() {
           ),
         })}
       />
-      <Stack.Screen
-        name="Map"
-        component={Map}
-        options={{ title: "Bokklubbens plats" }}
-      />
+
       <Stack.Screen
         name="QuoteDetails"
         component={QuoteDetails}
         options={{ title: "Citatet" }}
+      />
+
+      <Stack.Screen
+        name="FavoriteRecipes"
+        component={FavoriteRecipes}
+        options={{ title: "Mina favoritrecept" }}
+      />
+      <Stack.Screen
+        name="Diets"
+        component={Diets}
+        options={{ title: "Mina dieter" }}
+      />
+      <Stack.Screen
+        name="Allergies"
+        component={Allergies}
+        options={{ title: "Mina allergier" }}
+      />
+
+      <Stack.Screen
+        name="FoodDetails"
+        component={FoodDetails}
+        options={{ title: "Food Details" }}
       />
     </Stack.Navigator>
   );

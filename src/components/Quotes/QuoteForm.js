@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Text, View, ScrollView, TextInput } from "react-native";
 import { Quote } from "../../models/quote";
 import FlatButton from "../../UI/FlatButton";
-import LocationPicker from "../BookclubEvent/BookClubLocation";
 import ImagePicker from "./ImagePicker";
 
 function QuoteForm({ onCreateQuote, bookToRate }) {

@@ -5,7 +5,7 @@ import { RECIPES } from "../data/data";
 import { FavoritesContext } from "../../store/context/favorites-context";
 import Colors from "../../constants/Colors";
 
-function Profile() {
+function FavoriteRecipes(props) {
   const favoriteCtx = useContext(FavoritesContext);
 
   const favoriteRecipes = RECIPES.filter((favorite) =>
@@ -22,7 +22,7 @@ function Profile() {
   return <BooksList items={favoriteRecipes} />;
 }
 
-export default Profile;
+export default FavoriteRecipes;
 
 const styles = StyleSheet.create({
   main: {

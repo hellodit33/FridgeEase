@@ -3,13 +3,15 @@ import Colors from "../../constants/Colors";
 
 function Header(props) {
   return (
-    <View style={styles.header}>
-      <Image
-        style={styles.image}
-        source={require("../.././assets/icon2.png")}
-      />
-      <Text style={styles.text}>{props.title}</Text>
-    </View>
+    <>
+      <View style={styles.header}>
+        <Image
+          style={styles.image}
+          source={require("../.././assets/icon2.png")}
+        />
+        <Text style={styles.text}>{props.title}</Text>
+      </View>
+    </>
   );
 }
 
@@ -20,17 +22,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
+    paddingTop: 20,
     backgroundColor: Colors.blue,
   },
   text: {
     fontSize: 20,
     backgroundColor: Colors.blue,
-    color: Colors.darkpink,
+    color: Colors.green,
     fontWeight: "bold",
+    borderBottomWidth: 3,
+    borderColor: Colors.green,
   },
   image: {
     resizeMode: "cover",
-    width: 80,
+    width: 100,
     height: 50,
   },
 });

@@ -18,8 +18,9 @@ import SuggestionItem from "./SuggestionItem";
 import { storeSuggestions } from "../util/http";
 import { Ionicons } from "@expo/vector-icons";
 import AppLoading from "expo-app-loading";
+import FoodComponents from "../components/FoodComponents";
 
-function Fridge() {
+function Fridge(props) {
   const categoryData = [
     {
       id: 1,
@@ -305,7 +306,7 @@ function Fridge() {
             />
           </View>
         </View>
-        {renderFoodList()}
+        <FoodComponents navigation={props.navigation} />
         <View style={styles.list}>
           <FlatList
             data={suggestionsList}
