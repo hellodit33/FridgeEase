@@ -5,8 +5,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { legacy_createStore as createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 
-import { store } from "./store/redux/store";
+import { rootReducer } from "./store/redux/store";
 import { Provider } from "react-redux";
 
 import {
@@ -63,6 +66,11 @@ import Allergies from "./src/screens/Allergies";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
+
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 
 function AuthStack() {
   return (

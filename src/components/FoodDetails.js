@@ -1,9 +1,16 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Button } from "react-native";
 
 function FoodDetails() {
   return (
     <View>
-      <Text>Food Details</Text>
+      <View style={StyleSheet.firstview}>
+        <Text>Title</Text>
+        <Text>Expiration</Text>
+      </View>
+      <Text>Date</Text>
+      <Text>Carbon</Text>
+      <Text>Carbon footprint class</Text>
+      <Button title="Spara"></Button>
     </View>
   );
 }
