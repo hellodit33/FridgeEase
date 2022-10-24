@@ -1,16 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import axios from "axios";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { legacy_createStore as createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import { composeWithDevTools } from "redux-devtools-extension";
-
-import { rootReducer } from "./store/redux/store";
-import { Provider } from "react-redux";
 
 import {
   faHouseChimneyUser,
@@ -30,9 +25,6 @@ import {
   Image,
 } from "react-native";
 import Colors from "./constants/Colors";
-import { StatusBar } from "expo-status-bar";
-import { LinearGradient } from "expo-linear-gradient";
-import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 
 import SuggestionItem from "./src/screens/SuggestionItem";
@@ -49,7 +41,7 @@ import User from "./src/screens/User";
 import RateItem from "./src/screens/RateItem";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignupScreen";
-import AuthContextProvider, { AuthContext } from "./store/context/auth-context";
+import { AuthContext } from "./store/context/auth-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AddQuote from "./src/screens/AddQuote";
 import AllQuotes from "./src/screens/AllQuotes";
@@ -57,7 +49,6 @@ import Map from "./src/screens/Map";
 import QuoteDetails from "./src/screens/QuoteDetails";
 import FavoriteRecipes from "./src/screens/FavoriteRecipes";
 import RecipesDetails from "./src/screens/RecipesDetails";
-import { ColorSpace } from "react-native-reanimated";
 import Header from "./src/components/Header";
 import FoodDetails from "./src/components/FoodDetails";
 import Diets from "./src/screens/Diets";
@@ -66,11 +57,6 @@ import Allergies from "./src/screens/Allergies";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
-
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(applyMiddleware(thunk))
-);
 
 function AuthStack() {
   return (
@@ -298,7 +284,7 @@ function Navigation() {
   );
 }
 
-function Root() {
+export function Root() {
   const [isTryingLogin, setIsTryingLogin] = useState(true);
   const authCtx = useContext(AuthContext);
   useEffect(() => {
@@ -317,18 +303,6 @@ function Root() {
     return <AppLoading />;
   }
   return <Navigation />;
-}
-export default function App() {
-  return (
-    <>
-      <StatusBar style="dark" />
-      <Provider store={store}>
-        <AuthContextProvider>
-          <Root />
-        </AuthContextProvider>
-      </Provider>
-    </>
-  );
 }
 
 const styles = StyleSheet.create({

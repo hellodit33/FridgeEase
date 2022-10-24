@@ -1,8 +1,9 @@
-const express = require("express");
 const { check, validationResult } = require("express-validator");
-const Fridge = require("../models/Fridge");
 
-const router = express.Router();
+const router = require("express").Router();
+const fridgeController = require("../controllers/fridge.controller");
+
+const Fridge = require("../models/fridge.model");
 
 const validate = [
   check("title")
@@ -25,6 +26,8 @@ const validate = [
     .withMessage("Expiration should be between 3 to 25 characters"),
 ];
 
+router.get("/", fridgeController.readFood);
+
 router.post("/", validate, (req, res) => {
   const errors = validationResult(req);
 
@@ -46,14 +49,6 @@ router.post("/", validate, (req, res) => {
         message: "Fridge Data Created Successfully",
         data: result,
       });
-    })
-    .catch((err) => console.log(err));
-});
-
-router.get("/", (req, res) => {
-  Fridge.find()
-    .then((fridges) => {
-      res.send(fridges);
     })
     .catch((err) => console.log(err));
 });

@@ -8,4 +8,4 @@ var FridgeSchema = new mongoose.Schema({
   quantity: { type: Number, required: true },
 });
 
-module.exports = mongoose.model("Fridge", FridgeSchema);
+module.exports = mongoose.model("fridge", FridgeSchema);

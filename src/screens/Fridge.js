@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Colors from "../../constants/Colors";
 import { useFonts } from "expo-font";
-
 import {
   View,
   Button,
