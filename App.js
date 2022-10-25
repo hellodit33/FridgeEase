@@ -41,7 +41,7 @@ import User from "./src/screens/User";
 import RateItem from "./src/screens/RateItem";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignupScreen";
-import { AuthContext } from "./store/context/auth-context";
+import AuthContextProvider, { AuthContext } from "./store/context/auth-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AddQuote from "./src/screens/AddQuote";
 import AllQuotes from "./src/screens/AllQuotes";

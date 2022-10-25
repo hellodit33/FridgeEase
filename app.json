@@ -3,7 +3,7 @@
     "name": "FridgeEase",
     "slug": "FridgeEase",
     "version": "1.0.0",
-    "icon": "./assets/icon2.png",
+    "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash2.png",
       "resizeMode": "cover",
@@ -27,10 +27,6 @@
       "favicon": "./assets/favicon.png"
     },
 
-    "extra": {
-      "eas": {
-        "projectId": "48bbb4f4-4b2d-4c1a-8b51-1fac6e634bb8"
-      }
-    }
+    "extra": {}
   }
 }
