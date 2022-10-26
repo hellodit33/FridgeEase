@@ -11,6 +11,7 @@ import {
   TextInput,
   SafeAreaView,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import SuggestionInput from "./SuggestionInput";
 import SuggestionItem from "./SuggestionItem";
@@ -63,107 +64,8 @@ function Fridge(props) {
     },
   ];
 
-  // price rating
-  const affordable = 1;
-  const fairPrice = 2;
-  const expensive = 3;
-
-  const foodData = [
-    {
-      id: 1,
-      name: "Spenat",
-      categories: [2],
-      expiration: 1,
-      carbon: 300,
-      climate: 2,
-    },
-
-    {
-      id: 2,
-      name: "Morötter",
-      categories: [2],
-      expiration: 3,
-      carbon: 300,
-      climate: 2,
-    },
-    {
-      id: 3,
-      name: "Ägg",
-      categories: [4],
-      expiration: 1,
-      carbon: 300,
-      climate: 2,
-    },
-    {
-      id: 4,
-      name: "Mjölk",
-      categories: [4],
-      expiration: 4,
-      carbon: 300,
-      climate: 2,
-    },
-    {
-      id: 5,
-      name: "Grädde",
-      categories: [4],
-      expiration: 1,
-      carbon: 300,
-      climate: 2,
-    },
-    {
-      id: 6,
-      name: "Ost",
-      categories: [4],
-      expiration: 1,
-      carbon: 300,
-      climate: 2,
-    },
-    {
-      id: 7,
-      name: "Kyckling",
-      categories: [5],
-      expiration: 1,
-      carbon: 300,
-      climate: 2,
-    },
-    {
-      id: 8,
-      name: "Smör",
-      categories: [4],
-      expiration: 1,
-      carbon: 300,
-      climate: 2,
-    },
-    {
-      id: 9,
-      name: "Bröd",
-      categories: [6],
-      expiration: 1,
-      carbon: 300,
-      climate: 2,
-    },
-  ];
-
   const [categories, setCategories] = useState(categoryData);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [food, setFood] = useState(foodData);
-
-  function onSelectCategory(category) {
-    //filter restaurant
-    let foodList = foodData.filter((a) => a.categories.includes(category.id));
-
-    setFood(foodList);
-
-    setSelectedCategory(category);
-  }
-
-  function getCategoryNameById(id) {
-    let category = categories.filter((a) => a.id == id);
-
-    if (category.length > 0) return category[0].name;
-
-    return "";
-  }
 
   const [suggestionsList, setSuggestionsList] = useState([]);
 
@@ -180,7 +82,6 @@ function Fridge(props) {
             alignItems: "center",
             justifyContent: "center",
           }}
-          onPress={() => onSelectCategory(item)}
         >
           <Text
             style={{
@@ -212,70 +113,6 @@ function Fridge(props) {
     );
   }
 
-  function renderFoodList() {
-    const renderItem = ({ item }) => (
-      <TouchableOpacity
-        style={{}}
-        onPress={() => {
-          /* navigation.navigate("Food", {
-            item,
-            currentLocation,
-          })*/
-        }}
-      >
-        {/* Image */}
-        <View
-          style={{
-            marginBottom: 4,
-          }}
-        >
-          <Text>{item.expiration} dagar</Text>
-        </View>
-
-        {/* Restaurant Info */}
-        <Text>{item.name}</Text>
-
-        <View
-          style={{
-            marginTop: 4,
-            flexDirection: "column",
-          }}
-        >
-          {/* Rating */}
-
-          <Text>{item.carbon}</Text>
-
-          {/* Categories */}
-          <View
-            style={{
-              flexDirection: "column",
-              marginLeft: 10,
-            }}
-          >
-            {item.categories.map((categoryId) => {
-              return (
-                <View style={{ flexDirection: "row" }} key={categoryId}>
-                  <Text>{getCategoryNameById(categoryId)}</Text>
-                </View>
-              );
-            })}
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-
-    return (
-      <FlatList
-        data={food}
-        keyExtractor={(item) => `${item.id}`}
-        renderItem={renderItem}
-        contentContainerStyle={{
-          paddingHorizontal: 4,
-          paddingBottom: 30,
-        }}
-      />
-    );
-  }
   const [loaded] = useFonts({
     alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
     Intermedium: require("../../assets/fonts/Inter-Medium.ttf"),
@@ -288,8 +125,10 @@ function Fridge(props) {
   }
 
   return (
-    <View>
-      <View style={styles.main}>{renderFoodCategories()}</View>
+    <>
+      <View>
+        <View style={styles.main}>{renderFoodCategories()}</View>
+      </View>
       <View style={styles.fridge}>
         <View style={styles.addFood}>
           <View style={styles.addFoodIcon}>
@@ -305,39 +144,20 @@ function Fridge(props) {
             />
           </View>
         </View>
-        <FoodComponents navigation={props.navigation} />
-        <View style={styles.list}>
-          <FlatList
-            data={suggestionsList}
-            alwaysBounceVertical={false}
-            renderItem={(itemData) => {
-              return (
-                <SuggestionItem
-                  text={itemData.item.text}
-                  onDeleteItem={deleteSuggestionHandler}
-                  id={itemData.item.id}
-                />
-              );
-            }}
-            keyExtractor={(item, index) => {
-              return item.id;
-            }}
-          ></FlatList>
-        </View>
       </View>
-    </View>
+      <View style={{ flex: 1 }}>
+        <FoodComponents navigation={props.navigation} />
+      </View>
+    </>
   );
 }
 
 export default Fridge;
-const deviceWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   main: {
     backgroundColor: Colors.blue,
-    paddingTop: 5,
     fontFamily: "Interbold",
-
     justifyContent: "center",
     alignItems: "center",
   },

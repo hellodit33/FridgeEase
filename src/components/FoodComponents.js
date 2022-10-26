@@ -2,10 +2,12 @@ import {
   StyleSheet,
   ScrollView,
   Image,
+  Checkbox,
   View,
   Text,
   Pressable,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 
 import * as fridgeAction from "../../store/redux/actions/fridge.actions";
@@ -30,20 +32,20 @@ function FoodComponents(props) {
 
   //<Pressable onPress={FoodDetails}></Pressable>*/
   return (
-    <View scrollToOverflowEnabled={true}>
+    <View>
       <FlatList
-        data={foodsLists}
+        contentContainerStyle={styles.foodList}
         numColumns={3}
-        scrollToOverflowEnabled={true}
-        nestedScrollEnabled={true}
-        style={styles.foodList}
+        data={foodsLists}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <View style={styles.food}>
-            <View style={styles.textContainer}>
-              <Text style={styles.item}>{item.title}</Text>
-            </View>
-
+          <Pressable
+            onPress={() => console.log("press")}
+            style={({ pressed }) => [
+              { borderWidth: pressed ? 4 : 2 },
+              styles.food,
+            ]}
+          >
             <View style={styles.imageContainer}>
               <Image
                 style={styles.image}
@@ -54,7 +56,10 @@ function FoodComponents(props) {
                 }}
               ></Image>
             </View>
-          </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.item}>{item.title}</Text>
+            </View>
+          </Pressable>
         )}
       ></FlatList>
     </View>
@@ -65,7 +70,9 @@ export default FoodComponents;
 
 const styles = StyleSheet.create({
   foodList: {
-    marginHorizontal: 20,
+    backgroundColor: Colors.blue,
+    alignItems: "center",
+    paddingVertical: 10,
   },
   food: {
     height: 90,
@@ -77,8 +84,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 30,
     borderColor: Colors.green,
-    borderWidth: 2,
   },
+
   textContainer: {
     justifyContent: "space-evenly",
 
@@ -87,6 +94,7 @@ const styles = StyleSheet.create({
   item: {
     fontWeight: "bold",
     textAlign: "center",
+
     color: Colors.green,
   },
   imageContainer: {

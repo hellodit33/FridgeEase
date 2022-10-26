@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: "center",
     alignItems: "center",
-    flex: 1,
     paddingTop: 20,
+    marginBottom: 10,
     backgroundColor: Colors.blue,
   },
   text: {
