@@ -48,7 +48,9 @@ function FoodComponents(props) {
               <Image
                 style={styles.image}
                 source={{
-                  uri: item.logo,
+                  uri:
+                    "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                    item.logo,
                 }}
               ></Image>
             </View>
