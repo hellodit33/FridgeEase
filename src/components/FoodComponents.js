@@ -1,6 +1,7 @@
 import {
   StyleSheet,
   ScrollView,
+  Button,
   Image,
   Checkbox,
   View,
@@ -25,12 +26,22 @@ function FoodComponents(props) {
   fridge();*/
   const dispatch = useDispatch();
   const foodsLists = useSelector((state) => state.intoFridgeReducer);
-  console.log(foodsLists);
-  /*function FoodDetails() {
+
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  const handlePress = (food) => {
+    if (selectedItems.includes(food._id)) {
+      const newListItem = selectedItems.filter((foodId) => foodId !== food._id);
+
+      return setSelectedItems(newListItem);
+    }
+    setSelectedItems([...selectedItems, food._id]);
+  };
+
+  function FoodDetails() {
     props.navigation.navigate("FoodDetails");
   }
 
-  //<Pressable onPress={FoodDetails}></Pressable>*/
   return (
     <View>
       <FlatList
@@ -40,28 +51,37 @@ function FoodComponents(props) {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <Pressable
-            onPress={() => console.log("press")}
-            style={({ pressed }) => [
-              { borderWidth: pressed ? 4 : 2 },
-              styles.food,
-            ]}
+            onLongPress={FoodDetails}
+            onPress={() => handlePress(item)}
           >
-            <View style={styles.imageContainer}>
-              <Image
-                style={styles.image}
-                source={{
-                  uri:
-                    "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
-                    item.logo,
-                }}
-              ></Image>
+            <View style={styles.food}>
+              <View style={styles.imageContainer}>
+                <Image
+                  style={styles.image}
+                  source={{
+                    uri:
+                      "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                      item.logo,
+                  }}
+                ></Image>
+              </View>
+              <View style={styles.textContainer}>
+                <Text style={styles.item}>{item.title}</Text>
+              </View>
             </View>
-            <View style={styles.textContainer}>
-              <Text style={styles.item}>{item.title}</Text>
-            </View>
+            {selectedItems.includes(item._id) && (
+              <View style={styles.overlay} />
+            )}
           </Pressable>
         )}
       ></FlatList>
+      {selectedItems.length ? (
+        <View style={styles.readyView}>
+          <Pressable style={styles.readyButton}>
+            <Text style={styles.readyText}>Klar</Text>
+          </Pressable>
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -84,6 +104,16 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 30,
     borderColor: Colors.green,
+    borderWidth: 2,
+  },
+  overlay: {
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    borderRadius: 30,
+
+    borderColor: Colors.green,
+    borderWidth: 4,
   },
 
   textContainer: {
@@ -105,5 +135,27 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     resizeMode: "contain",
+  },
+  readyView: {
+    backgroundColor: Colors.blue,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+  },
+  readyButton: {
+    justifyContent: "center",
+
+    borderRadius: 40,
+    backgroundColor: Colors.green,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+
+    width: "40%",
+  },
+  readyText: {
+    textAlign: "center",
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
