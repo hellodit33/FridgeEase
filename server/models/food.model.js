@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-var FridgeSchema = new mongoose.Schema({
+var FoodSchema = new mongoose.Schema({
   title: { type: String, required: true },
   carbon: { type: Number, required: true },
   category: { type: String, required: true },
@@ -9,4 +9,4 @@ var FridgeSchema = new mongoose.Schema({
   logo: { type: String },
 });
 
-module.exports = mongoose.model("fridge", FridgeSchema);
+module.exports = mongoose.model("food", FoodSchema);

@@ -25,7 +25,6 @@ import {
   Image,
 } from "react-native";
 import Colors from "./constants/Colors";
-import AppLoading from "expo-app-loading";
 
 import SuggestionItem from "./src/screens/SuggestionItem";
 import SuggestionInput from "./src/screens/SuggestionInput";
@@ -54,6 +53,7 @@ import FoodDetails from "./src/components/FoodDetails";
 import Diets from "./src/screens/Diets";
 
 import Allergies from "./src/screens/Allergies";
+import LoadingOverlay from "./src/UI/LoadingOverlay";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -100,6 +100,7 @@ function BottomNav() {
         name="Fridge"
         component={Fridge}
         options={{
+          title: "Mitt kylskåp",
           headerTitle: () => <Header title="Mitt kylskåp" />,
           headerStyle: { backgroundColor: Colors.blue },
           tabBarIcon: () => (
@@ -115,7 +116,9 @@ function BottomNav() {
         name="Recipes"
         component={Recipes}
         options={{
-          headerTitle: () => <Header title="Recept" />,
+          title: "Mina recept",
+
+          headerTitle: () => <Header title="Mina recept" />,
           tabBarIcon: () => (
             <FontAwesomeIcon icon={faUtensils} color={Colors.green} size={24} />
           ),
@@ -126,6 +129,8 @@ function BottomNav() {
         name="Shopping"
         component={Shopping}
         options={{
+          title: "Min inköpslista",
+
           headerTitle: () => <Header title="Min inköpslista" />,
           tabBarIcon: ({ color, size }) => (
             <FontAwesomeIcon
@@ -141,6 +146,8 @@ function BottomNav() {
         name="Profile"
         component={User}
         options={{
+          title: "Min profil",
+
           headerTitle: () => <Header title="Min sida" />,
           tabBarIcon: ({ color, size }) => (
             <FontAwesomeIcon icon={faUser} color={Colors.green} size={24} />
@@ -300,7 +307,7 @@ export function Root() {
   }, []);
 
   if (isTryingLogin) {
-    return <AppLoading />;
+    return <LoadingOverlay message="Vi loggar in dig..." />;
   }
   return <Navigation />;
 }

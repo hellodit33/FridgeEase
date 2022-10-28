@@ -25,7 +25,7 @@ function SignupScreen() {
   }
 
   if (isAuthenticating) {
-    return <LoadingOverlay message="Creating user..." />;
+    return <LoadingOverlay message="Vi skapar ditt konto..." />;
   }
 
   return <AuthContent onAuthenticate={signupHandler} />;

@@ -1,7 +1,7 @@
 //const { check, validationResult } = require("express-validator");
 
 const router = require("express").Router();
-const fridgeController = require("../controllers/fridge.controller");
+const foodController = require("../controllers/food.controller");
 
 /*
 const validate = [
@@ -25,7 +25,7 @@ const validate = [
     .withMessage("Expiration should be between 3 to 25 characters"),
 ];*/
 
-router.get("/", fridgeController.readFood);
+router.get("/", foodController.readFood);
 
 /*router.post("/", validate, (req, res) => {
   const errors = validationResult(req);

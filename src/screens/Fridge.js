@@ -17,8 +17,8 @@ import SuggestionInput from "./SuggestionInput";
 import SuggestionItem from "./SuggestionItem";
 import { storeSuggestions } from "../util/http";
 import { Ionicons } from "@expo/vector-icons";
-import AppLoading from "expo-app-loading";
 import FoodComponents from "../components/FoodComponents";
+import LoadingOverlay from "../UI/LoadingOverlay";
 
 function Fridge(props) {
   const categoryData = [
@@ -68,6 +68,9 @@ function Fridge(props) {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [suggestionsList, setSuggestionsList] = useState([]);
+  const [messageFoodComponents, setMessageFoodComponents] = useState(true);
+
+  const [foodComponents, setFoodComponents] = useState(false);
 
   function renderHeader() {}
 
@@ -121,7 +124,12 @@ function Fridge(props) {
   });
 
   if (!loaded) {
-    return null;
+    return <LoadingOverlay message="Ge oss en kort stund..." />;
+  }
+
+  function showFoodComponents() {
+    setMessageFoodComponents(false);
+    setFoodComponents(true);
   }
 
   return (
@@ -141,13 +149,24 @@ function Fridge(props) {
               placeholder="Lägg till matvara...."
               keyboardType="default"
               multiline={false}
+              onTextInput={showFoodComponents}
             />
           </View>
         </View>
       </View>
-      <View style={{ flex: 1 }}>
-        <FoodComponents navigation={props.navigation} />
-      </View>
+      {messageFoodComponents && (
+        <View style={styles.message}>
+          <Text style={styles.textMessage}>
+            Ditt kylskåp är tomt, lägg till matvaror för att se vilka matvaror
+            som behöver ätas upp snart och få inspiration till matlagning!
+          </Text>
+        </View>
+      )}
+      {foodComponents && (
+        <View style={{ flex: 1 }}>
+          <FoodComponents navigation={props.navigation} />
+        </View>
+      )}
     </>
   );
 }
@@ -160,6 +179,17 @@ const styles = StyleSheet.create({
     fontFamily: "Interbold",
     justifyContent: "center",
     alignItems: "center",
+  },
+  message: {
+    flex: 1,
+    backgroundColor: Colors.blue,
+    alignItems: "center",
+  },
+  textMessage: {
+    fontFamily: "Interbold",
+    color: Colors.green,
+    textAlign: "center",
+    width: "80%",
   },
   fridge: {
     backgroundColor: Colors.blue,

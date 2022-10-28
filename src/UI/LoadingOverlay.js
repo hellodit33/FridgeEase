@@ -4,8 +4,8 @@ import Colors from "../../constants/Colors";
 function LoadingOverlay({ message }) {
   return (
     <View style={styles.container}>
-      <Text>{message}</Text>
-      <ActivityIndicator size="large" color="white"></ActivityIndicator>
+      <Text style={styles.loadingText}>{message}</Text>
+      <ActivityIndicator size="large" color={Colors.green}></ActivityIndicator>
     </View>
   );
 }
@@ -18,6 +18,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 24,
-    backgroundColor: Colors.saumon,
+    backgroundColor: Colors.blue,
+  },
+  loadingText: {
+    fontSize: 20,
+    paddingBottom: 10,
+    fontWeight: "bold",
+    color: Colors.green,
   },
 });

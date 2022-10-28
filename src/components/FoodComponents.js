@@ -10,14 +10,13 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
+import { addFoodToFridge } from "../../store/redux/actions/fridge.actions";
 
-import * as fridgeAction from "../../store/redux/actions/fridge.actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Colors from "../../constants/Colors";
-//import { fetchFood } from "../../store/redux/actions/fridge.actions";
 
-function FoodComponents(props) {
+function FoodComponents({ foodIdToAdd, type, props }) {
   /*const fridge = async () => {
     const response = await fridgeApi.get("/api/fridge");
     console.log(response.data[0].title);
@@ -26,8 +25,10 @@ function FoodComponents(props) {
   fridge();*/
   const dispatch = useDispatch();
   const foodsLists = useSelector((state) => state.intoFridgeReducer);
+  const [isAdded, setIsAdded] = useState(false);
 
   const [selectedItems, setSelectedItems] = useState([]);
+  const [titles, setTitles] = useState("");
 
   const handlePress = (food) => {
     if (selectedItems.includes(food._id)) {
@@ -36,6 +37,7 @@ function FoodComponents(props) {
       return setSelectedItems(newListItem);
     }
     setSelectedItems([...selectedItems, food._id]);
+    dispatch(addFoodToFridge(selectedItems, foodIdToAdd));
   };
 
   function FoodDetails() {
@@ -44,6 +46,13 @@ function FoodComponents(props) {
 
   return (
     <View>
+      {selectedItems.length ? (
+        <View style={styles.readyView}>
+          <Pressable style={styles.readyButton}>
+            <Text style={styles.readyText}>Klar</Text>
+          </Pressable>
+        </View>
+      ) : null}
       <FlatList
         contentContainerStyle={styles.foodList}
         numColumns={3}
@@ -75,13 +84,6 @@ function FoodComponents(props) {
           </Pressable>
         )}
       ></FlatList>
-      {selectedItems.length ? (
-        <View style={styles.readyView}>
-          <Pressable style={styles.readyButton}>
-            <Text style={styles.readyText}>Klar</Text>
-          </Pressable>
-        </View>
-      ) : null}
     </View>
   );
 }
