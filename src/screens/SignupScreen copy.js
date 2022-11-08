@@ -1,23 +1,20 @@
 import { useContext, useState } from "react";
 import { Alert } from "react-native";
-import AuthContent from "../components/Auth/AuthContent";
 
+import AuthContent from "../components/Auth/AuthContent";
+import { AuthContext } from "../../store/context/auth-context";
 import LoadingOverlay from "../UI/LoadingOverlay";
+import { createUser } from "../util/auth";
 
 function SignupScreen() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const authCtx = useContext(AuthContext);
 
   async function signupHandler({ email, password }) {
     setIsAuthenticating(true);
     try {
-      await axios({
-        method: "post",
-        url: "https://c459-46-183-103-8.eu.ngrok.io/api/user/register",
-        data: {
-          email,
-          password,
-        },
-      });
+      const token = await createUser(email, password);
+      authCtx.authenticate(token);
     } catch (error) {
       Alert.alert(
         "Sign up failed.",

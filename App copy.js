@@ -6,7 +6,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { AuthProvider } from "./store/context/auth-context";
 
 import {
   faHouseChimneyUser,
@@ -34,15 +33,14 @@ import RecipesOverview from "./src/screens/RecipesOverview";
 import Recipes from "./src/screens/Recipes";
 import Fridge from "./src/screens/Fridge";
 
-//import FavoritesContextProvider from "./store/context/favorites-context";
 import IconButton from "./src/components/IcoButton";
 
 import User from "./src/screens/User";
 import RateItem from "./src/screens/RateItem";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignupScreen";
-//import AuthContextProvider, { AuthContext } from "./store/context/auth-context";
-import { AuthContext } from "./store/context/auth-context";
+import AuthContextProvider, { AuthContext } from "./store/context/auth-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import AddQuote from "./src/screens/AddQuote";
 import AllQuotes from "./src/screens/AllQuotes";
 import Map from "./src/screens/Map";
@@ -55,10 +53,6 @@ import Diets from "./src/screens/Diets";
 
 import Allergies from "./src/screens/Allergies";
 import LoadingOverlay from "./src/UI/LoadingOverlay";
-import { UidContext } from "./src/components/AppContext";
-import { getUser } from "./store/redux/actions/user.actions";
-import { useDispatch } from "react-redux";
-
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -85,7 +79,7 @@ function AuthStack() {
 }
 
 function BottomNav() {
-  // const authCtx = useContext(AuthContext);
+  const authCtx = useContext(AuthContext);
 
   return (
     <BottomTabs.Navigator
@@ -285,40 +279,35 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
-  const [uid, setUid] = useState(null);
-  const [login, setLogIn] = useState(false);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const fetchToken = async () => {
-      await axios({
-        method: "get",
-        url: "https://c459-46-183-103-8.eu.ngrok.io/jwtid",
-        withCredentials: true,
-      })
-        .then((res) => {
-          setUid(res.data);
-          console.log(uid);
-          console.log("hello");
-        })
-        .catch((err) => console.log("No token"));
-    };
-    fetchToken();
-    if (uid) {
-      dispatch(getUser(uid));
-      setLogIn(true);
-    }
-  }, [uid, dispatch]);
+  const authCtx = useContext(AuthContext);
   return (
-    <AuthProvider>
+    <FavoritesContextProvider>
       <NavigationContainer>
-        {!login && <AuthStack />}
-        {login && <AuthenticatedStack />}
+        {!authCtx.isAuthenticated && <AuthStack />}
+        {authCtx.isAuthenticated && <AuthenticatedStack />}
       </NavigationContainer>
-    </AuthProvider>
+    </FavoritesContextProvider>
   );
 }
 
 export function Root() {
+  const [isTryingLogin, setIsTryingLogin] = useState(true);
+  const authCtx = useContext(AuthContext);
+  useEffect(() => {
+    async function fetchToken() {
+      const storedToken = await AsyncStorage.getItem("token");
+      if (storedToken) {
+        authCtx.authenticate(storedToken);
+      }
+      setIsTryingLogin(false);
+    }
+
+    fetchToken();
+  }, []);
+
+  if (isTryingLogin) {
+    return <LoadingOverlay message="Vi loggar in dig..." />;
+  }
   return <Navigation />;
 }
 

@@ -1,6 +1,6 @@
-const router = require("express").Router();
+/*const router = require("express").Router();
 const userFoodController = require("../controllers/userFood.controller");
 
-router.patch("/", userFoodController.addFoodToUserFridge);
+router.put("/", userFoodController.addFoodToUserFridge);
 
-module.exports = router;
+module.exports = router;*/

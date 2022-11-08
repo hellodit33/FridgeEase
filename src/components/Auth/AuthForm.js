@@ -4,7 +4,6 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import FlatButton from "../../UI/FlatButton";
 import Input from "./Input";
 import Colors from "../../../constants/Colors";
-import { notInitialized } from "react-redux/es/utils/useSyncExternalStore";
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   const [enteredEmail, setEnteredEmail] = useState("");

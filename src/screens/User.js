@@ -1,7 +1,11 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
+import { useContext, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Colors from "../../constants/Colors";
 import IcoButton from "../components/IcoButton";
+import cookie from "js-cookie";
+import LoadingOverlay from "../UI/LoadingOverlay";
+import { AuthContext } from "../../store/context/auth-context";
 function User(props) {
   function FavoritesPress() {
     props.navigation.navigate("FavoriteRecipes");
@@ -11,6 +15,18 @@ function User(props) {
   }
   function AllergyPress() {
     props.navigation.navigate("Allergies");
+  }
+
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const { logout } = useContext(AuthContext);
+
+  async function logoutHandler() {
+    await logout();
+  }
+
+  if (isLoggingOut) {
+    return <LoadingOverlay message="Vi loggar ut dig..." />;
   }
   return (
     <>
@@ -29,12 +45,13 @@ function User(props) {
             <Text style={styles.buttonsText}>Mina allergier</Text>
             <IcoButton icon="alert" color={Colors.darkpink}></IcoButton>
           </Pressable>
-        </View>
-
-        <View style={styles.loggaUtView}>
-          <Pressable style={styles.loggaUt}>
-            <Text style={styles.loggaUtText}>Logga ut</Text>
-          </Pressable>
+          <View style={styles.loggaUtView}>
+            <Pressable style={styles.loggaUt}>
+              <Text style={styles.loggaUtText} onPress={logoutHandler}>
+                Logga ut
+              </Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </>
@@ -45,7 +62,6 @@ export default User;
 const styles = StyleSheet.create({
   main: {
     backgroundColor: Colors.blue,
-
     paddingTop: 50,
     flex: 1,
   },
@@ -79,7 +95,6 @@ const styles = StyleSheet.create({
   },
   loggaUt: {
     justifyContent: "center",
-
     borderRadius: 40,
     backgroundColor: Colors.green,
     paddingHorizontal: 10,

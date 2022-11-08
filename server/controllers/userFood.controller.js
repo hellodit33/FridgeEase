@@ -24,7 +24,7 @@ module.exports.createUserFood = async (req, res) => {
   } catch (err) {
     return res.status(400).send("new error");
   }
-};*/
+};
 
 module.exports.addFoodToUserFridge = (req, res) => {
   if (
@@ -47,3 +47,4 @@ module.exports.addFoodToUserFridge = (req, res) => {
     return res.status(500).json({ message: err });
   }
 };
+*/

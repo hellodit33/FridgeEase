@@ -10,7 +10,10 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { addFoodToFridge } from "../../store/redux/actions/fridge.actions";
+import {
+  addFoodToFridge,
+  removeFoodFromFridge,
+} from "../../store/redux/actions/fridge.actions";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -24,21 +27,33 @@ function FoodComponents({ foodIdToAdd, type, props }) {
 
   fridge();*/
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userReducer);
+
   const foodsLists = useSelector((state) => state.intoFridgeReducer);
   const [isAdded, setIsAdded] = useState(false);
+  const [addedItems, setAddedItems] = useState([]);
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [titles, setTitles] = useState("");
 
-  const handlePress = (food) => {
+  const handlePress = async (food) => {
     if (selectedItems.includes(food._id)) {
       const newListItem = selectedItems.filter((foodId) => foodId !== food._id);
-
-      return setSelectedItems(newListItem);
+      console.log(newListItem);
+      await dispatch(removeFoodFromFridge(userData._id, food._id));
     }
     setSelectedItems([...selectedItems, food._id]);
-    dispatch(addFoodToFridge(selectedItems, foodIdToAdd));
+    console.log(selectedItems);
+    await dispatch(addFoodToFridge(userData._id, food._id));
   };
+
+  /*
+  const handlePress = () => {
+    dispatch(addFoodToFridge(userData._id, foodIdToAdd));
+    setIsAdded(true);
+
+    console.log(isAdded);
+  };*/
 
   function FoodDetails() {
     props.navigation.navigate("FoodDetails");

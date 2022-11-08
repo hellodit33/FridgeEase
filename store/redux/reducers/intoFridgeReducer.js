@@ -1,4 +1,8 @@
-import { FETCH_FOOD, ADD_FOOD_TO_FRIDGE } from "../actions/fridge.actions";
+import {
+  FETCH_FOOD,
+  ADD_FOOD_TO_FRIDGE,
+  REMOVE_FOOD_FROM_FRIDGE,
+} from "../actions/fridge.actions";
 
 const initialState = {};
 
@@ -10,9 +14,15 @@ export default function intoFridgeReducer(state = initialState, action) {
     case ADD_FOOD_TO_FRIDGE:
       return {
         ...state,
-        foodInFridge: [action.payload.foodIdToAdd, ...state.foodInFridge],
+        usersfood: [action.payload.foodIdToAdd, ...state.usersfood],
       };
-
+    case REMOVE_FOOD_FROM_FRIDGE:
+      return {
+        ...state,
+        usersfood: state.usersfood.filter(
+          (id) => id !== action.payload.foodIdToRemove
+        ),
+      };
     default:
       return state;
   }

@@ -5,15 +5,6 @@ const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
   {
-    //trim leaves out the blanks written by the user
-    pseudo: {
-      type: String,
-      required: true,
-      minLength: 5,
-      maxLength: 15,
-      unique: true,
-      trim: true,
-    },
     email: {
       type: String,
       required: true,

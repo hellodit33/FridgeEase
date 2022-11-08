@@ -12,9 +12,8 @@ router.get("/", userController.getAllUsers);
 router.get("/:id", userController.userInfo);
 //update user info
 router.put("/:id", userController.updateUser);
-
-//follow and unfollow other users
-router.patch("/addfood/:id", userController.addFoodToFridge);
-router.patch("/removefood/:id", userController.removeFoodFromFridge);
+//add and remove food from fridge
+router.put("/addfood/:id", userController.addFoodToFridge);
+router.put("/removefood/:id", userController.removeFoodFromFridge);
 
 module.exports = router;

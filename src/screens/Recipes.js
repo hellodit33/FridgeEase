@@ -19,20 +19,6 @@ import AuthContent from "../components/Auth/AuthContent";
 import { AuthContext } from "../../store/context/auth-context";
 import { useFonts } from "expo-font";
 function Recipes() {
-  const authCtx = useContext(AuthContext);
-
-  const token = authCtx.token;
-  useEffect(() => {
-    axios
-      .get(
-        "https://bookclub-course-default-rtdb.firebaseio.com//message.json?auth=" +
-          token
-      )
-      .then((response) => {
-        setFetchedMessage(response.data);
-      }),
-      [];
-  });
   const [loaded] = useFonts({
     alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
   });

@@ -62,6 +62,7 @@ module.exports.addFoodToFridge = (req, res) => {
     return res.status(400).send("ID unknown: " + req.params.id);
 
   try {
+    //add to the food list
     UserModel.findByIdAndUpdate(
       req.params.id,
       { $addToSet: { usersfood: req.body.foodIdToAdd } },
