@@ -10,17 +10,27 @@ require("./config/database");
 //const path = require("path");
 const app = express();
 const { checkUser, requireAuth } = require("./middleware/auth.middleware");
+const verifyToken = require("./middleware/verifyToken");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.get("/", verifyToken, (req, res) => {
+  res.send("welcome to the auth system");
+});
 
 //jwt
-app.get("*", checkUser);
-app.get("/jwtid", requireAuth, (req, res) => {
+app.get("*", verifyToken);
+/* app.get("/jwtid", requireAuth, (req, res) => {
   res.status(200).send(res.locals.user._id);
 });
-app.use("/api/food", foodRoutes);
+*/
+
+app.get("/api/user/profile", verifyToken, (req, res) => {
+  res.send({ success: true, data: req.user });
+});
+
+app.use("/api/food", verifyToken, foodRoutes);
 
 app.use("/api/user", userRoutes);
 

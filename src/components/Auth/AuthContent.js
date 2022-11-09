@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from "react-native";
 
 import FlatButton from "../../UI/FlatButton";
 import AuthForm from "./AuthForm";
@@ -45,20 +52,23 @@ function AuthContent({ isLogin, onAuthenticate }) {
   }
 
   return (
-    <View style={styles.authContent}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.authContent}
+    >
       <AuthForm
         isLogin={isLogin}
         onSubmit={submitHandler}
         credentialsInvalid={credentialsInvalid}
       />
-      <View style={styles.buttons}>
+      <ScrollView style={styles.buttons}>
         <FlatButton onPress={switchAuthModeHandler}>
           {isLogin
             ? "Är du ny användare? Bli medlem"
             : "Eller fortsätt med att logga in"}
         </FlatButton>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

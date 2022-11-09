@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 
 import FlatButton from "../../UI/FlatButton";
 import Input from "./Input";
@@ -36,14 +44,15 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   function submitHandler() {
     onSubmit({
       email: enteredEmail,
-
       password: enteredPassword,
       confirmPassword: enteredConfirmPassword,
     });
   }
 
   return (
-    <View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <View style={styles.titleContainer}>
         <Image
           source={require("../../../assets/icon2.png")}
@@ -55,7 +64,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
           <Text style={styles.title}>Bli medlem</Text>
         )}
       </View>
-      <View>
+      <ScrollView>
         <Input
           style={styles.input}
           label="E-mail"
@@ -101,8 +110,8 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
             {isLogin ? "Logga in" : "Bli medlem"}
           </FlatButton>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

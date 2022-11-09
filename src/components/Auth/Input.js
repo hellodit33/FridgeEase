@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   inputInvalid: {
-    backgroundColor: Colors.green,
+    backgroundColor: Colors.middlepink,
+    color: "black",
   },
 });

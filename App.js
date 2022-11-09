@@ -285,14 +285,14 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
-  const [uid, setUid] = useState(null);
+  /* const [uid, setUid] = useState(null);
   const [login, setLogIn] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchToken = async () => {
       await axios({
         method: "get",
-        url: "https://c459-46-183-103-8.eu.ngrok.io/jwtid",
+        url: "https://1386-84-216-128-7.eu.ngrok.io/jwtid",
         withCredentials: true,
       })
         .then((res) => {
@@ -307,14 +307,13 @@ function Navigation() {
       dispatch(getUser(uid));
       setLogIn(true);
     }
-  }, [uid, dispatch]);
+  }, [uid, dispatch]);*/
   return (
-    <AuthProvider>
-      <NavigationContainer>
-        {!login && <AuthStack />}
-        {login && <AuthenticatedStack />}
-      </NavigationContainer>
-    </AuthProvider>
+    <NavigationContainer>
+      <AuthStack />
+      {/*!login && <AuthStack />}
+        {login && <AuthenticatedStack /> */}
+    </NavigationContainer>
   );
 }
 
