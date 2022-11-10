@@ -70,6 +70,7 @@ module.exports.addFoodToFridge = (req, res) => {
       (err, data) => {
         if (!err) res.status(201).json(data);
         else return res.status(400).json(err);
+        console.log("hello");
       }
     );
   } catch (err) {
@@ -79,7 +80,7 @@ module.exports.addFoodToFridge = (req, res) => {
 
 module.exports.removeFoodFromFridge = (req, res) => {
   if (
-    !ObjectID.isValid(req.params.id) ||
+    !ObjectID.isValid(req.params._id) ||
     !ObjectID.isValid(req.body.foodIdToRemove)
   )
     return res.status(400).send("ID unknown: " + req.params.id);

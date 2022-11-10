@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { fetchFood } from "./store/redux/actions/fridge.actions";
 import AuthContextProvider from "./store/context/auth-context";
 import { AuthProvider } from "./src/components/AppContext";
+import { getAllUsers } from "./server/controllers/user.controller";
 
 const store = configureStore({ reducer: rootReducer });
 
