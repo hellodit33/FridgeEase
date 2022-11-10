@@ -15,22 +15,23 @@ const verifyToken = require("./middleware/verifyToken");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.get("/", verifyToken, (req, res) => {
+/*app.get("/", verifyToken, (req, res) => {
   res.send("welcome to the auth system");
 });
-
-//jwt
+*/
+/*jwt
 app.get("*", verifyToken);
 /* app.get("/jwtid", requireAuth, (req, res) => {
   res.status(200).send(res.locals.user._id);
 });
-*/
+
 
 app.get("/api/user/profile", verifyToken, (req, res) => {
   res.send({ success: true, data: req.user });
 });
+*/
 
-app.use("/api/food", verifyToken, foodRoutes);
+app.use("/api/food", foodRoutes);
 
 app.use("/api/user", userRoutes);
 

@@ -1,3 +1,36 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createContext, useEffect, useState } from "react";
+export const AuthContext = createContext({
+  token: "",
+  isAuthenticated: false,
+  authenticate: (token) => {},
+  logout: () => {},
+});
+
+function AuthContextProvider({ children }) {
+  const [authToken, setAuthToken] = useState();
+
+  function authenticate(token) {
+    setAuthToken(token);
+    AsyncStorage.setItem("token", token);
+  }
+
+  function logout() {
+    setAuthToken(null);
+    AsyncStorage.removeItem("token");
+  }
+
+  const value = {
+    token: authToken,
+    isAuthenticated: !!authToken,
+    authenticate: authenticate,
+    logout: logout,
+  };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export default AuthContextProvider;
+
 /*import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useEffect, useState } from "react";
 
@@ -66,7 +99,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     axios
-      .post("https://c459-46-183-103-8.eu.ngrok.io/api/user/login", {
+      .post("https://e53b-213-163-151-83.eu.ngrok.io/api/user/login", {
         email,
         password,
       })
@@ -83,7 +116,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     axios
-      .get("https://c459-46-183-103-8.eu.ngrok.io/api/user/logout")
+      .get("https://e53b-213-163-151-83.eu.ngrok.io/api/user/logout")
       .then((res) => {
         console.log(res.data);
         AsyncStorage.removeItem("userInfo");

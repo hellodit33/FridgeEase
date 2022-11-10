@@ -3,10 +3,12 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import axios from "axios";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { AuthProvider } from "./store/context/auth-context";
+import AuthContextProvider, { AuthContext } from "./store/context/auth-context";
 
 import {
   faHouseChimneyUser,
@@ -41,8 +43,6 @@ import User from "./src/screens/User";
 import RateItem from "./src/screens/RateItem";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignupScreen";
-//import AuthContextProvider, { AuthContext } from "./store/context/auth-context";
-import { AuthContext } from "./store/context/auth-context";
 import AddQuote from "./src/screens/AddQuote";
 import AllQuotes from "./src/screens/AllQuotes";
 import Map from "./src/screens/Map";
@@ -285,14 +285,34 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
+  const authCtx = useContext(AuthContext);
+
   /* const [uid, setUid] = useState(null);
   const [login, setLogIn] = useState(false);
   const dispatch = useDispatch();
+
+  const fetchToken = async () => {
+    
+
+const token = await AsyncStorage.getItem("token")
+
+      .then(() => {
+        setUid(token);
+        console.log(uid);
+        console.log("hello");
+      })
+      .catch((err) => console.log("No token"));
+  };
   useEffect(() => {
-    const fetchToken = async () => {
+    fetchToken();
+    if (uid) {
+      setLogIn(true);
+    }
+  }, [uid]);
+  /* const fetchToken = async () => {
       await axios({
         method: "get",
-        url: "https://1386-84-216-128-7.eu.ngrok.io/jwtid",
+        url: "https://e53b-213-163-151-83.eu.ngrok.io",
         withCredentials: true,
       })
         .then((res) => {
@@ -310,15 +330,36 @@ function Navigation() {
   }, [uid, dispatch]);*/
   return (
     <NavigationContainer>
-      <AuthStack />
-      {/*!login && <AuthStack />}
-        {login && <AuthenticatedStack /> */}
+      {!authCtx.isAuthenticated && <AuthStack />}
+
+      {authCtx.isAuthenticated && <AuthenticatedStack />}
     </NavigationContainer>
   );
 }
 
 export function Root() {
-  return <Navigation />;
+  const [isTryingLogin, setIsTryingLogin] = useState(true);
+  const authCtx = useContext(AuthContext);
+  useEffect(() => {
+    async function fetchToken() {
+      const storedToken = await AsyncStorage.getItem("token");
+      if (storedToken) {
+        authCtx.authenticate(storedToken);
+        console.log(authCtx);
+      }
+      setIsTryingLogin(false);
+    }
+
+    fetchToken();
+  }, [authCtx]);
+  if (isTryingLogin) {
+    return <LoadingOverlay />;
+  }
+  return (
+    <AuthContextProvider>
+      <Navigation />
+    </AuthContextProvider>
+  );
 }
 
 const styles = StyleSheet.create({

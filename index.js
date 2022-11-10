@@ -4,7 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./store/redux/reducers";
 import { Provider } from "react-redux";
 import { fetchFood } from "./store/redux/actions/fridge.actions";
-//import AuthContextProvider from "./store/context/auth-context";
+import AuthContextProvider from "./store/context/auth-context";
 
 const store = configureStore({ reducer: rootReducer });
 
@@ -14,9 +14,11 @@ export default function App() {
   return (
     <>
       <StatusBar style="dark" />
-      <Provider store={store}>
-        <Root />
-      </Provider>
+      <AuthContextProvider>
+        <Provider store={store}>
+          <Root />
+        </Provider>
+      </AuthContextProvider>
     </>
   );
 }

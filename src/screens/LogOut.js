@@ -18,7 +18,7 @@ function Logout({ onPress }) {
       try {
         await axios({
           method: "get",
-          url: "https://180e-2-71-56-111.eu.ngrok.io/api/user/logout",
+          url: "https://e53b-213-163-151-83.eu.ngrok.io/api/user/logout",
           withCredentials: true,
         });
         then(() => removeCookie("jwt"));
