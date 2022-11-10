@@ -14,7 +14,6 @@ function LoginScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const loginHandler = async ({ email, password }) => {
-    setIsAuthenticating(true);
     /*dispatch(authAction.loginUser({ email, password }))
       .then(async (result) => {
         console.log(result);
@@ -41,7 +40,7 @@ function LoginScreen() {
   if (isAuthenticating) {
     return <LoadingOverlay message="Vi loggar in dig..." />;
   }*/
-    login();
+    login({ email, password });
   };
 
   return (

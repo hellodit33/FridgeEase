@@ -19,7 +19,7 @@ app.use(cookieParser());
   res.send("welcome to the auth system");
 });
 */
-/*jwt
+//jwt
 app.get("*", verifyToken);
 /* app.get("/jwtid", requireAuth, (req, res) => {
   res.status(200).send(res.locals.user._id);

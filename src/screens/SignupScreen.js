@@ -6,13 +6,18 @@ import LoadingOverlay from "../UI/LoadingOverlay";
 import { useDispatch } from "react-redux";
 import * as authAction from "../../store/redux/actions/auth.actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../components/AppContext";
 
 function SignupScreen(props) {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const { register } = useContext(AuthContext);
 
   const signupHandler = async ({ email, password }) => {
+    register({ email, password });
+
+    /*
     setIsAuthenticating(true);
 
     dispatch(authAction.registerUser({ email, password }))
@@ -38,8 +43,8 @@ function SignupScreen(props) {
 
   if (isAuthenticating) {
     return <LoadingOverlay message="Vi skapar ditt konto..." />;
-  }
-
+  }*/
+  };
   return <AuthContent onAuthenticate={signupHandler} />;
 }
 
