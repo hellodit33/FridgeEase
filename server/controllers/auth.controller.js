@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 
-const generateToken = (user) => {
+const generateToken = async (user) => {
   return jwt.sign(
     { _id: user._id, email: user.email },
     process.env.SECRET_TOKEN,

@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     axios
-      .post("https://e53b-213-163-151-83.eu.ngrok.io/api/user/login", {
+      .post("https://c459-46-183-103-8.eu.ngrok.io/api/user/login", {
         email,
         password,
       })
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     axios
-      .get("https://e53b-213-163-151-83.eu.ngrok.io/api/user/logout")
+      .get("https://c459-46-183-103-8.eu.ngrok.io/api/user/logout")
       .then((res) => {
         console.log(res.data);
         AsyncStorage.removeItem("userInfo");

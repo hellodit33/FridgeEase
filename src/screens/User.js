@@ -5,8 +5,9 @@ import Colors from "../../constants/Colors";
 import IcoButton from "../components/IcoButton";
 import cookie from "js-cookie";
 import LoadingOverlay from "../UI/LoadingOverlay";
-import { AuthContext } from "../../store/context/auth-context";
+import { AuthContext } from "../components/AppContext";
 function User(props) {
+  const { logout } = useContext(AuthContext);
   function FavoritesPress() {
     props.navigation.navigate("FavoriteRecipes");
   }
@@ -17,17 +18,11 @@ function User(props) {
     props.navigation.navigate("Allergies");
   }
 
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  //const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const { logout } = useContext(AuthContext);
-
-  async function logoutHandler() {
-    await logout();
-  }
-
-  if (isLoggingOut) {
+  /* if (isLoggingOut) {
     return <LoadingOverlay message="Vi loggar ut dig..." />;
-  }
+  }*/
   return (
     <>
       <View style={styles.main}>
@@ -47,7 +42,7 @@ function User(props) {
           </Pressable>
           <View style={styles.loggaUtView}>
             <Pressable style={styles.loggaUt}>
-              <Text style={styles.loggaUtText} onPress={logoutHandler}>
+              <Text style={styles.loggaUtText} onPress={() => logout()}>
                 Logga ut
               </Text>
             </Pressable>

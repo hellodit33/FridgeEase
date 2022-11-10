@@ -4,11 +4,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import axios from "axios";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import AuthContextProvider, { AuthContext } from "./store/context/auth-context";
 
 import {
   faHouseChimneyUser,
@@ -55,7 +53,11 @@ import Diets from "./src/screens/Diets";
 
 import Allergies from "./src/screens/Allergies";
 import LoadingOverlay from "./src/UI/LoadingOverlay";
-import { UidContext } from "./src/components/AppContext";
+import {
+  AuthContext,
+  AuthProvider,
+  UidContext,
+} from "./src/components/AppContext";
 import { getUser } from "./store/redux/actions/user.actions";
 import { useDispatch } from "react-redux";
 
@@ -285,9 +287,26 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
-  const authCtx = useContext(AuthContext);
+  const { isLoading, userToken } = useContext(AuthContext);
 
+  if (isLoading) {
+    return <LoadingOverlay message="Vänta" />;
+  }
+  /* const authCtx = useContext(AuthContext);*/
   /* const [uid, setUid] = useState(null);
+
+  const loadProfile = async () => {
+    const token = await AsyncStorage.getItem("token");
+    const tokenJson = await token.toString();
+
+    await setUid(tokenJson);
+    console.log(tokenJson);
+    console.log("true");
+  };
+
+  loadProfile();
+
+  /* 
   const [login, setLogIn] = useState(false);
   const dispatch = useDispatch();
 
@@ -330,15 +349,15 @@ const token = await AsyncStorage.getItem("token")
   }, [uid, dispatch]);*/
   return (
     <NavigationContainer>
-      {!authCtx.isAuthenticated && <AuthStack />}
+      {userToken !== null ? <AuthenticatedStack /> : <AuthStack />}
 
-      {authCtx.isAuthenticated && <AuthenticatedStack />}
+      {/*!authCtx.isAuthenticated && <AuthStack />*/}
     </NavigationContainer>
   );
 }
 
 export function Root() {
-  const [isTryingLogin, setIsTryingLogin] = useState(true);
+  /* const [isTryingLogin, setIsTryingLogin] = useState(true);
   const authCtx = useContext(AuthContext);
   useEffect(() => {
     async function fetchToken() {
@@ -354,11 +373,11 @@ export function Root() {
   }, [authCtx]);
   if (isTryingLogin) {
     return <LoadingOverlay />;
-  }
+  }*/
   return (
-    <AuthContextProvider>
+    <AuthProvider>
       <Navigation />
-    </AuthContextProvider>
+    </AuthProvider>
   );
 }
 
