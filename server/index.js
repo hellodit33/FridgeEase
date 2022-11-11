@@ -7,7 +7,7 @@ const userRoutes = require("./routes/user.routes");
 require("dotenv").config();
 require("./config/database");
 //const cors = require("cors");
-//const path = require("path");
+const path = require("path");
 const app = express();
 const { checkUser, requireAuth } = require("./middleware/auth.middleware");
 const verifyToken = require("./middleware/verifyToken");

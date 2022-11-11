@@ -331,7 +331,7 @@ const token = await AsyncStorage.getItem("token")
   /* const fetchToken = async () => {
       await axios({
         method: "get",
-        url: "https://e53b-213-163-151-83.eu.ngrok.io",
+        url: "https://f56e-213-163-151-83.eu.ngrok.io",
         withCredentials: true,
       })
         .then((res) => {
@@ -356,7 +356,7 @@ const token = await AsyncStorage.getItem("token")
   );
 }
 
-export function Root() {
+function Root() {
   /* const [isTryingLogin, setIsTryingLogin] = useState(true);
   const authCtx = useContext(AuthContext);
   useEffect(() => {
@@ -378,6 +378,27 @@ export function Root() {
     <AuthProvider>
       <Navigation />
     </AuthProvider>
+  );
+}
+import { fetchFood } from "./store/redux/actions/fridge.actions";
+import { Provider } from "react-redux";
+import rootReducer from "./store/redux/reducers";
+import { configureStore } from "@reduxjs/toolkit";
+import { StatusBar } from "expo-status-bar";
+
+const store = configureStore({ reducer: rootReducer });
+
+store.dispatch(fetchFood());
+
+export default function App() {
+  return (
+    <>
+      <StatusBar style="dark" />
+
+      <Provider store={store}>
+        <Root />
+      </Provider>
+    </>
   );
 }
 

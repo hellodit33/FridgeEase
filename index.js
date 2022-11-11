@@ -1,4 +1,4 @@
-import { Root } from "./App";
+/*import { Root } from "./App";
 import { StatusBar } from "expo-status-bar";
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./store/redux/reducers";
@@ -23,3 +23,4 @@ export default function App() {
     </>
   );
 }
+*/
