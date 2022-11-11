@@ -20,7 +20,7 @@ export default function intoFridgeReducer(state = initialState, action) {
       return {
         ...state,
         usersfood: state.usersfood.filter(
-          (id) => id !== action.payload.foodIdToFollow
+          (id) => id !== action.payload.foodIdToRemove
         ),
       };
     default:
