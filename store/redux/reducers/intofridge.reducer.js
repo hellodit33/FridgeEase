@@ -19,8 +19,9 @@ export default function intoFridgeReducer(state = initialState, action) {
     case REMOVE_FOOD_FROM_FRIDGE:
       return {
         ...state,
+
         usersfood: state.usersfood.filter(
-          (id) => id !== action.payload.foodIdToRemove
+          (id) => id !== action.payload.foodIdToFollow
         ),
       };
     default:

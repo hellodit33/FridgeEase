@@ -31,6 +31,8 @@ export const AuthProvider = ({ children }) => {
             setUid(resultData.id);
             console.log(resultData.id);
             AsyncStorage.setItem("userToken", resultData.token);
+            AsyncStorage.setItem("uid", resultData.id);
+
             console.log(resultData);
             setIsLoading(false);
           } catch (err) {
@@ -58,7 +60,10 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsLoading(true);
       let userToken = await AsyncStorage.getItem("userToken");
+      let userId = await AsyncStorage.getItem("uid");
+
       setUserToken(userToken);
+      setUid(userId);
       console.log(userToken);
       setIsLoading(false);
     } catch (e) {
@@ -73,6 +78,7 @@ export const AuthProvider = ({ children }) => {
         if (resultData.success) {
           try {
             setUserToken(resultData.token);
+            setUid(resultData.id);
 
             AsyncStorage.setItem("userToken", resultData.token);
             console.log(resultData);

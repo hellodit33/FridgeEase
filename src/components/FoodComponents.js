@@ -34,17 +34,25 @@ function FoodComponents({ foodIdToAdd, type, props }) {
   const [addedItems, setAddedItems] = useState([]);
 
   const [selectedItems, setSelectedItems] = useState([]);
+  const [toDelete, setToDelete] = useState(false);
+
   const [titles, setTitles] = useState("");
 
   const handlePress = async (food) => {
     if (selectedItems.includes(food._id)) {
-      const newListItem = selectedItems.filter((foodId) => foodId !== food._id);
-      console.log(newListItem);
+      // setToDelete([...toDelete, food._id]);
+      //  selectedItems.filter((foodId) => foodId !== foodId);
+      // console.log(toDelete);
+      console.log(selectedItems);
+      console.log(food.title);
       await dispatch(removeFoodFromFridge(userData._id, food._id));
+      setToDelete(true);
+    } else if (!selectedItems.includes(food._id) || toDelete) {
+      setSelectedItems([...selectedItems, food._id]);
+      console.log(selectedItems);
+      console.log(food.title);
+      await dispatch(addFoodToFridge(userData._id, food._id));
     }
-    setSelectedItems([...selectedItems, food._id]);
-    console.log(selectedItems);
-    await dispatch(addFoodToFridge(userData._id, food._id));
   };
 
   /*
