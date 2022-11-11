@@ -19,7 +19,7 @@ module.exports.signUp = async (req, res) => {
 
   try {
     const user = await UserModel.create({ email, password });
-    const token = generateToken(user);
+    const token = await generateToken(user);
 
     res.status(201).send({
       success: true,
@@ -37,10 +37,14 @@ module.exports.signIn = async (req, res) => {
 
   try {
     const user = await UserModel.login(email, password);
-    const token = generateToken(user);
-    res
-      .header("auth-token", token)
-      .send({ success: true, message: "logged in successfully", token });
+    const token = await generateToken(user);
+    res.header("auth-token", token).send({
+      email: user.email,
+      id: user._id,
+      success: true,
+      message: "logged in successfully",
+      token,
+    });
   } catch (err) {
     const errors = signInErrors(err);
     res.status(200).send({ success: false, errors });

@@ -287,7 +287,14 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
-  const { isLoading, userToken } = useContext(AuthContext);
+  const { isLoading, userToken, uid } = useContext(AuthContext);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(uid);
+    console.log("hello");
+    if (uid) dispatch(getUser(uid));
+  }, [uid]);
 
   if (isLoading) {
     return <LoadingOverlay message="Vänta" />;

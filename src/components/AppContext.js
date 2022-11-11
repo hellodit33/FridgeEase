@@ -7,6 +7,8 @@ import axios from "axios";
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
 import * as authAction from "../../store/redux/actions/auth.actions";
+import * as userAction from "../../store/redux/actions/user.actions";
+
 import { createNextState } from "@reduxjs/toolkit";
 
 export const AuthContext = createContext();
@@ -14,6 +16,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userToken, setUserToken] = useState(null);
+  const [uid, setUid] = useState(null);
+
   const [userInfo, setUserInfo] = useState(null);
   const dispatch = useDispatch();
 
@@ -23,8 +27,10 @@ export const AuthProvider = ({ children }) => {
       .then((resultData) => {
         if (resultData.success) {
           try {
-            setUserToken("djsflsdhflsd");
-            AsyncStorage.setItem("userToken", "djsflsdhflsd");
+            setUserToken(resultData.token);
+            setUid(resultData.id);
+            console.log(resultData.id);
+            AsyncStorage.setItem("userToken", resultData.token);
             console.log(resultData);
             setIsLoading(false);
           } catch (err) {
@@ -66,9 +72,9 @@ export const AuthProvider = ({ children }) => {
       .then((resultData) => {
         if (resultData.success) {
           try {
-            setUserToken("djsflsdhflsd");
+            setUserToken(resultData.token);
 
-            AsyncStorage.setItem("userToken", "djsflsdhflsd");
+            AsyncStorage.setItem("userToken", resultData.token);
             console.log(resultData);
             setIsLoading(false);
           } catch (err) {
@@ -91,7 +97,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
   return (
     <AuthContext.Provider
-      value={{ login, logout, register, isLoading, userToken }}
+      value={{ login, logout, register, uid, isLoading, userToken }}
     >
       {children}
     </AuthContext.Provider>
