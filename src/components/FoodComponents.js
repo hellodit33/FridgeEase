@@ -10,6 +10,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import {
   addFoodToFridge,
   removeFoodFromFridge,
@@ -18,8 +19,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Colors from "../../constants/Colors";
+import { setStatusBarHidden } from "expo-status-bar";
+import { ScreenStackHeaderSearchBarView } from "react-native-screens";
 
-function FoodComponents({ foodIdToAdd, type, props }) {
+function FoodComponents({ foodIdToAdd, type }) {
+  const navigation = useNavigation();
   /*const fridge = async () => {
     const response = await fridgeApi.get("/api/fridge");
     console.log(response.data[0].title);
@@ -32,7 +36,6 @@ function FoodComponents({ foodIdToAdd, type, props }) {
   const foodsLists = useSelector((state) => state.intoFridgeReducer);
   const [isAdded, setIsAdded] = useState(false);
   const [addedItems, setAddedItems] = useState([]);
-
   const [selectedItems, setSelectedItems] = useState([]);
   const [toDelete, setToDelete] = useState(false);
 
@@ -64,18 +67,11 @@ function FoodComponents({ foodIdToAdd, type, props }) {
   };*/
 
   function FoodDetails() {
-    props.navigation.navigate("FoodDetails");
+    navigation.navigate("FoodDetails");
   }
 
   return (
     <View>
-      {selectedItems.length ? (
-        <View style={styles.readyView}>
-          <Pressable style={styles.readyButton}>
-            <Text style={styles.readyText}>Klar</Text>
-          </Pressable>
-        </View>
-      ) : null}
       <FlatList
         contentContainerStyle={styles.foodList}
         numColumns={3}

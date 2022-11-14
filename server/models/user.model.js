@@ -26,7 +26,17 @@ const userSchema = new mongoose.Schema(
     },
 
     usersfood: {
-      type: [String],
+      type: [
+        {
+          foodId: Number,
+          foodName: String,
+          foodCarbon: Number,
+          foodExpiration: Number,
+          foodCategory: String,
+          foodLogo: String,
+          timestamp: Number,
+        },
+      ],
     },
   },
   {

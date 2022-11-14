@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userToken, setUserToken] = useState(null);
   const [uid, setUid] = useState(null);
-
+  const [userFoodTrue, setUserFoodTrue] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const dispatch = useDispatch();
 
@@ -29,11 +29,15 @@ export const AuthProvider = ({ children }) => {
           try {
             setUserToken(resultData.token);
             setUid(resultData.id);
+
             console.log(resultData.id);
             AsyncStorage.setItem("userToken", resultData.token);
             AsyncStorage.setItem("uid", resultData.id);
 
-            console.log(resultData);
+            console.log(resultData.usersfood);
+            if (resultData.usersfood > 0) {
+              setUserFoodTrue(true);
+            }
             setIsLoading(false);
           } catch (err) {
             console.log(err);
@@ -54,6 +58,7 @@ export const AuthProvider = ({ children }) => {
     setUserToken(null);
     AsyncStorage.removeItem("userToken");
     setIsLoading(false);
+    console.log("logged out");
   };
 
   const isLoggedIn = async () => {
@@ -61,7 +66,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(true);
       let userToken = await AsyncStorage.getItem("userToken");
       let userId = await AsyncStorage.getItem("uid");
-
+      let userfood = await AsyncStorage.getItem("userfood");
       setUserToken(userToken);
       setUid(userId);
       console.log(userToken);
@@ -81,7 +86,7 @@ export const AuthProvider = ({ children }) => {
             setUid(resultData.id);
 
             AsyncStorage.setItem("userToken", resultData.token);
-            console.log(resultData);
+            console.log(resultData.usersfood);
             setIsLoading(false);
           } catch (err) {
             console.log(err);
@@ -98,12 +103,25 @@ export const AuthProvider = ({ children }) => {
       .catch((err) => console.log(err));
   };
 
+  const addFood = () => {
+    setUserFood(true);
+  };
+
   useEffect(() => {
     isLoggedIn();
   }, []);
   return (
     <AuthContext.Provider
-      value={{ login, logout, register, uid, isLoading, userToken }}
+      value={{
+        login,
+        logout,
+        register,
+        addFood,
+        userFoodTrue,
+        uid,
+        isLoading,
+        userToken,
+      }}
     >
       {children}
     </AuthContext.Provider>

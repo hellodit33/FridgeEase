@@ -1,4 +1,5 @@
 //user controller requiremments
+
 const UserModel = require("../models/user.model");
 const ObjectID = require("mongoose").Types.ObjectId;
 
@@ -25,6 +26,17 @@ module.exports.userInfo = (req, res) => {
     if (!err) res.send(data);
     else console.log("ID unknown : " + err);
   }).select("-password");
+};
+
+module.exports.userFood = (req, res) => {
+  console.log(req.params);
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  UserModel.findById(req.params.id, (err, data) => {
+    if (!err) res.send(data.usersfood);
+    else console.log("ID unknown : " + err);
+  });
 };
 
 /**
@@ -55,22 +67,30 @@ module.exports.updateUser = (req, res) => {
 };
 
 module.exports.addFoodToFridge = (req, res) => {
-  if (
-    !ObjectID.isValid(req.params.id) ||
-    !ObjectID.isValid(req.body.foodIdToAdd)
-  )
+  if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown: " + req.params.id);
 
   try {
     //add to the food list
     UserModel.findByIdAndUpdate(
       req.params.id,
-      { $addToSet: { usersfood: req.body.foodIdToAdd } },
+      {
+        $addToSet: {
+          usersfood: {
+            foodId: req.body.foodId,
+            foodName: req.body.foodName,
+            foodCarbon: req.body.foodCarbon,
+            foodExpiration: req.body.foodExpiration,
+            foodCategory: req.body.foodCategory,
+            foodLogo: req.body.foodLogo,
+            timestamp: new Date().getTime(),
+          },
+        },
+      },
       { new: true, upsert: true },
       (err, data) => {
         if (!err) res.status(201).json(data);
         else return res.status(400).json(err);
-        console.log("hello");
       }
     );
   } catch (err) {

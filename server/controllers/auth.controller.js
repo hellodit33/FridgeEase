@@ -2,7 +2,7 @@ const UserModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const { signUpErrors, signInErrors } = require("../utils/errors.utils");
 
-const maxAge = 3 * 24 * 60 * 60 * 1000;
+const maxAge = 1; /* 3 * 24 * 60 * 60 * 1000;*/
 
 const generateToken = async (user) => {
   return jwt.sign(
@@ -40,6 +40,7 @@ module.exports.signIn = async (req, res) => {
     const token = await generateToken(user);
     res.header("auth-token", token).send({
       email: user.email,
+      usersfood: user.usersfood,
       id: user._id,
       success: true,
       message: "logged in successfully",

@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }) => {
   const register = (email, password) => {
     setIsLoading(true);
     axios
-      .post("https://f56e-213-163-151-83.eu.ngrok.io/api/user/register", {
+      .post("https://c886-213-163-151-83.eu.ngrok.io/api/user/register", {
         email,
         password,
       })
@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     axios
-      .post("https://f56e-213-163-151-83.eu.ngrok.io/api/user/login", {
+      .post("https://c886-213-163-151-83.eu.ngrok.io/api/user/login", {
         email,
         password,
       })
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     axios
-      .get("https://f56e-213-163-151-83.eu.ngrok.io/api/user/logout")
+      .get("https://c886-213-163-151-83.eu.ngrok.io/api/user/logout")
       .then((res) => {
         console.log(res.data);
         AsyncStorage.removeItem("userInfo");

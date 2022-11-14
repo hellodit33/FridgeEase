@@ -33,7 +33,7 @@ import Shopping from "./src/screens/Shopping";
 import RecipesOverview from "./src/screens/RecipesOverview";
 import Recipes from "./src/screens/Recipes";
 import Fridge from "./src/screens/Fridge";
-
+import MyFridge from "./src/screens/MyFridge";
 //import FavoritesContextProvider from "./store/context/favorites-context";
 import IconButton from "./src/components/IcoButton";
 
@@ -58,7 +58,7 @@ import {
   AuthProvider,
   UidContext,
 } from "./src/components/AppContext";
-import { getUser } from "./store/redux/actions/user.actions";
+import { getUser, getUserFood } from "./store/redux/actions/user.actions";
 import { useDispatch } from "react-redux";
 
 const Stack = createNativeStackNavigator();
@@ -226,6 +226,7 @@ function AuthenticatedStack() {
           headerShown: false,
         }}
       />
+
       <Stack.Screen name="RecipesOverview" component={RecipesOverview} />
       <Stack.Screen name="RecipesDetails" component={RecipesDetails} />
 
@@ -287,13 +288,15 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
-  const { isLoading, userToken, uid } = useContext(AuthContext);
+  const { isLoading, userToken, uid, userFoodTrue } = useContext(AuthContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log(uid);
     console.log("hello");
-    if (uid) dispatch(getUser(uid));
+    if (uid) {
+      dispatch(getUser(uid));
+    }
   }, [uid]);
 
   if (isLoading) {
@@ -338,7 +341,7 @@ const token = await AsyncStorage.getItem("token")
   /* const fetchToken = async () => {
       await axios({
         method: "get",
-        url: "https://f56e-213-163-151-83.eu.ngrok.io",
+        url: "https://c886-213-163-151-83.eu.ngrok.io",
         withCredentials: true,
       })
         .then((res) => {
@@ -356,7 +359,11 @@ const token = await AsyncStorage.getItem("token")
   }, [uid, dispatch]);*/
   return (
     <NavigationContainer>
-      {userToken !== null ? <AuthenticatedStack /> : <AuthStack />}
+      {userToken !== null ? (
+        <AuthenticatedStack /*value={uid} */ />
+      ) : (
+        <AuthStack />
+      )}
 
       {/*!authCtx.isAuthenticated && <AuthStack />*/}
     </NavigationContainer>
@@ -396,7 +403,10 @@ import { StatusBar } from "expo-status-bar";
 const store = configureStore({ reducer: rootReducer });
 
 store.dispatch(fetchFood());
-
+/*
+if (uid) {
+  store.dispatch(getUserFood(uid));
+}*/
 export default function App() {
   return (
     <>

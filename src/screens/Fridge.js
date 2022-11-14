@@ -2,7 +2,14 @@ import { useState, useEffect } from "react";
 import Colors from "../../constants/Colors";
 import { useFonts } from "expo-font";
 import {
+  addFoodToFridge,
+  removeFoodFromFridge,
+} from "../../store/redux/actions/fridge.actions";
+import { getUser } from "../../store/redux/actions/user.actions";
+import {
   View,
+  Image,
+  Pressable,
   Button,
   Text,
   FlatList,
@@ -19,6 +26,10 @@ import { storeSuggestions } from "../util/http";
 import { Ionicons } from "@expo/vector-icons";
 import FoodComponents from "../components/FoodComponents";
 import LoadingOverlay from "../UI/LoadingOverlay";
+import { useDispatch, useSelector } from "react-redux";
+import { faHelicopterSymbol } from "@fortawesome/free-solid-svg-icons";
+import { useContext } from "react";
+import { cos } from "react-native-reanimated";
 
 function Fridge(props) {
   const categoryData = [
@@ -64,15 +75,78 @@ function Fridge(props) {
     },
   ];
 
+  const userData = useSelector((state) => state.userReducer);
+  const userFood = useSelector((state) => state.usersfood);
+
+  const fridge = useSelector((state) => state.intoFridgeReducer);
+
   const [categories, setCategories] = useState(categoryData);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const [suggestionsList, setSuggestionsList] = useState([]);
+  const [newFood, setNewFood] = useState([]);
   const [messageFoodComponents, setMessageFoodComponents] = useState(true);
+  const [hideFood, setHideFood] = useState(false);
+  const [hide, setHide] = useState(false);
 
   const [foodComponents, setFoodComponents] = useState(false);
 
-  function renderHeader() {}
+  //function foodcomponent
+
+  /*const fridge = async () => {
+    const response = await fridgeApi.get("/api/fridge");
+    console.log(response.data[0].title);
+  };
+
+  fridge();*/
+  const dispatch = useDispatch();
+
+  const foodsLists = useSelector((state) => state.intoFridgeReducer);
+  const [isAdded, setIsAdded] = useState(false);
+  const [addedItems, setAddedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [toDelete, setToDelete] = useState(false);
+
+  const [titles, setTitles] = useState("");
+
+  const handlePress = (food) => {
+    if (selectedItems.includes(food._id)) {
+      // setToDelete([...toDelete, food._id]);
+      //  selectedItems.filter((foodId) => foodId !== foodId);
+      // console.log(toDelete);
+      console.log(selectedItems);
+      console.log("delete " + food.title);
+      dispatch(removeFoodFromFridge(userData._id, food._id));
+      setToDelete(true);
+    } else if (!selectedItems.includes(food._id) || toDelete) {
+      setSelectedItems([...selectedItems, food._id]);
+      console.log(selectedItems);
+      console.log("added " + food.title);
+      dispatch(
+        addFoodToFridge(
+          userData._id,
+          food._id,
+          food.title,
+          food.logo,
+          food.carbon,
+          food.category,
+          food.expiration
+        )
+      );
+      dispatch(getUser(userData._id));
+    }
+  };
+
+  /*
+  const handlePress = () => {
+    dispatch(addFoodToFridge(userData._id, foodIdToAdd));
+    setIsAdded(true);
+
+    console.log(isAdded);
+  };*/
+
+  function FoodDetails() {
+    navigation.navigate("FoodDetails");
+  }
 
   function renderFoodCategories() {
     const renderItem = ({ item }) => {
@@ -115,6 +189,48 @@ function Fridge(props) {
       ></FlatList>
     );
   }
+  /*
+  function renderMyFridge() {
+
+return(
+
+    {userData.map((user) => { for (let i = 0; i < userData.userfoods.length; i++) {
+          if (fridge._id === user.userfoods[i]) {
+            <Text>{fridge.title}</Text>;
+          }
+        }
+      })
+    }
+)
+  }*/
+
+  /* const userFridge = fridge.filter((item) => item._id !== userFood);
+  console.log("myfood" + userFridge);
+  console.log(JSON.stringify(userFridge));*/
+
+  function renderMyFridge() {
+    const renderFridge = ({ item }) => {
+      /*   for (let i = 0; i < userData.usersfood.length; i++) {
+        if (userData.usersfood[i] === item._id) */ {
+        return (
+          <ScrollView>
+            <Text>{item.foodName}</Text>
+            <Text>{item.foodCarbon}</Text>
+          </ScrollView>
+        );
+      }
+    };
+
+    return (
+      <FlatList
+        data={userData.usersfood}
+        extraData={userData.usersfood}
+        keyExtractor={(item) => `${item._id}`}
+        renderItem={renderFridge}
+        contentContainerStyle={{}}
+      ></FlatList>
+    );
+  }
 
   const [loaded] = useFonts({
     alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
@@ -130,7 +246,22 @@ function Fridge(props) {
   function showFoodComponents() {
     setMessageFoodComponents(false);
     setFoodComponents(true);
+    setHideFood(true);
   }
+
+  const hello = () => {
+    setHideFood(false);
+  };
+  /*const addNewFood = (id) => {
+    setFood((userData) => {
+      return [
+        { id: food._id, key: Math.random().toString() },
+        ...userData.usersfood,
+      ];
+    });
+  };
+
+  /*const { addFood } = useContext(AuthContext);*/
 
   return (
     <>
@@ -154,7 +285,8 @@ function Fridge(props) {
           </View>
         </View>
       </View>
-      {messageFoodComponents && (
+
+      {messageFoodComponents && !userData.usersfood && (
         <View style={styles.message}>
           <Text style={styles.textMessage}>
             Ditt kylskåp är tomt, lägg till matvaror för att se vilka matvaror
@@ -162,9 +294,55 @@ function Fridge(props) {
           </Text>
         </View>
       )}
-      {foodComponents && (
+
+      {userData.usersfood && !hideFood && (
+        <View>
+          <Text>your fridge:</Text>
+          {renderMyFridge()}
+        </View>
+      )}
+      {foodComponents && hideFood && (
         <View style={{ flex: 1 }}>
-          <FoodComponents navigation={props.navigation} />
+          <View style={styles.readyView}>
+            <Pressable style={styles.readyButton} onPress={() => hello()}>
+              <Text style={styles.readyText}>Klar</Text>
+            </Pressable>
+          </View>
+
+          <View>
+            <FlatList
+              legacyImplementation={true}
+              contentContainerStyle={styles.foodList}
+              numColumns={3}
+              data={foodsLists}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => (
+                <Pressable
+                  onLongPress={FoodDetails}
+                  onPress={() => handlePress(item)}
+                >
+                  <View style={styles.food}>
+                    <View style={styles.imageContainer}>
+                      <Image
+                        style={styles.image}
+                        source={{
+                          uri:
+                            "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                            item.logo,
+                        }}
+                      ></Image>
+                    </View>
+                    <View style={styles.textContainer}>
+                      <Text style={styles.item}>{item.title}</Text>
+                    </View>
+                  </View>
+                  {selectedItems.includes(item._id) && (
+                    <View style={styles.overlay} />
+                  )}
+                </Pressable>
+              )}
+            ></FlatList>
+          </View>
         </View>
       )}
     </>
@@ -214,5 +392,74 @@ const styles = StyleSheet.create({
   addFoodIcon: {
     paddingRight: 5,
     paddingLeft: 10,
+  },
+  foodList: {
+    backgroundColor: Colors.blue,
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  food: {
+    height: 90,
+    width: 100,
+    marginHorizontal: 2,
+    marginVertical: 2,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    backgroundColor: "white",
+    borderRadius: 30,
+    borderColor: Colors.green,
+    borderWidth: 2,
+  },
+  overlay: {
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    borderRadius: 30,
+
+    borderColor: Colors.green,
+    borderWidth: 4,
+  },
+
+  textContainer: {
+    justifyContent: "space-evenly",
+
+    alignItems: "center",
+  },
+  item: {
+    fontWeight: "bold",
+    textAlign: "center",
+
+    color: Colors.green,
+  },
+  imageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: {
+    width: 50,
+    height: 50,
+    resizeMode: "contain",
+  },
+  readyView: {
+    backgroundColor: Colors.blue,
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+  },
+  readyButton: {
+    justifyContent: "center",
+
+    borderRadius: 40,
+    backgroundColor: Colors.green,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+
+    width: "40%",
+  },
+  readyText: {
+    textAlign: "center",
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
