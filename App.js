@@ -341,7 +341,7 @@ const token = await AsyncStorage.getItem("token")
   /* const fetchToken = async () => {
       await axios({
         method: "get",
-        url: "https://c886-213-163-151-83.eu.ngrok.io",
+        url: "https://de63-213-163-151-83.eu.ngrok.io",
         withCredentials: true,
       })
         .then((res) => {

@@ -18,5 +18,7 @@ router.put("/:id", userController.updateUser);
 //add and remove food from fridge
 router.put("/addfood/:id", userController.addFoodToFridge);
 router.put("/removefood/:id", userController.removeFoodFromFridge);
+router.patch("/editfood/:id", userController.editFoodFromFridge);
+router.patch("/deletefood/:id", userController.deleteFoodFromFridge);
 
 module.exports = router;

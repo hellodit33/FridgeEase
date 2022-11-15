@@ -5,7 +5,12 @@ import {
   addFoodToFridge,
   removeFoodFromFridge,
 } from "../../store/redux/actions/fridge.actions";
+import {
+  deleteFoodFromFridge,
+  editFoodFromFridge,
+} from "../../store/redux/actions/user.actions";
 import { getUser } from "../../store/redux/actions/user.actions";
+import EditModal from "../components/EditModal";
 import {
   View,
   Image,
@@ -19,19 +24,25 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
+  Modal,
 } from "react-native";
 import SuggestionInput from "./SuggestionInput";
 import SuggestionItem from "./SuggestionItem";
 import { storeSuggestions } from "../util/http";
 import { Ionicons } from "@expo/vector-icons";
+import IconButton from "../UI/IconButton";
 import FoodComponents from "../components/FoodComponents";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import { useDispatch, useSelector } from "react-redux";
 import { faHelicopterSymbol } from "@fortawesome/free-solid-svg-icons";
 import { useContext } from "react";
 import { cos } from "react-native-reanimated";
+import IcoButton from "../components/IcoButton";
+import PrimaryButton from "../components/PrimaryButton";
 
 function Fridge(props) {
+  const [itemToEdit, setItemToEdit] = useState();
+
   const categoryData = [
     {
       id: 1,
@@ -74,6 +85,18 @@ function Fridge(props) {
       name: "Desserter",
     },
   ];
+
+  const [modalIsVisible, setModalIsVisible] = useState(false);
+  function openModal(item) {
+    setModalIsVisible(true);
+    console.log(item._id);
+    console.log(item.foodName);
+    setItemToEdit(item._id);
+    console.log(itemToEdit);
+  }
+  function closeModal() {
+    setModalIsVisible(false);
+  }
 
   const userData = useSelector((state) => state.userReducer);
   const userFood = useSelector((state) => state.usersfood);
@@ -211,27 +234,80 @@ return(
   console.log(JSON.stringify(userFridge));*/
 
   function renderMyFridge() {
+    const editInFridge = (item) => {
+      dispatch(
+        editFoodFromFridge(
+          userData._id,
+          item._id,
+          item.foodExpiration,
+          item.foodQuantity
+        )
+      );
+      dispatch(getUser(userData._id));
+      closeModal();
+    };
+    const deleteInFridge = (item) => {
+      dispatch(deleteFoodFromFridge(userData._id, item._id));
+      dispatch(getUser(userData._id));
+    };
+
+    function renderCarbon({ item }) {
+      if (item.foodCarbon > 300) {
+        return <Text style={styles.itemCarbon}>B</Text>;
+      }
+      if (item.foodCarbon <= 300) {
+        return <Text style={styles.itemCarbon}>A</Text>;
+      }
+    }
     const renderFridge = ({ item }) => {
       /*   for (let i = 0; i < userData.usersfood.length; i++) {
         if (userData.usersfood[i] === item._id) */ {
         return (
           <ScrollView>
             <View style={styles.userFridgeItem}>
-              <Image
-                style={styles.userImage}
-                source={{
-                  uri:
-                    "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
-                    item.foodLogo,
-                }}
-              ></Image>
-              <Text style={styles.itemName}>{item.foodName}</Text>
-              <Text style={styles.itemExp}>{item.foodExpiration}</Text>
+              <View style={styles.userImageView}>
+                <Image
+                  style={styles.userImage}
+                  source={{
+                    uri:
+                      "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                      item.foodLogo,
+                  }}
+                ></Image>
+              </View>
+              <View style={styles.itemView}>
+                <Text style={styles.itemName}>{item.foodName}</Text>
+              </View>
+              <View style={styles.expView}>
+                <Text style={styles.itemExp}>{item.foodExpiration} dagar</Text>
+              </View>
+              <View style={styles.carbonView}>
+                {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
+                {renderCarbon({ item })}
+              </View>
+              <View style={styles.editItem}>
+                <IcoButton
+                  icon="create-outline"
+                  size={24}
+                  color={Colors.green}
+                  onPress={() => openModal(item)}
+                />
+              </View>
 
-              <Text style={styles.itemCarbon}>{item.foodCarbon}</Text>
-              <Ionicons name="create-outline" size={24} />
+              <View style={styles.deleteItem}>
+                <IcoButton
+                  icon="close-outline"
+                  size={24}
+                  color={Colors.green}
+                  onPress={() => deleteInFridge(item)}
+                />
 
-              <Ionicons name="close-outline" size={24} />
+                <EditModal
+                  visible={modalIsVisible}
+                  foodItem={item}
+                  onEditFood={() => editInFridge()}
+                />
+              </View>
             </View>
           </ScrollView>
         );
@@ -285,7 +361,6 @@ return(
     let filteredFridge = fridge.filter((foodcat) =>
       foodcat.category.includes(categories.name)
     );
-
     setNewFood(filteredFridge);
 
     setSelectedCategory(category);
@@ -325,7 +400,12 @@ return(
 
       {userData.usersfood && !hideFood && (
         <View style={styles.fridgeView}>
-          <Text>{userData.usersfood.length} products in your fridge</Text>
+          <View style={styles.fridgeInstView}>
+            {/*<Text>{userData.usersfood.length} products in your fridge</Text>*/}
+            <Text style={styles.fridgeToRecipe}>
+              Markera de matvaror du vill laga mat på och klicka på receptikonen
+            </Text>
+          </View>
           {renderMyFridge()}
         </View>
       )}
@@ -406,7 +486,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 120,
-    margin: 20,
+    marginHorizontal: 20,
+    marginVertical: 5,
     borderWidth: 4,
     borderColor: Colors.green,
     flexDirection: "row",
@@ -494,33 +575,74 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue,
     flex: 1,
   },
+  fridgeInstView: {
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+  },
+  fridgeToRecipe: {
+    color: Colors.green,
+    fontWeight: "bold",
+  },
   userFridgeItem: {
     backgroundColor: "white",
     marginVertical: 10,
-    paddingVertical: 10,
     marginHorizontal: 20,
     borderRadius: 30,
-    borderColor: Colors.green,
-    borderWidth: 2,
     width: "90%",
     height: 60,
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
+  },
+  itemView: {
+    justifyContent: "center",
+    height: 60,
   },
   itemName: {
     color: Colors.green,
     fontWeight: "bold",
     fontSize: 17,
-    paddingVertical: 6,
+  },
+  carbonView: {
+    marginVertical: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "green",
+    height: 40,
+    width: 40,
+    padding: 10,
+    borderRadius: 60,
   },
   itemCarbon: {
-    backgroundColor: "green",
+    fontWeight: "bold",
+    color: "white",
+  },
+  expView: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.middlepink,
+    padding: 10,
+    height: 60,
   },
   itemExp: {
-    backgroundColor: Colors.middlepink,
+    color: "white",
+    fontWeight: "bold",
+  },
+  userImageView: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 10,
+    height: 60,
   },
   userImage: {
     width: 30,
     height: 30,
+  },
+  editItem: { justifyContent: "center", alignItems: "center" },
+  deleteItem: { justifyContent: "center", alignItems: "center" },
+  editView: {
+    backgroundColor: Colors.blue,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

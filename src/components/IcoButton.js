@@ -24,6 +24,6 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   icons: {
-    paddingHorizontal: 9,
+    /*paddingHorizontal: 9*/
   },
 });

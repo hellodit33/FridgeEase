@@ -30,10 +30,11 @@ const userSchema = new mongoose.Schema(
         {
           foodId: Number,
           foodName: String,
-          foodCarbon: Number,
+          foodCarbon: String,
           foodExpiration: Number,
           foodCategory: String,
           foodLogo: String,
+          foodQuantity: Number,
           timestamp: Number,
         },
       ],

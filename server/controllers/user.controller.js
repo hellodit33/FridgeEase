@@ -108,7 +108,7 @@ module.exports.removeFoodFromFridge = (req, res) => {
     UserModel.findByIdAndUpdate(
       req.params.id,
       { $pull: { usersfood: req.body.foodIdToRemove } },
-      { new: true, upsert: true },
+
       (err, data) => {
         if (!err) res.status(201).json(data);
         else return res.status(400).json(err);
@@ -116,5 +116,54 @@ module.exports.removeFoodFromFridge = (req, res) => {
     );
   } catch (err) {
     return res.status(500).json({ message: err });
+  }
+};
+
+module.exports.editFoodFromFridge = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    return UserModel.findById(req.params.id, (err, data) => {
+      const theFood = data.usersfood.find((food) =>
+        food._id.equals(req.body.foodId)
+      );
+
+      if (!theFood) return res.status(404).send("Food not found");
+      theFood.foodExpiration = req.body.foodExpiration;
+
+      theFood.foodQuantity = req.body.foodQuantity;
+
+      return data.save((err) => {
+        if (!err) return res.status(200).send(data);
+        return res.status(500).send(err);
+      });
+    });
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+};
+module.exports.deleteFoodFromFridge = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    return UserModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: {
+          usersfood: {
+            _id: req.body.foodId,
+          },
+        },
+      },
+      { new: true },
+      (err, data) => {
+        if (!err) return res.send(data);
+        else return res.status(400).send(err);
+      }
+    );
+  } catch (err) {
+    return res.status(400).send(err);
   }
 };
