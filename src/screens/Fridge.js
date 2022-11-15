@@ -101,6 +101,7 @@ function Fridge(props) {
   const dispatch = useDispatch();
 
   const foodsLists = useSelector((state) => state.intoFridgeReducer);
+  const [foodlist, setFoodlist] = useState(foodsLists);
   const [isAdded, setIsAdded] = useState(false);
   const [addedItems, setAddedItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -159,6 +160,7 @@ function Fridge(props) {
             alignItems: "center",
             justifyContent: "center",
           }}
+          onPress={() => onSelectCategory(item)}
         >
           <Text
             style={{
@@ -214,8 +216,23 @@ return(
         if (userData.usersfood[i] === item._id) */ {
         return (
           <ScrollView>
-            <Text>{item.foodName}</Text>
-            <Text>{item.foodCarbon}</Text>
+            <View style={styles.userFridgeItem}>
+              <Image
+                style={styles.userImage}
+                source={{
+                  uri:
+                    "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                    item.foodLogo,
+                }}
+              ></Image>
+              <Text style={styles.itemName}>{item.foodName}</Text>
+              <Text style={styles.itemExp}>{item.foodExpiration}</Text>
+
+              <Text style={styles.itemCarbon}>{item.foodCarbon}</Text>
+              <Ionicons name="create-outline" size={24} />
+
+              <Ionicons name="close-outline" size={24} />
+            </View>
           </ScrollView>
         );
       }
@@ -263,6 +280,17 @@ return(
 
   /*const { addFood } = useContext(AuthContext);*/
 
+  function onSelectCategory(category) {
+    //filter restaurant
+    let filteredFridge = fridge.filter((foodcat) =>
+      foodcat.category.includes(categories.name)
+    );
+
+    setNewFood(filteredFridge);
+
+    setSelectedCategory(category);
+  }
+
   return (
     <>
       <View>
@@ -296,8 +324,8 @@ return(
       )}
 
       {userData.usersfood && !hideFood && (
-        <View>
-          <Text>your fridge:</Text>
+        <View style={styles.fridgeView}>
+          <Text>{userData.usersfood.length} products in your fridge</Text>
           {renderMyFridge()}
         </View>
       )}
@@ -461,5 +489,38 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 20,
     fontWeight: "bold",
+  },
+  fridgeView: {
+    backgroundColor: Colors.blue,
+    flex: 1,
+  },
+  userFridgeItem: {
+    backgroundColor: "white",
+    marginVertical: 10,
+    paddingVertical: 10,
+    marginHorizontal: 20,
+    borderRadius: 30,
+    borderColor: Colors.green,
+    borderWidth: 2,
+    width: "90%",
+    height: 60,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  itemName: {
+    color: Colors.green,
+    fontWeight: "bold",
+    fontSize: 17,
+    paddingVertical: 6,
+  },
+  itemCarbon: {
+    backgroundColor: "green",
+  },
+  itemExp: {
+    backgroundColor: Colors.middlepink,
+  },
+  userImage: {
+    width: 30,
+    height: 30,
   },
 });
