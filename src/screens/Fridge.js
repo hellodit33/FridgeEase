@@ -128,6 +128,7 @@ function Fridge(props) {
   const [isAdded, setIsAdded] = useState(false);
   const [addedItems, setAddedItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [selectToRecipe, setSelectToRecipe] = useState([]);
   const [toDelete, setToDelete] = useState(false);
 
   const [titles, setTitles] = useState("");
@@ -157,6 +158,17 @@ function Fridge(props) {
         )
       );
       dispatch(getUser(userData._id));
+    }
+  };
+
+  const handlePressToRecipe = (food) => {
+    if (selectToRecipe.includes(food._id)) {
+      selectToRecipe.filter((foodId) => foodId !== foodId);
+
+      console.log(selectToRecipe);
+    } else if (!selectToRecipe.includes(food._id)) {
+      setSelectToRecipe([...selectToRecipe, food._id]);
+      console.log(selectToRecipe);
     }
   };
 
@@ -263,53 +275,62 @@ return(
       /*   for (let i = 0; i < userData.usersfood.length; i++) {
         if (userData.usersfood[i] === item._id) */ {
         return (
-          <ScrollView>
-            <View style={styles.userFridgeItem}>
-              <View style={styles.userImageView}>
-                <Image
-                  style={styles.userImage}
-                  source={{
-                    uri:
-                      "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
-                      item.foodLogo,
-                  }}
-                ></Image>
-              </View>
-              <View style={styles.itemView}>
-                <Text style={styles.itemName}>{item.foodName}</Text>
-              </View>
-              <View style={styles.expView}>
-                <Text style={styles.itemExp}>{item.foodExpiration} dagar</Text>
-              </View>
-              <View style={styles.carbonView}>
-                {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
-                {renderCarbon({ item })}
-              </View>
-              <View style={styles.editItem}>
-                <IcoButton
-                  icon="create-outline"
-                  size={24}
-                  color={Colors.green}
-                  onPress={() => openModal(item)}
-                />
-              </View>
+          <>
+            <ScrollView>
+              <Pressable onPress={() => handlePressToRecipe(item)}>
+                <View style={styles.userFridgeItem}>
+                  <View style={styles.userImageView}>
+                    <Image
+                      style={styles.userImage}
+                      source={{
+                        uri:
+                          "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                          item.foodLogo,
+                      }}
+                    ></Image>
+                  </View>
+                  <View style={styles.itemView}>
+                    <Text style={styles.itemName}>{item.foodName}</Text>
+                  </View>
+                  <View style={styles.expView}>
+                    <Text style={styles.itemExp}>
+                      {item.foodExpiration} dagar
+                    </Text>
+                  </View>
+                  <View style={styles.carbonView}>
+                    {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
+                    {renderCarbon({ item })}
+                  </View>
+                  <View style={styles.editItem}>
+                    <IcoButton
+                      icon="create-outline"
+                      size={24}
+                      color={Colors.green}
+                      onPress={() => openModal(item)}
+                    />
+                  </View>
 
-              <View style={styles.deleteItem}>
-                <IcoButton
-                  icon="close-outline"
-                  size={24}
-                  color={Colors.green}
-                  onPress={() => deleteInFridge(item)}
-                />
+                  <View style={styles.deleteItem}>
+                    <IcoButton
+                      icon="close-outline"
+                      size={24}
+                      color={Colors.green}
+                      onPress={() => deleteInFridge(item)}
+                    />
 
-                <EditModal
-                  visible={modalIsVisible}
-                  foodItem={item}
-                  onEditFood={() => editInFridge()}
-                />
-              </View>
-            </View>
-          </ScrollView>
+                    <EditModal
+                      visible={modalIsVisible}
+                      foodItem={item}
+                      onEditFood={() => editInFridge()}
+                    />
+                  </View>
+                  {selectToRecipe.includes(item._id) && (
+                    <View style={styles.overlayToRecipe} />
+                  )}
+                </View>
+              </Pressable>
+            </ScrollView>
+          </>
         );
       }
     };
@@ -525,6 +546,14 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 30,
 
+    borderColor: Colors.green,
+    borderWidth: 4,
+  },
+  overlayToRecipe: {
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    borderRadius: 30,
     borderColor: Colors.green,
     borderWidth: 4,
   },
