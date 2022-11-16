@@ -98,32 +98,34 @@ function Recipes() {
           )
         );
       }
-
-      recipesData.map(item).filter((item) => item.selectRecipe === "true") && (
-        <>
-          <FlatList
-            legacyImplementation={true}
-            data={recipesData}
-            extraData={recipesData}
-            keyExtractor={() => Math.random()}
-            renderItem={({ item }) => (
-              <View style={{ padding: 9 }}>
-                <Text>{item.description}</Text>
-                <FlatList
-                  data={item.ingredients}
-                  keyExtractor={() => Math.random()}
-                  renderItem={({ item }) => (
-                    <View>
-                      <Text>{item}</Text>
-                    </View>
-                  )}
-                />
-              </View>
-            )}
-          />
-        </>
-      );
     }
+    recipes();
+    const selectedRecipes = recipesData.filter(
+      (recipe) => recipe.selectRecipe === true
+    );
+    console.log(selectedRecipes);
+    return (
+      <FlatList
+        legacyImplementation={true}
+        data={selectedRecipes}
+        extraData={selectedRecipes}
+        keyExtractor={() => Math.random()}
+        renderItem={({ item }) => (
+          <View style={{ padding: 9 }}>
+            <Text>{item.description}</Text>
+            <FlatList
+              data={item.ingredients}
+              keyExtractor={() => Math.random()}
+              renderItem={({ item }) => (
+                <View>
+                  <Text>{item}</Text>
+                </View>
+              )}
+            />
+          </View>
+        )}
+      />
+    );
   }
   const [loaded] = useFonts({
     alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
@@ -162,7 +164,7 @@ function Recipes() {
             </View>
           )}
         />*/}
-        <FlatList
+        {/*<FlatList
           legacyImplementation={true}
           contentContainerStyle={styles.foodList}
           data={commonElements}
@@ -173,8 +175,8 @@ function Recipes() {
               <Text>{item}</Text>
             </View>
           )}
-        />
-        <FlatList
+        />*/}
+        {/* <FlatList
           legacyImplementation={true}
           contentContainerStyle={styles.foodList}
           data={ingredients}
@@ -193,7 +195,7 @@ function Recipes() {
               />
             </View>
           )}
-        />
+        />*/}
       </View>
     </View>
   );
