@@ -6,6 +6,7 @@ import {
   removeFoodFromFridge,
 } from "../../store/redux/actions/fridge.actions";
 import {
+  addFoodToRecipe,
   deleteFoodFromFridge,
   editFoodFromFridge,
 } from "../../store/redux/actions/user.actions";
@@ -39,6 +40,7 @@ import { useContext } from "react";
 import { cos } from "react-native-reanimated";
 import IcoButton from "../components/IcoButton";
 import PrimaryButton from "../components/PrimaryButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function Fridge(props) {
   const [itemToEdit, setItemToEdit] = useState();
@@ -162,9 +164,12 @@ function Fridge(props) {
       const newListItem = selectToRecipe.filter(
         (foodId) => foodId !== food._id
       );
+
       return setSelectToRecipe(newListItem);
     }
+
     setSelectToRecipe([...selectToRecipe, food._id]);
+    dispatch(addFoodToRecipe(userData._id, food.foodName));
     console.log(selectToRecipe);
   };
 

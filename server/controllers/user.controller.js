@@ -39,6 +39,17 @@ module.exports.userFood = (req, res) => {
   });
 };
 
+module.exports.getFoodToRecipe = (req, res) => {
+  console.log(req.params);
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  UserModel.findById(req.params.id, (err, data) => {
+    if (!err) res.send(data.foodToRecipe);
+    else console.log("ID unknown : " + err);
+  });
+};
+
 /**
  *
  * @returns new information about user into db, while onboarding or changing info on profile
@@ -59,6 +70,30 @@ module.exports.updateUser = (req, res) => {
       (err, data) => {
         if (!err) return res.send(data);
         if (err) return res.status(500).send({ message: err });
+      }
+    );
+  } catch (err) {
+    return res.status(500).json({ message: err });
+  }
+};
+
+module.exports.addFoodToRecipe = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown: " + req.params.id);
+
+  try {
+    //add to the food list
+    UserModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $addToSet: {
+          foodToRecipe: [req.body.foodName],
+        },
+      },
+      { new: true, upsert: true },
+      (err, data) => {
+        if (!err) res.status(201).json(data);
+        else return res.status(400).json(err);
       }
     );
   } catch (err) {

@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       max: 1024,
     },
-
+    foodToRecipe: [String],
     usersfood: {
       type: [
         {

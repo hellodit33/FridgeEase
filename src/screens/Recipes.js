@@ -18,7 +18,19 @@ import { useContext, useEffect, useState } from "react";
 import AuthContent from "../components/Auth/AuthContent";
 import { AuthContext } from "../../store/context/auth-context";
 import { useFonts } from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  getFoodToRecipe,
+  getUser,
+} from "../../store/redux/actions/user.actions";
+import { useSelector, useDispatch } from "react-redux";
+
 function Recipes() {
+  const dispatch = useDispatch();
+  const [foodToRecipe, setfoodToRecipe] = useState([]);
+  const userData = useSelector((state) => state.userReducer);
+  dispatch(getUser(userData._id));
+
   const [loaded] = useFonts({
     alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
   });
@@ -26,10 +38,23 @@ function Recipes() {
   if (!loaded) {
     return null;
   }
+
   return (
     <View style={styles.firstScreen}>
       <View style={[styles.month, styles.book]}>
         <Text style={styles.title}>Hej</Text>
+        <FlatList
+          legacyImplementation={true}
+          contentContainerStyle={styles.foodList}
+          data={userData.foodToRecipe}
+          extraData={userData.foodToRecipe}
+          keyExtractor={(item) => Math.random(item._id)}
+          renderItem={({ item }) => (
+            <View>
+              <Text>{item}</Text>
+            </View>
+          )}
+        />
       </View>
     </View>
   );

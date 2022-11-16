@@ -4,6 +4,8 @@ export const GET_USER = "GET_USER";
 export const GET_USER_FOOD = "GET_USER_FOOD";
 export const EDIT_FOOD = "EDIT_FOOD";
 export const DELETE_FOOD = "DELETE_FOOD";
+export const ADD_FOOD_TO_RECIPE = "ADD_FOOD_TO_RECIPE";
+export const GET_FOOD_TO_RECIPE = "GET_FOOD_TO_RECIPE";
 
 export const getUser = (uid) => {
   return (dispatch) => {
@@ -53,15 +55,58 @@ export const deleteFoodFromFridge = (userId, foodId) => {
   };
 };
 
-/*export const getUserFood = (uid) => {
+export const addFoodToRecipe = (userId, foodName) => {
   return (dispatch) => {
-    return axios
-      .get(`https://07c7-213-163-151-83.eu.ngrok.io/api/user/${uid}/userfood`)
+    return axios({
+      method: "put",
+      url:
+        `https://07c7-213-163-151-83.eu.ngrok.io/api/user/addtorecipe/` +
+        userId,
+      data: {
+        foodName,
+      },
+    })
       .then((res) => {
-        dispatch({ type: GET_USER_FOOD, payload: res.data.usersfood });
-        console.log(res.data.usersfood);
-        console.log("hellohellouserfood");
+        dispatch({
+          type: ADD_FOOD_TO_RECIPE,
+          payload: {
+            foodName,
+          },
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+};
+
+/*export const getFoodToRecipe = (userId, foodName) => {
+  return (dispatch) => {
+    return axios({
+      method: "get",
+      url:
+        `https://07c7-213-163-151-83.eu.ngrok.io/api/user/gettorecipe/` +
+        userId,
+    })
+      .then((res) => {
+        dispatch({
+          type: GET_FOOD_TO_RECIPE,
+          payload: {
+            foodName,
+          },
+        });
       })
       .catch((err) => console.log(err));
   };
 };*/
+
+export const getFoodToRecipe = (userId) => {
+  return (dispatch) => {
+    return axios
+      .get(
+        `https://07c7-213-163-151-83.eu.ngrok.io/api/user/gettorecipe/` + userId
+      )
+      .then((res) => {
+        dispatch({ type: GET_FOOD_TO_RECIPE, payload: res.data.foodToRecipe });
+      })
+      .catch((err) => console.log(err));
+  };
+};
