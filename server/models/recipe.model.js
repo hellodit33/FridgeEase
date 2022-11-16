@@ -20,6 +20,8 @@ var RecipeSchema = new mongoose.Schema({
   description: { type: String },
 
   picture: { type: String },
+
+  selectRecipe: { type: Boolean },
 });
 
 module.exports = mongoose.model("recipes", RecipeSchema);

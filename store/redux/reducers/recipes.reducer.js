@@ -7,6 +7,7 @@ export default function recipesReducer(state = initialState, action) {
     case FETCH_RECIPES: {
       return action.payload;
     }
+
     default:
       return state;
   }

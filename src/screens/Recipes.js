@@ -25,7 +25,10 @@ import {
   getUser,
 } from "../../store/redux/actions/user.actions";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchRecipes } from "../../store/redux/actions/recipe.actions";
+import {
+  fetchRecipes,
+  selectRecipe,
+} from "../../store/redux/actions/recipe.actions";
 import LoadingOverlay from "../UI/LoadingOverlay";
 
 function Recipes() {
@@ -71,37 +74,56 @@ function Recipes() {
   let question = getTrueOrFalse(ingredients, commonElements);
 
   function showRecipe() {
-    const [showRecipes, setShowRecipes] = useState([]);
-    for (var i = 0; i < ingredients.length; ++i) {
-      const recipesToShow = ingredients[i].some((item) =>
-        commonElements.includes(item)
+    async function recipes() {
+      for (var i = 0; i < ingredients?.length; ++i) {
+        const recipesToShow = [
+          ...recipesToShow,
+          ingredients[i]?.some((item) => commonElements?.includes(item)),
+        ];
+
+        const data = [
+          ...data,
+          [
+            recipesData[i]?._id,
+            ingredients[i]?.some((item) => commonElements?.includes(item)),
+          ],
+        ];
+
+        console.log(data);
+        console.log(recipesToShow);
+        dispatch(
+          selectRecipe(
+            recipesData[i]?._id,
+            ingredients[i]?.some((item) => commonElements?.includes(item))
+          )
+        );
+      }
+
+      recipesData.map(item).filter((item) => item.selectRecipe === "true") && (
+        <>
+          <FlatList
+            legacyImplementation={true}
+            data={recipesData}
+            extraData={recipesData}
+            keyExtractor={() => Math.random()}
+            renderItem={({ item }) => (
+              <View style={{ padding: 9 }}>
+                <Text>{item.description}</Text>
+                <FlatList
+                  data={item.ingredients}
+                  keyExtractor={() => Math.random()}
+                  renderItem={({ item }) => (
+                    <View>
+                      <Text>{item}</Text>
+                    </View>
+                  )}
+                />
+              </View>
+            )}
+          />
+        </>
       );
-      console.log(recipesToShow);
     }
-    return (
-      <>
-        <FlatList
-          legacyImplementation={true}
-          data={recipesData}
-          extraData={recipesData}
-          keyExtractor={() => Math.random()}
-          renderItem={({ item }) => (
-            <View style={{ padding: 9 }}>
-              <Text>{item.description}</Text>
-              <FlatList
-                data={item.ingredients}
-                keyExtractor={() => Math.random()}
-                renderItem={({ item }) => (
-                  <View>
-                    <Text>{item}</Text>
-                  </View>
-                )}
-              />
-            </View>
-          )}
-        />
-      </>
-    );
   }
   const [loaded] = useFonts({
     alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
@@ -114,7 +136,7 @@ function Recipes() {
   return (
     <View style={styles.firstScreen}>
       <View style={{ flex: 1 }}>
-        <FlatList
+        {/* <FlatList
           legacyImplementation={true}
           contentContainerStyle={styles.foodList}
           data={userData.foodToRecipe}
@@ -125,12 +147,10 @@ function Recipes() {
               <Text>{item}</Text>
             </View>
           )}
-        />
-        <Text>{ingredients}</Text>
+        />*/}
 
-        <Text>Allt jag har</Text>
         {showRecipe()}
-        <FlatList
+        {/* <FlatList
           legacyImplementation={true}
           contentContainerStyle={styles.foodList}
           data={userIngredients}
@@ -141,7 +161,7 @@ function Recipes() {
               <Text>{item}</Text>
             </View>
           )}
-        />
+        />*/}
         <FlatList
           legacyImplementation={true}
           contentContainerStyle={styles.foodList}
