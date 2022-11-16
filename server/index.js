@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 
 const foodRoutes = require("./routes/food.routes");
 const userRoutes = require("./routes/user.routes");
+const recipeRoutes = require("./routes/recipe.routes");
 
 require("dotenv").config();
 require("./config/database");
@@ -34,6 +35,8 @@ app.get("/api/user/profile", verifyToken, (req, res) => {
 app.use("/api/food", foodRoutes);
 
 app.use("/api/user", userRoutes);
+
+app.use("/api/recipes", recipeRoutes);
 
 //listening to server on available port from heroku or 5000 for
 app.listen(process.env.PORT || 5000, () => {

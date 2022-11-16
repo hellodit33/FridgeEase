@@ -44,6 +44,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function Fridge(props) {
   const [itemToEdit, setItemToEdit] = useState();
+  const [filteredData, setFilteredData] = useState([]);
+  const searchFilterFunction = (text) => {
+    const newData = foodlist
+      .map((food) => food.foodName)
+      .filter((f) => {
+        let foodLowerCase = f.foodName.toLowerCase();
+        let searchTermLowerCase = text.toLowerCase();
+        return foodLowerCase.indexOf(searchTermLowerCase) > -1;
+      });
+    setFoodlist(newData);
+  };
 
   const categoryData = [
     {
@@ -170,6 +181,7 @@ function Fridge(props) {
 
     setSelectToRecipe([...selectToRecipe, food._id]);
     dispatch(addFoodToRecipe(userData._id, food.foodName));
+    dispatch(getUser(userData._id));
     console.log(selectToRecipe);
   };
 
@@ -406,7 +418,8 @@ return(
               placeholder="Lägg till matvara...."
               keyboardType="default"
               multiline={false}
-              onTextInput={showFoodComponents}
+              onTouchStart={showFoodComponents}
+              /* onChangeText={(e) => searchFilterFunction(e.nativeEvent.text)}*/
             />
           </View>
         </View>
@@ -445,7 +458,8 @@ return(
               legacyImplementation={true}
               contentContainerStyle={styles.foodList}
               numColumns={3}
-              data={foodsLists}
+              data={foodlist}
+              extraData={foodlist}
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <Pressable

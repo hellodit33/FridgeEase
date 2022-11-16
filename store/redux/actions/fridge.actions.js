@@ -4,7 +4,7 @@ export const FETCH_FOOD = "FETCH_FOOD";
 export const ADD_FOOD_TO_FRIDGE = "ADD_FOOD_TO_FRIDGE";
 export const REMOVE_FOOD_FROM_FRIDGE = "REMOVE_FOOD_FROM_FRIDGE";
 
-const BASE_URL = "https://07c7-213-163-151-83.eu.ngrok.io";
+const BASE_URL = "https://4bae-213-163-151-83.eu.ngrok.io";
 export const fetchFood = () => {
   return (dispatch) => {
     return axios

@@ -300,7 +300,7 @@ function Navigation() {
   }, [uid]);
 
   if (isLoading) {
-    return <LoadingOverlay message="Vänta" />;
+    return <LoadingOverlay message="Ge oss en kort stund..." />;
   }
   /* const authCtx = useContext(AuthContext);*/
   /* const [uid, setUid] = useState(null);
@@ -399,10 +399,13 @@ import { Provider } from "react-redux";
 import rootReducer from "./store/redux/reducers";
 import { configureStore } from "@reduxjs/toolkit";
 import { StatusBar } from "expo-status-bar";
+import { fetchRecipes } from "./store/redux/actions/recipe.actions";
 
 const store = configureStore({ reducer: rootReducer });
 
 store.dispatch(fetchFood());
+store.dispatch(fetchRecipes());
+
 /*
 if (uid) {
   store.dispatch(getUserFood(uid));
