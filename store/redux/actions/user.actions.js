@@ -8,7 +8,7 @@ export const DELETE_FOOD = "DELETE_FOOD";
 export const getUser = (uid) => {
   return (dispatch) => {
     return axios
-      .get(`https://de63-213-163-151-83.eu.ngrok.io/api/user/${uid}`)
+      .get(`https://07c7-213-163-151-83.eu.ngrok.io/api/user/${uid}`)
       .then((res) => {
         dispatch({ type: GET_USER, payload: res.data });
         console.log(res.data);
@@ -26,7 +26,7 @@ export const editFoodFromFridge = (
   return (dispatch) => {
     return axios({
       method: "patch",
-      url: `https://de63-213-163-151-83.eu.ngrok.io/api/user/editfood/${userId}`,
+      url: `https://07c7-213-163-151-83.eu.ngrok.io/api/user/editfood/${userId}`,
       data: { foodId, foodExpiration, foodQuantity },
     })
       .then((res) => {
@@ -43,7 +43,7 @@ export const deleteFoodFromFridge = (userId, foodId) => {
   return (dispatch) => {
     return axios({
       method: "patch",
-      url: `https://de63-213-163-151-83.eu.ngrok.io/api/user/deletefood/${userId}`,
+      url: `https://07c7-213-163-151-83.eu.ngrok.io/api/user/deletefood/${userId}`,
       data: { foodId },
     })
       .then((res) => {
@@ -56,7 +56,7 @@ export const deleteFoodFromFridge = (userId, foodId) => {
 /*export const getUserFood = (uid) => {
   return (dispatch) => {
     return axios
-      .get(`https://de63-213-163-151-83.eu.ngrok.io/api/user/${uid}/userfood`)
+      .get(`https://07c7-213-163-151-83.eu.ngrok.io/api/user/${uid}/userfood`)
       .then((res) => {
         dispatch({ type: GET_USER_FOOD, payload: res.data.usersfood });
         console.log(res.data.usersfood);

@@ -129,47 +129,43 @@ function Fridge(props) {
   const [addedItems, setAddedItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectToRecipe, setSelectToRecipe] = useState([]);
+  const [unselectToRecipe, setUnselectToRecipe] = useState([]);
+
   const [toDelete, setToDelete] = useState(false);
 
   const [titles, setTitles] = useState("");
 
   const handlePress = (food) => {
     if (selectedItems.includes(food._id)) {
-      // setToDelete([...toDelete, food._id]);
-      //  selectedItems.filter((foodId) => foodId !== foodId);
-      // console.log(toDelete);
-      console.log(selectedItems);
-      console.log("delete " + food.title);
+      const newSelect = selectedItems.filter((foodId) => foodId !== food._id);
       dispatch(removeFoodFromFridge(userData._id, food._id));
-      setToDelete(true);
-    } else if (!selectedItems.includes(food._id) || toDelete) {
-      setSelectedItems([...selectedItems, food._id]);
-      console.log(selectedItems);
-      console.log("added " + food.title);
-      dispatch(
-        addFoodToFridge(
-          userData._id,
-          food._id,
-          food.title,
-          food.logo,
-          food.carbon,
-          food.category,
-          food.expiration
-        )
-      );
-      dispatch(getUser(userData._id));
+      return setSelectedItems(newSelect);
     }
+    setSelectedItems([...selectedItems, food._id]);
+
+    dispatch(
+      addFoodToFridge(
+        userData._id,
+        food._id,
+        food.title,
+        food.logo,
+        food.carbon,
+        food.category,
+        food.expiration
+      )
+    );
+    dispatch(getUser(userData._id));
   };
 
   const handlePressToRecipe = (food) => {
     if (selectToRecipe.includes(food._id)) {
-      selectToRecipe.filter((foodId) => foodId !== foodId);
-
-      console.log(selectToRecipe);
-    } else if (!selectToRecipe.includes(food._id)) {
-      setSelectToRecipe([...selectToRecipe, food._id]);
-      console.log(selectToRecipe);
+      const newListItem = selectToRecipe.filter(
+        (foodId) => foodId !== food._id
+      );
+      return setSelectToRecipe(newListItem);
     }
+    setSelectToRecipe([...selectToRecipe, food._id]);
+    console.log(selectToRecipe);
   };
 
   /*
@@ -324,10 +320,11 @@ return(
                       onEditFood={() => editInFridge()}
                     />
                   </View>
-                  {selectToRecipe.includes(item._id) && (
+                </View>
+                {selectToRecipe.includes(item._id) &&
+                  !unselectToRecipe.includes(item._id) && (
                     <View style={styles.overlayToRecipe} />
                   )}
-                </View>
               </Pressable>
             </ScrollView>
           </>
@@ -545,28 +542,17 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     borderRadius: 30,
-
-    borderColor: Colors.green,
-    borderWidth: 4,
-  },
-  overlayToRecipe: {
-    position: "absolute",
-    height: "100%",
-    width: "100%",
-    borderRadius: 30,
     borderColor: Colors.green,
     borderWidth: 4,
   },
 
   textContainer: {
     justifyContent: "space-evenly",
-
     alignItems: "center",
   },
   item: {
     fontWeight: "bold",
     textAlign: "center",
-
     color: Colors.green,
   },
   imageContainer: {
@@ -586,12 +572,10 @@ const styles = StyleSheet.create({
   },
   readyButton: {
     justifyContent: "center",
-
     borderRadius: 40,
     backgroundColor: Colors.green,
     paddingHorizontal: 10,
     paddingVertical: 10,
-
     width: "40%",
   },
   readyText: {
@@ -621,6 +605,16 @@ const styles = StyleSheet.create({
     height: 60,
     flexDirection: "row",
     justifyContent: "space-evenly",
+  },
+  overlayToRecipe: {
+    position: "absolute",
+    width: "90%",
+    height: 60,
+    borderRadius: 30,
+    borderColor: Colors.green,
+    borderWidth: 4,
+    marginVertical: 10,
+    marginHorizontal: 20,
   },
   itemView: {
     justifyContent: "center",
