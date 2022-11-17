@@ -107,12 +107,19 @@ function Recipes() {
     return (
       <FlatList
         legacyImplementation={true}
+        horizontal
+        contentContainerStyle={styles.recipesList}
         data={selectedRecipes}
         extraData={selectedRecipes}
         keyExtractor={() => Math.random()}
         renderItem={({ item }) => (
-          <View style={{ padding: 9 }}>
-            <Text>{item.description}</Text>
+          <View style={styles.recipes}>
+            <View>
+              <Text>{item.title}</Text>
+              <Text>{item.duration}</Text>
+              <Text>{item.difficulty}</Text>
+              <Text>{item.carbon}</Text>
+            </View>
             <FlatList
               data={item.ingredients}
               keyExtractor={() => Math.random()}
@@ -150,8 +157,7 @@ function Recipes() {
             </View>
           )}
         />*/}
-
-        {showRecipe()}
+        <View>{showRecipe()}</View>
         {/* <FlatList
           legacyImplementation={true}
           contentContainerStyle={styles.foodList}
@@ -211,6 +217,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue,
     justifyContent: "center",
     alignItems: "center",
+  },
+  recipesList: {
+    alignContent: "center",
+    justifyItems: "center",
+  },
+  recipes: {
+    backgroundColor: "white",
+    marginLeft: 15,
+    marginRight: 5,
+    marginVertical: 40,
+    padding: 120,
+    borderRadius: 30,
   },
   title: {
     fontFamily: "alk",
