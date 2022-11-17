@@ -19,7 +19,7 @@ var RecipeSchema = new mongoose.Schema({
 
   description: { type: String },
 
-  picture: { type: String },
+  image: { type: String },
 
   selectRecipe: { type: Boolean },
 });

@@ -241,6 +241,11 @@ const styles = StyleSheet.create({
     padding: 120,
     borderRadius: 30,
   },
+  image: {
+    width: 50,
+    height: 50,
+    resizeMode: "contain",
+  },
   title: {
     fontFamily: "alk",
 
