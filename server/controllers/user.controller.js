@@ -213,7 +213,7 @@ module.exports.addFoodToShoppingList = (req, res) => {
       req.params.id,
       {
         $addToSet: {
-          foodToShoppingList: [req.body.foodName],
+          shoppingList: [req.body.foodName],
         },
       },
       { new: true, upsert: true },

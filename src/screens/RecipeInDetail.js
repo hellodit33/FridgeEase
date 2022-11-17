@@ -12,17 +12,19 @@ import {
 import { useDispatch } from "react-redux";
 import Hyperlink from "react-native-hyperlink";
 import { useNavigation } from "@react-navigation/native";
-import RatingsOutput from "../components/Ratings/RatingsOutput";
 import Colors from "../../constants/Colors";
 import { useFonts } from "expo-font";
 
-import recipesReducer from "../../store/redux/reducers/recipes.reducer";
 import { useSelector } from "react-redux";
 import { useLayoutEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../components/Header";
 import LoadingOverlay from "../UI/LoadingOverlay";
-import { addFoodToShoppingList } from "../../server/controllers/user.controller";
+import {
+  addFoodToShopping,
+  ADD_FOOD_TO_SHOPPING_LIST,
+  getUser,
+} from "../../store/redux/actions/user.actions";
 
 function RecipeInDetail({ route, navigation }) {
   const dispatch = useDispatch();
@@ -36,6 +38,11 @@ function RecipeInDetail({ route, navigation }) {
 
   const climateImpact = ["A", "B", "C", "D", "E"];
 
+  function addToShoppingList(uid, item) {
+    dispatch(addFoodToShopping(uid, item));
+    dispatch(getUser(uid));
+  }
+
   const renderIngredients = () => {
     return ingredientsToShow.map((item) => {
       return (
@@ -46,7 +53,7 @@ function RecipeInDetail({ route, navigation }) {
               paddingHorizontal: 20,
               paddingVertical: 5,
             }}
-            onPress={() => dispatch(addFoodToShoppingList(userData._id, item))}
+            onPress={() => addToShoppingList(userData._id, item)}
           >
             <Ionicons
               name="add-circle-outline"
@@ -327,7 +334,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 10,
 
-    marginTop: 10,
+    marginVertical: 10,
     borderRadius: 30,
   },
 
