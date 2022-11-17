@@ -208,7 +208,7 @@ function Fridge(props) {
             alignItems: "center",
             justifyContent: "center",
           }}
-          onPress={() => onSelectCategory(item)}
+          /* onPress={() => onSelectCategory(item)}*/
         >
           <Text
             style={{
@@ -661,7 +661,7 @@ const styles = StyleSheet.create({
   expView: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.middlepink,
+    backgroundColor: Colors.lightpink,
     padding: 10,
     height: 60,
   },

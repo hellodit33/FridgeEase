@@ -32,6 +32,7 @@ import SuggestionInput from "./src/screens/SuggestionInput";
 import Shopping from "./src/screens/Shopping";
 import RecipesOverview from "./src/screens/RecipesOverview";
 import Recipes from "./src/screens/Recipes";
+import RecipeInDetail from "./src/screens/RecipeInDetail";
 import Fridge from "./src/screens/Fridge";
 import MyFridge from "./src/screens/MyFridge";
 //import FavoritesContextProvider from "./store/context/favorites-context";
@@ -226,6 +227,7 @@ function AuthenticatedStack() {
           headerShown: false,
         }}
       />
+      <Stack.Screen name="RecipeInDetail" component={RecipeInDetail} />
 
       <Stack.Screen name="RecipesOverview" component={RecipesOverview} />
       <Stack.Screen name="RecipesDetails" component={RecipesDetails} />
@@ -400,7 +402,6 @@ import rootReducer from "./store/redux/reducers";
 import { configureStore } from "@reduxjs/toolkit";
 import { StatusBar } from "expo-status-bar";
 import { fetchRecipes } from "./store/redux/actions/recipe.actions";
-
 const store = configureStore({ reducer: rootReducer });
 
 store.dispatch(fetchFood());

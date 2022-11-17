@@ -5,7 +5,7 @@ var RecipeSchema = new mongoose.Schema({
 
   ingredients: [String],
 
-  carbon: { type: Number },
+  climateImpact: { type: String },
 
   category: { type: String },
 

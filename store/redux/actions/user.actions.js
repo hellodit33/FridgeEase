@@ -6,7 +6,7 @@ export const EDIT_FOOD = "EDIT_FOOD";
 export const DELETE_FOOD = "DELETE_FOOD";
 export const ADD_FOOD_TO_RECIPE = "ADD_FOOD_TO_RECIPE";
 export const GET_FOOD_TO_RECIPE = "GET_FOOD_TO_RECIPE";
-const BASE_URL = "https://fd73-213-163-151-83.eu.ngrok.io";
+const BASE_URL = "https://da35-213-163-151-83.eu.ngrok.io";
 
 export const getUser = (uid) => {
   return (dispatch) => {
