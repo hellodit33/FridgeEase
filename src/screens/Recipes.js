@@ -119,6 +119,7 @@ function Recipes() {
               <Text>{item.duration}</Text>
               <Text>{item.difficulty}</Text>
               <Text>{item.carbon}</Text>
+              <Text></Text>
             </View>
             <FlatList
               data={item.ingredients}
