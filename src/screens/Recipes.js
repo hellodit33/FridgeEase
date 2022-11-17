@@ -2,6 +2,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   TextInput,
   FlatList,
   Button,
@@ -115,6 +116,15 @@ function Recipes() {
         renderItem={({ item }) => (
           <View style={styles.recipes}>
             <View>
+              <Image
+                style={styles.image}
+                source={{
+                  uri:
+                    "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/recipesPictures/" +
+                    item.title +
+                    ".png",
+                }}
+              ></Image>
               <Text>{item.title}</Text>
               <Text>{item.duration}</Text>
               <Text>{item.difficulty}</Text>
