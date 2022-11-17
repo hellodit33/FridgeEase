@@ -599,31 +599,37 @@ const styles = StyleSheet.create({
   },
   low: {
     width: 30,
+    marginHorizontal: 2,
     borderBottomWidth: 5,
     borderBottomColor: Colors.middlepink,
   },
   low2: {
     width: 30,
+    marginHorizontal: 2,
     borderBottomWidth: 5,
     borderBottomColor: "grey",
   },
   low3: {
     width: 30,
+    marginHorizontal: 2,
     borderBottomWidth: 5,
     borderBottomColor: "grey",
   },
   middle: {
     width: 30,
+    marginHorizontal: 2,
     borderBottomWidth: 5,
     borderBottomColor: Colors.middlepink,
   },
   middle2: {
     width: 30,
+    marginHorizontal: 2,
     borderBottomWidth: 5,
     borderBottomColor: "grey",
   },
   high: {
     width: 30,
+    marginHorizontal: 2,
     borderBottomWidth: 5,
     borderBottomColor: Colors.middlepink,
   },
