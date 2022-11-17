@@ -22,5 +22,6 @@ router.patch("/editfood/:id", userController.editFoodFromFridge);
 router.patch("/deletefood/:id", userController.deleteFoodFromFridge);
 router.put("/addtorecipe/:id", userController.addFoodToRecipe);
 router.get("/gettorecipe/:id", userController.getFoodToRecipe);
+router.put("/addtoshoppinglist/:id", userController.addFoodToShoppingList);
 
 module.exports = router;

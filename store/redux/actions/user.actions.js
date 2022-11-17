@@ -6,6 +6,8 @@ export const EDIT_FOOD = "EDIT_FOOD";
 export const DELETE_FOOD = "DELETE_FOOD";
 export const ADD_FOOD_TO_RECIPE = "ADD_FOOD_TO_RECIPE";
 export const GET_FOOD_TO_RECIPE = "GET_FOOD_TO_RECIPE";
+export const ADD_FOOD_TO_SHOPPING_LIST = "ADD_FOOD_TO_SHOPPING_LIST";
+
 const BASE_URL = "https://da35-213-163-151-83.eu.ngrok.io";
 
 export const getUser = (uid) => {
@@ -68,6 +70,27 @@ export const addFoodToRecipe = (userId, foodName) => {
       .then((res) => {
         dispatch({
           type: ADD_FOOD_TO_RECIPE,
+          payload: {
+            foodName,
+          },
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+};
+
+export const addFoodToShopping = (userId, foodName) => {
+  return (dispatch) => {
+    return axios({
+      method: "put",
+      url: `${BASE_URL}/api/user/addtoshoppinglist/` + userId,
+      data: {
+        foodName,
+      },
+    })
+      .then((res) => {
+        dispatch({
+          type: ADD_FOOD_TO_SHOPPING_LIST,
           payload: {
             foodName,
           },

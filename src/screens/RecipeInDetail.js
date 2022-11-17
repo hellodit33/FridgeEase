@@ -9,6 +9,7 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import Hyperlink from "react-native-hyperlink";
 import { useNavigation } from "@react-navigation/native";
 import RatingsOutput from "../components/Ratings/RatingsOutput";
@@ -21,10 +22,12 @@ import { useLayoutEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../components/Header";
 import LoadingOverlay from "../UI/LoadingOverlay";
+import { addFoodToShoppingList } from "../../server/controllers/user.controller";
 
 function RecipeInDetail({ route, navigation }) {
+  const dispatch = useDispatch();
   const recipeId = route.params.recipeId;
-
+  const userData = useSelector((state) => state.userReducer);
   const recipesData = useSelector((state) => state.recipesReducer);
   const recipeToShow = recipesData.find(
     (recipeItem) => recipeItem._id === recipeId
@@ -43,6 +46,7 @@ function RecipeInDetail({ route, navigation }) {
               paddingHorizontal: 20,
               paddingVertical: 5,
             }}
+            onPress={() => dispatch(addFoodToShoppingList(userData._id, item))}
           >
             <Ionicons
               name="add-circle-outline"
