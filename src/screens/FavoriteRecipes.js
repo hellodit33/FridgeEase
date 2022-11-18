@@ -12,11 +12,17 @@ import { useContext } from "react";
 import Colors from "../../constants/Colors";
 import { useSelector } from "react-redux";
 
-function FavoriteRecipes(props) {
+function FavoriteRecipes({ route, navigation }) {
   const recipesData = useSelector((state) => state.recipesReducer);
   const userData = useSelector((state) => state.userReducer);
   const favoriteRecipes = userData.favoriteRecipe;
+
   function renderFavoriteRecipes() {
+    function recipePressHandler(recipeId) {
+      navigation.navigate("RecipeInDetail", {
+        recipeId,
+      });
+    }
     /* const handlePressToShopping = (food) => {
       if (selectToShopping.includes(food._id)) {
         const newListItem = selectToShopping.filter(
@@ -48,12 +54,29 @@ function FavoriteRecipes(props) {
     return recipesData.map((item) => {
       for (let i = 0; i < favoriteRecipes.length; i++) {
         if (item._id === favoriteRecipes[i]) {
+          const renderIngredients = () => {
+            return item.ingredients.map((item) => {
+              return (
+                <>
+                  <TouchableOpacity
+                    style={styles.ingredientsItem}
+
+                    /* onPress={() => addToShoppingList(userData._id, item)}*/
+                  >
+                    <View style={styles.ingredientsItemText}>
+                      <Text key={() => Math.random()}>{item}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </>
+              );
+            });
+          };
           return (
             <>
               <TouchableOpacity
                 style={styles.recipes}
                 recipeId={item._id}
-                /* onPress={() => recipePressHandler(item._id)}*/
+                onPress={() => recipePressHandler(item._id)}
               >
                 <View>
                   <View style={styles.recipeView}>
@@ -213,9 +236,12 @@ function FavoriteRecipes(props) {
                     </View>
                   </View>
                   <View style={styles.ingredientsView}>
-                    <Text style={styles.recipesText}>Du behöver:</Text>
-                    <View style={styles.ingredientsItem}>
-                      {/*<FlatList
+                    <Text style={styles.recipesText}>
+                      Du behöver bland annat:
+                    </Text>
+
+                    {renderIngredients()}
+                    {/*<FlatList
                             data={item.ingredients}
                             numColumns={3}
                             contentContainerStyle={styles.centerItems}
@@ -226,7 +252,6 @@ function FavoriteRecipes(props) {
                               </View>
                             )}
                           />*/}
-                    </View>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -237,7 +262,11 @@ function FavoriteRecipes(props) {
     });
   }
   return (
-    <ScrollView horizontal style={styles.main}>
+    <ScrollView
+      contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
+      horizontal
+      style={styles.main}
+    >
       {renderFavoriteRecipes()}
     </ScrollView>
   );
@@ -247,7 +276,6 @@ export default FavoriteRecipes;
 const styles = StyleSheet.create({
   main: {
     backgroundColor: Colors.blue,
-
     paddingTop: 5,
     flex: 1,
   },
@@ -265,8 +293,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     width: 300,
-    height: 440,
-    marginTop: 10,
+    height: 500,
     borderRadius: 30,
   },
   recipeView: {
@@ -390,19 +417,14 @@ const styles = StyleSheet.create({
   },
   ingredientsView: {
     marginTop: 10,
-
-    height: 120,
+    padding: 10,
+    height: 170,
     backgroundColor: Colors.lightblue,
     borderBottomEndRadius: 20,
     borderBottomStartRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
   },
-  ingredientsItem: {
-    flexDirection: "row",
-  },
+  ingredientsItem: { flexDirection: "row" },
   ingredientsItemText: {
-    justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
     borderColor: Colors.green,
