@@ -457,42 +457,45 @@ return(
           {renderMyFridge()}
         </View>
       )}
+
       {foodComponents && hideFood && (
-        <View>
+        <View style={{ flex: 1 }}>
           <View>
-            <FlatList
-              legacyImplementation={true}
-              contentContainerStyle={styles.foodList}
-              numColumns={3}
-              data={foodlist}
-              extraData={foodlist}
-              keyExtractor={(item) => item._id}
-              renderItem={({ item }) => (
-                <Pressable
-                  onLongPress={FoodDetails}
-                  onPress={() => handlePress(item)}
-                >
-                  <View style={styles.food}>
-                    <View style={styles.imageContainer}>
-                      <Image
-                        style={styles.image}
-                        source={{
-                          uri:
-                            "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
-                            item.logo,
-                        }}
-                      ></Image>
+            <View>
+              <FlatList
+                legacyImplementation={true}
+                contentContainerStyle={styles.foodList}
+                numColumns={3}
+                data={foodlist}
+                extraData={foodlist}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                  <Pressable
+                    onLongPress={FoodDetails}
+                    onPress={() => handlePress(item)}
+                  >
+                    <View style={styles.food}>
+                      <View style={styles.imageContainer}>
+                        <Image
+                          style={styles.image}
+                          source={{
+                            uri:
+                              "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                              item.logo,
+                          }}
+                        ></Image>
+                      </View>
+                      <View style={styles.textContainer}>
+                        <Text style={styles.item}>{item.title}</Text>
+                      </View>
                     </View>
-                    <View style={styles.textContainer}>
-                      <Text style={styles.item}>{item.title}</Text>
-                    </View>
-                  </View>
-                  {selectedItems.includes(item._id) && (
-                    <View style={styles.overlay} />
-                  )}
-                </Pressable>
-              )}
-            ></FlatList>
+                    {selectedItems.includes(item._id) && (
+                      <View style={styles.overlay} />
+                    )}
+                  </Pressable>
+                )}
+              ></FlatList>
+            </View>
           </View>
         </View>
       )}
@@ -551,8 +554,7 @@ const styles = StyleSheet.create({
   foodList: {
     backgroundColor: Colors.blue,
     alignItems: "center",
-    paddingBottom: 300,
-    marginBottom: 300,
+    paddingVertical: 10,
   },
   food: {
     height: 90,
