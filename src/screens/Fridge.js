@@ -405,21 +405,35 @@ return(
         <View style={styles.main}>{renderFoodCategories()}</View>
       </View>
       <View style={styles.fridge}>
-        <View style={styles.addFood}>
-          <View style={styles.addFoodIcon}>
-            <Ionicons name="add-sharp" size={24} />
+        <View style={styles.addKlar}>
+          <View
+            style={[
+              styles.addFood,
+              { width: foodComponents && hideFood ? "60%" : "90%" },
+            ]}
+          >
+            <View style={styles.addFoodIcon}>
+              <Ionicons name="add-sharp" size={24} />
+            </View>
+            <View style={styles.addFoodInput}>
+              <TextInput
+                style={styles.addFoodInput}
+                placeholderTextColor={Colors.green}
+                placeholder="Lägg till matvara...."
+                keyboardType="default"
+                multiline={false}
+                onTouchStart={showFoodComponents}
+                /* onChangeText={(e) => searchFilterFunction(e.nativeEvent.text)}*/
+              />
+            </View>
           </View>
-          <View style={styles.addFoodInput}>
-            <TextInput
-              style={styles.addFoodInput}
-              placeholderTextColor={Colors.green}
-              placeholder="Lägg till matvara...."
-              keyboardType="default"
-              multiline={false}
-              onTouchStart={showFoodComponents}
-              /* onChangeText={(e) => searchFilterFunction(e.nativeEvent.text)}*/
-            />
-          </View>
+          {foodComponents && hideFood && (
+            <View style={styles.readyView}>
+              <Pressable style={styles.readyButton} onPress={() => hello()}>
+                <Text style={styles.readyText}>Klar</Text>
+              </Pressable>
+            </View>
+          )}
         </View>
       </View>
 
@@ -444,13 +458,7 @@ return(
         </View>
       )}
       {foodComponents && hideFood && (
-        <View style={{ flex: 1 }}>
-          <View style={styles.readyView}>
-            <Pressable style={styles.readyButton} onPress={() => hello()}>
-              <Text style={styles.readyText}>Klar</Text>
-            </Pressable>
-          </View>
-
+        <View>
           <View>
             <FlatList
               legacyImplementation={true}
@@ -516,6 +524,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue,
     fontFamily: "Intermedium",
   },
+  addKlar: {
+    flexDirection: "row",
+  },
   addFood: {
     backgroundColor: "white",
     paddingVertical: 10,
@@ -540,7 +551,8 @@ const styles = StyleSheet.create({
   foodList: {
     backgroundColor: Colors.blue,
     alignItems: "center",
-    paddingVertical: 10,
+    paddingBottom: 300,
+    marginBottom: 300,
   },
   food: {
     height: 90,
@@ -584,8 +596,7 @@ const styles = StyleSheet.create({
   readyView: {
     backgroundColor: Colors.blue,
     justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
+    width: "50%",
   },
   readyButton: {
     justifyContent: "center",
