@@ -311,7 +311,6 @@ return(
                     </Text>
                   </View>
                   <View style={styles.carbonView}>
-                    {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
                     {renderCarbon({ item })}
                   </View>
                   <View style={styles.editItem}>
@@ -338,10 +337,9 @@ return(
                     />
                   </View>
                 </View>
-                {selectToRecipe.includes(item._id) &&
-                  !unselectToRecipe.includes(item._id) && (
-                    <View style={styles.overlayToRecipe} />
-                  )}
+                {selectToRecipe.includes(item._id) && (
+                  <View style={styles.overlayToRecipe} />
+                )}
               </Pressable>
             </ScrollView>
           </>
@@ -673,11 +671,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 10,
+    paddingLeft: 10,
     height: 60,
   },
   userImage: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
+    resizeMode: "contain",
   },
   editItem: { justifyContent: "center", alignItems: "center" },
   deleteItem: { justifyContent: "center", alignItems: "center" },

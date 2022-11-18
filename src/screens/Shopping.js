@@ -6,15 +6,109 @@ import {
   Pressable,
   ScrollView,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import YearGridTile from "../components/YearGridTile.js";
 import Colors from "../../constants/Colors.js";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IcoButton from "../components/IcoButton.js";
 import EditModal from "../components/EditModal.js";
-
+import { useDispatch } from "react-redux";
+import { getUser } from "../../store/redux/actions/user.actions.js";
+import { fetchFood } from "../../store/redux/actions/fridge.actions.js";
+import { Ionicons } from "@expo/vector-icons";
 function Shopping({ navigation }) {
+  const categoryData = [
+    {
+      id: 1,
+      name: "Allt",
+    },
+    {
+      id: 2,
+      name: "Grönsaker",
+    },
+    {
+      id: 3,
+      name: "Frukt",
+    },
+    {
+      id: 4,
+      name: "Mejeri",
+    },
+    {
+      id: 5,
+      name: "Kött & Fisk",
+    },
+    {
+      id: 6,
+      name: "Bageri & Spannmål",
+    },
+    {
+      id: 7,
+      name: "Fryst",
+    },
+    {
+      id: 8,
+      name: "Kryddor",
+    },
+    {
+      id: 9,
+      name: "Pasta & Ris",
+    },
+    {
+      id: 10,
+      name: "Desserter",
+    },
+  ];
+
+  const [categories, setCategories] = useState(categoryData);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  function renderFoodCategories() {
+    const renderItem = ({ item }) => {
+      return (
+        <TouchableOpacity
+          style={{
+            padding: 4,
+            marginTop: 20,
+            backgroundColor: Colors.blue,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          /* onPress={() => onSelectCategory(item)}*/
+        >
+          <Text
+            style={{
+              paddingLeft: 5,
+              marginRight: 12,
+              fontSize: 18,
+              fontWeight: "bold",
+              color: Colors.green,
+              textDecorationStyle: "solid",
+              textDecorationColor: Colors.darkpink,
+              textDecorationLine:
+                selectedCategory?.id == item.id ? "underline" : "none",
+            }}
+          >
+            {item.name}
+          </Text>
+        </TouchableOpacity>
+      );
+    };
+    return (
+      <FlatList
+        data={categories}
+        horizontal
+        showsHorizontalScrollIndicator={true}
+        keyExtractor={(item) => `${item.id}`}
+        renderItem={renderItem}
+        contentContainerStyle={{}}
+      ></FlatList>
+    );
+  }
+  const dispatch = useDispatch();
+  const [selectToShopping, setSelectToShopping] = useState([]);
+
   const [modalIsVisible, setModalIsVisible] = useState(false);
   function openModal(item) {
     setModalIsVisible(true);
@@ -26,39 +120,141 @@ function Shopping({ navigation }) {
   function closeModal() {
     setModalIsVisible(false);
   }
+
   const userData = useSelector((state) => state.userReducer);
   const fridge = useSelector((state) => state.intoFridgeReducer);
-  /*const fridgeNames = fridge.*/
   const userShopping = userData.shoppingList;
+  console.log(userShopping);
 
-  /*    {usersData.map((user) => {
-                        for (let i = 0; i < userData.following.length; i++) {
-                          if (user._id === userData.following[i]) {
-                            return (
-                              <li key={user._id}>
-                                <img src={user.picture} alt="user-pic" />
-                                <h4>{user.pseudo}</h4>
-                                <div className="follow-handler">
-                                  <FollowHandler
-                                    idToFollow={user._id}
-                                    type={"suggestion"}
-                                  />
-                                </div>
-                              </li>
-                            );
-                          }
-                        }
-                        return null;
-                      })} */
+  function renderShoppingFridge() {
+    const handlePressToShopping = (food) => {
+      if (selectToShopping.includes(food._id)) {
+        const newListItem = selectToShopping.filter(
+          (foodId) => foodId !== food._id
+        );
 
-  /*const renderShoppingList = () => {
-    for (let i = 0; i < userShopping.length; i++) {
+        return setSelectToShopping(newListItem);
+      }
 
+      setSelectToShopping([...selectToShopping, food._id]);
+      /* dispatch(addFoodToRecipe(userData._id, food.foodName));
+    dispatch(getUser(userData._id));*/
+      console.log(selectToShopping);
+    };
+    const editInFridge = (item) => {
+      dispatch(
+        editFoodFromFridge(
+          userData._id,
+          item._id,
+          item.foodExpiration,
+          item.foodQuantity
+        )
+      );
+      dispatch(getUser(userData._id));
+      closeModal();
+    };
+    const deleteInFridge = (item) => {
+      dispatch(deleteFoodFromFridge(userData._id, item._id));
+      dispatch(getUser(userData._id));
+    };
 
-        if (userShopping[i] === fridge)}
-  };*/
+    function renderCarbon({ item }) {
+      if (item.carbon > 300) {
+        return <Text style={styles.itemCarbon}>B</Text>;
+      }
+      if (item.carbon <= 300) {
+        return <Text style={styles.itemCarbon}>A</Text>;
+      }
+    }
+    return fridge.map((item) => {
+      for (let i = 0; i < userShopping.length; i++) {
+        if (item.title === userShopping[i]) {
+          return (
+            <>
+              <ScrollView>
+                <Pressable
+                  key={() => Math.random(userData._id)}
+                  onPress={() =>
+                    handlePressToShopping(item)
+                  } /*onPress={() => handlePressToRecipe(item)}*/
+                >
+                  <View
+                    style={[
+                      styles.userFridgeItem,
+                      {
+                        backgroundColor: selectToShopping.includes(item._id)
+                          ? Colors.blue
+                          : "white",
+                      },
+                    ]}
+                  >
+                    {selectToShopping.includes(item._id) && (
+                      <View style={styles.overlay} />
+                    )}
+                    <View style={styles.userImageView}>
+                      <Image
+                        style={styles.userImage}
+                        source={{
+                          uri:
+                            "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                            item.logo,
+                        }}
+                      ></Image>
+                    </View>
+                    <View style={styles.itemView}>
+                      <Text style={styles.itemName}>{item.title}</Text>
+                    </View>
+                    <View style={styles.expView}></View>
+                    <View style={styles.carbonView}>
+                      {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
+                      {renderCarbon({ item })}
+                    </View>
+                    {selectToShopping.includes(item._id) && (
+                      <View style={styles.iconItem}>
+                        <Ionicons
+                          name="checkmark-done"
+                          size={29}
+                          color={Colors.green}
+                        />
+                      </View>
+                    )}
+                    <View style={styles.iconItem}>
+                      <IcoButton
+                        icon="create-outline"
+                        size={24}
+                        color={Colors.green}
+                        onPress={() => openModal(item)}
+                      />
+                    </View>
 
-  function renderMyFridge() {
+                    <View style={styles.iconItem}>
+                      <IcoButton
+                        icon="close"
+                        size={24}
+                        color={Colors.darkpink}
+                        onPress={() => deleteInFridge(item)}
+                      />
+
+                      <EditModal
+                        visible={modalIsVisible}
+                        foodItem={item}
+                        onEditFood={() => editInFridge()}
+                      />
+                    </View>
+                  </View>
+                  {selectToShopping.includes(item._id) && (
+                    <View style={styles.overlayToShopping} />
+                  )}
+                </Pressable>
+              </ScrollView>
+            </>
+          );
+        }
+      }
+    });
+  }
+
+  /*function renderMyFridge() {
     const editInFridge = (item) => {
       dispatch(
         editFoodFromFridge(
@@ -86,7 +282,7 @@ function Shopping({ navigation }) {
     }
     const renderFridge = ({ item }) => {
       /*   for (let i = 0; i < userData.usersfood.length; i++) {
-        if (userData.usersfood[i] === item._id) */ {
+        if (userData.usersfood[i] === item._id)  {
         return (
           <>
             <ScrollView>
@@ -111,7 +307,7 @@ function Shopping({ navigation }) {
                     </Text>
                   </View>
                   <View style={styles.carbonView}>
-                    {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
+                    {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>}
                     {renderCarbon({ item })}
                   </View>
                   <View style={styles.editItem}>
@@ -138,10 +334,10 @@ function Shopping({ navigation }) {
                     />
                   </View>
                 </View>
-                {/*selectToRecipe.includes(item._id) &&
+                {selectToRecipe.includes(item._id) &&
                   !unselectToRecipe.includes(item._id) && (
                     <View style={styles.overlayToRecipe} />
-                  )*/}
+                  )}
               </Pressable>
             </ScrollView>
           </>
@@ -157,17 +353,116 @@ function Shopping({ navigation }) {
         renderItem={renderFridge}
         contentContainerStyle={{}}
       ></FlatList>
-    );
-  }
-  return <View>{renderMyFridge()}</View>;
+    );*/
+
+  return (
+    <>
+      <View style={styles.shoppingList}>
+        <View>{renderFoodCategories()}</View>
+        <View>{renderShoppingFridge()}</View>
+      </View>
+    </>
+  );
 }
 
 export default Shopping;
 
 const styles = StyleSheet.create({
+  shoppingList: {
+    backgroundColor: Colors.blue,
+    fontFamily: "Intermedium",
+    flex: 1,
+  },
   main: {
     backgroundColor: Colors.blue,
     margin: 50,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  fridgeView: {
+    backgroundColor: Colors.blue,
+    flex: 1,
+  },
+  fridgeInstView: {
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+  },
+  fridgeToRecipe: {
+    color: Colors.green,
+    fontWeight: "bold",
+  },
+  userFridgeItem: {
+    marginVertical: 10,
+    marginHorizontal: 20,
+    borderRadius: 30,
+    width: "90%",
+    height: 60,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+
+  overlayToShopping: {
+    position: "absolute",
+    width: "90%",
+    height: 60,
+    borderRadius: 30,
+
+    borderColor: Colors.green,
+    borderWidth: 4,
+    marginVertical: 10,
+    marginHorizontal: 20,
+  },
+  itemView: {
+    justifyContent: "center",
+    height: 60,
+  },
+  itemName: {
+    color: Colors.green,
+    fontWeight: "bold",
+    fontSize: 17,
+  },
+  carbonView: {
+    marginVertical: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "green",
+    height: 40,
+    width: 40,
+    padding: 10,
+    borderRadius: 60,
+  },
+  itemCarbon: {
+    fontWeight: "bold",
+    color: "white",
+  },
+  expView: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.lightpink,
+    padding: 10,
+    height: 60,
+  },
+  itemExp: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  userImageView: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingLeft: 10,
+    height: 60,
+  },
+  userImage: {
+    width: 40,
+    height: 40,
+    resizeMode: "contain",
+  },
+  iconItem: { justifyContent: "center", alignItems: "center" },
+
+  editView: {
+    backgroundColor: Colors.blue,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
