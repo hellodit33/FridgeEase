@@ -2,27 +2,27 @@ import { createContext, useState } from "react";
 
 export const FavoritesContext = createContext({
   ids: [],
-  addToRead: (id) => {},
-  removeToRead: (id) => {},
+  addFav: (id) => {},
+  removeFav: (id) => {},
 });
 
 function FavoritesContextProvider({ children }) {
-  const [toReadIds, setToReadIds] = useState([]);
+  const [favIds, setFavIds] = useState([]);
 
-  function addToRead(id) {
-    setToReadIds((currentToReadIds) => [...currentToReadIds, id]);
+  function addFav(id) {
+    setFavIds((currentFavIds) => [...currentFavIds, id]);
   }
 
-  function removeToRead(id) {
-    setToReadIds((currentToReadIds) =>
-      currentToReadIds.filter((bookId) => bookId !== id)
+  function removeFav(id) {
+    setFavIds((currentFavIds) =>
+      currentFavIds.filter((recipeId) => recipeId !== id)
     );
   }
 
   const value = {
-    ids: toReadIds,
-    addToRead: addToRead,
-    removeToRead: removeToRead,
+    ids: favIds,
+    addFav: addFav,
+    removeFav: removeFav,
   };
 
   return (

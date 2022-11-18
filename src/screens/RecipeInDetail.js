@@ -14,7 +14,6 @@ import Hyperlink from "react-native-hyperlink";
 import { useNavigation } from "@react-navigation/native";
 import Colors from "../../constants/Colors";
 import { useFonts } from "expo-font";
-
 import { useSelector } from "react-redux";
 import { useLayoutEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,9 +21,11 @@ import Header from "../components/Header";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import {
   addFoodToShopping,
-  ADD_FOOD_TO_SHOPPING_LIST,
+  addFavoriteRecipe,
   getUser,
 } from "../../store/redux/actions/user.actions";
+import { useState, useContext } from "react";
+import { FavoritesContext } from "../../store/context/favorites-context";
 
 function RecipeInDetail({ route, navigation }) {
   const dispatch = useDispatch();
@@ -41,6 +42,21 @@ function RecipeInDetail({ route, navigation }) {
   function addToShoppingList(uid, item) {
     dispatch(addFoodToShopping(uid, item));
     dispatch(getUser(uid));
+  }
+  const [favorite, setFavorite] = useState(false);
+  const [favoriteRec, setFavoriteRec] = useState([]);
+  const favContext = useContext(FavoritesContext);
+
+  const recipeIsFav = favContext.ids.includes(recipeId);
+
+  function addToFavoriteRecipes(uid, recipe) {
+    if (recipeIsFav) {
+      favContext.removeFav(recipe._id);
+    } else {
+      favContext.addFav(recipe._id);
+    }
+
+    dispatch(addFavoriteRecipe(uid, recipe._id));
   }
 
   const renderIngredients = () => {
@@ -77,10 +93,19 @@ function RecipeInDetail({ route, navigation }) {
       headerStyle: { backgroundColor: Colors.blue },
 
       headerRight: () => {
-        return <Ionicons size={30} name="heart-outline"></Ionicons>;
+        return (
+          <Pressable
+            onPress={() => addToFavoriteRecipes(userData._id, recipeToShow)}
+          >
+            <Ionicons
+              size={30}
+              name={recipeIsFav ? "heart" : "heart-outline"}
+            ></Ionicons>
+          </Pressable>
+        );
       },
     });
-  }, [recipeToShow, navigation]);
+  }, [recipeToShow, navigation, addToFavoriteRecipes]);
 
   const [loaded] = useFonts({
     alk: require("../../assets/fonts/Alkalami-Regular.ttf"),

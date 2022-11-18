@@ -226,3 +226,27 @@ module.exports.addFoodToShoppingList = (req, res) => {
     return res.status(500).json({ message: err });
   }
 };
+
+module.exports.addFavoriteRecipe = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown: " + req.params.id);
+
+  try {
+    //add to the food list
+    UserModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $addToSet: {
+          favoriteRecipe: [req.body.recipeId],
+        },
+      },
+      { new: true, upsert: true },
+      (err, data) => {
+        if (!err) res.status(201).json(data);
+        else return res.status(400).json(err);
+      }
+    );
+  } catch (err) {
+    return res.status(500).json({ message: err });
+  }
+};

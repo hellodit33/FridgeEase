@@ -7,6 +7,7 @@ export const DELETE_FOOD = "DELETE_FOOD";
 export const ADD_FOOD_TO_RECIPE = "ADD_FOOD_TO_RECIPE";
 export const GET_FOOD_TO_RECIPE = "GET_FOOD_TO_RECIPE";
 export const ADD_FOOD_TO_SHOPPING_LIST = "ADD_FOOD_TO_SHOPPING_LIST";
+export const ADD_FAV_RECIPE = "ADD_FAV_RECIPE";
 
 const BASE_URL = "https://0e57-213-163-151-83.eu.ngrok.io";
 
@@ -93,6 +94,27 @@ export const addFoodToShopping = (userId, foodName) => {
           type: ADD_FOOD_TO_SHOPPING_LIST,
           payload: {
             foodName,
+          },
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+};
+
+export const addFavoriteRecipe = (userId, recipeId) => {
+  return (dispatch) => {
+    return axios({
+      method: "put",
+      url: `${BASE_URL}/api/user/addfavrecipe/` + userId,
+      data: {
+        recipeId,
+      },
+    })
+      .then((res) => {
+        dispatch({
+          type: ADD_FAV_RECIPE,
+          payload: {
+            recipeId,
           },
         });
       })

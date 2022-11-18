@@ -362,7 +362,9 @@ const token = await AsyncStorage.getItem("token")
   return (
     <NavigationContainer>
       {userToken !== null ? (
-        <AuthenticatedStack /*value={uid} */ />
+        <FavoritesContextProvider>
+          <AuthenticatedStack /*value={uid} */ />
+        </FavoritesContextProvider>
       ) : (
         <AuthStack />
       )}
@@ -402,6 +404,7 @@ import rootReducer from "./store/redux/reducers";
 import { configureStore } from "@reduxjs/toolkit";
 import { StatusBar } from "expo-status-bar";
 import { fetchRecipes } from "./store/redux/actions/recipe.actions";
+import FavoritesContextProvider from "./store/context/favorites-context";
 const store = configureStore({ reducer: rootReducer });
 
 store.dispatch(fetchFood());
