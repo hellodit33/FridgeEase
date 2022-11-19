@@ -41,6 +41,9 @@ import { cos } from "react-native-reanimated";
 import IcoButton from "../components/IcoButton";
 import PrimaryButton from "../components/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+
+import { faUtensils } from "@fortawesome/free-solid-svg-icons";
 
 function Fridge({ props, navigation, route }) {
   const [itemToEdit, setItemToEdit] = useState();
@@ -485,6 +488,18 @@ return(
             <View style={styles.fridgeView}>
               <View style={styles.fridgeInstView}>
                 {/*<Text>{userData.usersfood.length} products in your fridge</Text>*/}
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate("Recipes");
+                  }}
+                  style={{ marginHorizontal: 8 }}
+                >
+                  <FontAwesomeIcon
+                    icon={faUtensils}
+                    color={Colors.green}
+                    size={28}
+                  />
+                </Pressable>
                 <Text style={styles.fridgeToRecipe}>
                   Markera de matvaror du vill laga mat på och klicka på
                   receptikonen
@@ -657,12 +672,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   fridgeInstView: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 30,
     paddingVertical: 10,
   },
   fridgeToRecipe: {
     color: Colors.green,
     fontWeight: "bold",
+    fontSize: 15,
+    width: "80%",
   },
   userFridgeItem: {
     backgroundColor: "white",
