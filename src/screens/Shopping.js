@@ -153,8 +153,8 @@ function Shopping({ navigation }) {
       dispatch(getUser(userData._id));*/
       closeModal();
     };
-    const deleteInFridge = (item) => {
-      dispatch(deleteFoodFromFridge(userData._id, item._id));
+    const deleteInFridge = (fridge) => {
+      dispatch(deleteFoodFromFridge(userData._id, fridge._id));
       dispatch(getUser(userData._id));
     };
 
@@ -181,20 +181,20 @@ function Shopping({ navigation }) {
                 <Pressable
                   key={() => Math.random(userData._id)}
                   onPress={() =>
-                    handlePressToShopping(item)
+                    handlePressToShopping(fridge)
                   } /*onPress={() => handlePressToRecipe(item)}*/
                 >
                   <View
                     style={[
                       styles.userFridgeItem,
                       {
-                        backgroundColor: selectToShopping.includes(item._id)
+                        backgroundColor: selectToShopping.includes(fridge._id)
                           ? Colors.blue
                           : "white",
                       },
                     ]}
                   >
-                    {selectToShopping.includes(item._id) && (
+                    {selectToShopping.includes(fridge._id) && (
                       <View style={styles.overlay} />
                     )}
                     <View style={styles.userImageView}>
@@ -248,7 +248,7 @@ function Shopping({ navigation }) {
                         icon="close"
                         size={24}
                         color={Colors.darkpink}
-                        onPress={() => deleteInFridge(item)}
+                        onPress={() => deleteInFridge(fridge)}
                       />
 
                       <EditModalShopping
@@ -258,7 +258,7 @@ function Shopping({ navigation }) {
                       />
                     </View>
                   </View>
-                  {selectToShopping.includes(item._id) && (
+                  {selectToShopping.includes(fridge._id) && (
                     <View style={styles.overlayToShopping} />
                   )}
                 </Pressable>
