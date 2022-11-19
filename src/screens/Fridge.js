@@ -260,16 +260,10 @@ return(
   console.log(JSON.stringify(userFridge));*/
 
   function renderMyFridge() {
-    const editInFridge = () => {
-      /* dispatch(
-        editFoodFromFridge(
-          userData._id,
-          item._id,
-          item.foodExpiration,
-          item.foodQuantity
-        )
-      );
-      dispatch(getUser(userData._id));*/
+    const editInFridge = (foodId) => {
+      dispatch(editFoodFromFridge(userData._id, foodId));
+      console.log("edited");
+      dispatch(getUser(userData._id));
       closeModal();
     };
     const deleteInFridge = (item) => {
@@ -293,7 +287,6 @@ return(
         const name = item.foodName;
         const expiration = item.foodExpiration;
         const carbon = item.foodCarbon;
-        const category = item.foodCategory;
         const logo = item.foodLogo;
 
         return (

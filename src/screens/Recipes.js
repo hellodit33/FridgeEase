@@ -158,8 +158,42 @@ function Recipes({ navigation }) {
   const [foodToRecipe, setfoodToRecipe] = useState([]);
   const userData = useSelector((state) => state.userReducer);
   const recipesData = useSelector((state) => state.recipesReducer);
-
   const ingredients = recipesData.map((item) => item.ingredients);
+
+  const ingredients2 = recipesData.map((item) => item.ingredients2);
+
+  const renderIngredientsObject = () => {
+    for (let i = 0; i < recipesData.length; i++) {
+      console.log("length" + recipesData.length);
+      return recipesData.map((item) => {
+        const ingredients = recipesData[i].ingredients2[i];
+        return (
+          <>
+            <TouchableOpacity
+              style={{
+                flexDirection: "row",
+                paddingHorizontal: 20,
+                paddingVertical: 5,
+              }}
+              key={() => Math.random(userData._id)}
+              onPress={() => addToShoppingList(userData._id, item)}
+            >
+              <Ionicons
+                name="add-circle-outline"
+                size={20}
+                style={{ marginRight: 20 }}
+              />
+              <Text key={() => Math.random()}>{ingredients.quantity}</Text>
+              <Text key={() => Math.random()}>{ingredients.name}</Text>
+            </TouchableOpacity>
+          </>
+        );
+      });
+    }
+  };
+
+  const ingredients2names = ingredients2.map((item) => item.name);
+  console.log(ingredients2names);
   const userIngredients = userData.foodToRecipe;
   const ingArray = ingredients.toString().split(",");
 
@@ -413,13 +447,13 @@ function Recipes({ navigation }) {
                 <Text style={styles.recipesText}>Du behöver:</Text>
                 <View style={styles.ingredientsItem}>
                   <FlatList
-                    data={item.ingredients}
+                    data={item.ingredients2}
                     numColumns={3}
                     contentContainerStyle={styles.centerItems}
                     keyExtractor={() => Math.random()}
                     renderItem={({ item }) => (
                       <View style={styles.ingredientsItemText}>
-                        <Text style={styles.recipesText}>{item}</Text>
+                        <Text style={styles.recipesText}>{item.name}</Text>
                       </View>
                     )}
                   />
@@ -450,6 +484,7 @@ function Recipes({ navigation }) {
       <View>
         <View style={styles.main}>{renderFoodToRecipe()}</View>
       </View>
+      {/*<View>{renderIngredientsObject()}</View>*/}
 
       <View style={{ flex: 1 }}>
         {/* <FlatList

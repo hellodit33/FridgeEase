@@ -35,12 +35,12 @@ function RecipeInDetail({ route, navigation }) {
   const recipeToShow = recipesData.find(
     (recipeItem) => recipeItem._id === recipeId
   );
-  const ingredientsToShow = recipeToShow.ingredients;
+  const ingredientsToShow = recipeToShow.ingredients2;
 
   const climateImpact = ["A", "B", "C", "D", "E"];
 
-  function addToShoppingList(uid, item) {
-    dispatch(addFoodToShopping(uid, item));
+  function addToShoppingList(uid, name, quantity) {
+    dispatch(addFoodToShopping(uid, name, quantity));
     dispatch(getUser(uid));
   }
   const [favorite, setFavorite] = useState(false);
@@ -70,14 +70,17 @@ function RecipeInDetail({ route, navigation }) {
               paddingVertical: 5,
             }}
             key={() => Math.random(userData._id)}
-            onPress={() => addToShoppingList(userData._id, item)}
+            onPress={() =>
+              addToShoppingList(userData._id, item.name, item.quantity)
+            }
           >
             <Ionicons
               name="add-circle-outline"
               size={20}
               style={{ marginRight: 20 }}
             />
-            <Text key={() => Math.random()}>{item}</Text>
+            <Text key={() => Math.random()}>{item.quantity}</Text>
+            <Text key={() => Math.random()}> {item.name}</Text>
           </TouchableOpacity>
         </>
       );

@@ -42,7 +42,9 @@ function EditModalShopping(props) {
         </View>
         <View styles={styles.moreInfoToChange}>
           <View style={styles.foodChange}>
-            <TextInput placeholder="Kvantité"></TextInput>
+            <TextInput placeholder="Kvantité">
+              {props.passedData.quantity}
+            </TextInput>
             <Ionicons name="create" color={Colors.green} size={20}></Ionicons>
           </View>
           <View style={styles.foodChange}>

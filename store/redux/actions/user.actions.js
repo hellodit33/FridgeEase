@@ -22,23 +22,17 @@ export const getUser = (uid) => {
       .catch((err) => console.log(err));
   };
 };
-export const editFoodFromFridge = (
-  userId,
-  foodId,
-
-  foodExpiration,
-  foodQuantity
-) => {
+export const editFoodFromFridge = (userId, foodId) => {
   return (dispatch) => {
     return axios({
       method: "patch",
       url: `${BASE_URL}/api/user/editfood/${userId}`,
-      data: { foodId, foodExpiration, foodQuantity },
+      data: { foodId },
     })
       .then((res) => {
         dispatch({
           type: EDIT_FOOD,
-          payload: { userId, foodId, foodExpiration, foodQuantity },
+          payload: { userId, foodId },
         });
       })
       .catch((err) => console.log(err));
@@ -80,13 +74,14 @@ export const addFoodToRecipe = (userId, foodName) => {
   };
 };
 
-export const addFoodToShopping = (userId, foodName) => {
+export const addFoodToShopping = (userId, foodName, foodQuantity) => {
   return (dispatch) => {
     return axios({
       method: "put",
       url: `${BASE_URL}/api/user/addtoshoppinglist/` + userId,
       data: {
         foodName,
+        foodQuantity,
       },
     })
       .then((res) => {
@@ -94,6 +89,7 @@ export const addFoodToShopping = (userId, foodName) => {
           type: ADD_FOOD_TO_SHOPPING_LIST,
           payload: {
             foodName,
+            foodQuantity,
           },
         });
       })

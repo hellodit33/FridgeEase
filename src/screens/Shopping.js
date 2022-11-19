@@ -114,9 +114,9 @@ function Shopping({ navigation }) {
 
   const [passedData, setPassedData] = useState([]);
 
-  function openModal({ name, carbon, logo }) {
+  function openModal({ name, carbon, logo, quantity }) {
     setModalIsVisible(true);
-    setPassedData({ name, carbon, logo });
+    setPassedData({ name, carbon, logo, quantity });
   }
   function closeModal() {
     setPassedData({});
@@ -125,8 +125,6 @@ function Shopping({ navigation }) {
 
   const userData = useSelector((state) => state.userReducer);
   const fridge = useSelector((state) => state.intoFridgeReducer);
-  const userShopping = userData.shoppingList;
-  console.log(userShopping);
 
   function renderShoppingFridge() {
     const handlePressToShopping = (food) => {
@@ -160,21 +158,23 @@ function Shopping({ navigation }) {
       dispatch(getUser(userData._id));
     };
 
-    function renderCarbon({ item }) {
-      if (item.carbon > 300) {
+    function renderCarbon({ fridge }) {
+      if (fridge.carbon > 300) {
         return <Text style={styles.itemCarbon}>B</Text>;
       }
-      if (item.carbon <= 300) {
+      if (fridge.carbon <= 300) {
         return <Text style={styles.itemCarbon}>A</Text>;
       }
     }
-    return fridge.map((item) => {
+    const userShopping = userData.shoppingList2;
+    const item = "";
+    return fridge.map((fridge) => {
       for (let i = 0; i < userShopping.length; i++) {
-        if (item.title === userShopping[i]) {
-          const name = item.title;
-
-          const carbon = item.carbon;
-          const logo = item.logo;
+        if (fridge.title === userShopping[i].foodName) {
+          const name = fridge.title;
+          const quantity = userShopping[i].foodQuantity;
+          const carbon = fridge.carbon;
+          const logo = fridge.logo;
           return (
             <>
               <ScrollView>
@@ -203,19 +203,22 @@ function Shopping({ navigation }) {
                         source={{
                           uri:
                             "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
-                            item.logo,
+                            fridge.logo,
                         }}
                       ></Image>
                     </View>
                     <View style={styles.itemView}>
-                      <Text style={styles.itemName}>{item.title}</Text>
+                      <Text style={styles.itemName}>{fridge.title}</Text>
                     </View>
-                    <View style={styles.expView}></View>
+                    <View style={styles.quantityView}>
+                      <Text style={styles.quantityText}>{quantity}</Text>
+                    </View>
                     <View style={styles.carbonView}>
                       {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
-                      {renderCarbon({ item })}
+                      <Text style={styles.itemCarbon}>{fridge.carbon}</Text>
+                      {/*renderCarbon({ fridge })*/}
                     </View>
-                    {selectToShopping.includes(item._id) && (
+                    {selectToShopping.includes(fridge._id) && (
                       <View style={styles.iconItem}>
                         <Ionicons
                           name="checkmark-done"
@@ -232,7 +235,7 @@ function Shopping({ navigation }) {
                         onPress={() => {
                           openModal({
                             name,
-
+                            quantity,
                             carbon,
                             logo,
                           });
@@ -468,14 +471,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-  expView: {
+  quantityView: {
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.lightpink,
     padding: 10,
     height: 60,
   },
-  itemExp: {
+  quantityText: {
     color: "white",
     fontWeight: "bold",
   },

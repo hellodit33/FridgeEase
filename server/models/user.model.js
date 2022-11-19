@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema(
     },
     foodToRecipe: [String],
     shoppingList: [String],
+    shoppingList2: {
+      type: [
+        {
+          foodName: String,
+          foodQuantity: String,
+        },
+      ],
+    },
     favoriteRecipe: [String],
     usersfood: {
       type: [
