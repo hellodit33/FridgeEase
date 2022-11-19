@@ -2,14 +2,15 @@ import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 const data = [
-  { label: "Item 1", value: "1" },
-  { label: "Item 2", value: "2" },
-  { label: "Item 3", value: "3" },
-  { label: "Item 4", value: "4" },
-  { label: "Item 5", value: "5" },
-  { label: "Item 6", value: "6" },
-  { label: "Item 7", value: "7" },
-  { label: "Item 8", value: "8" },
+  { label: "Mjölk", value: "1" },
+  { label: "Gluten", value: "2" },
+  { label: "Ägg", value: "3" },
+  { label: "Jordnötter", value: "4" },
+  { label: "Fisk", value: "5" },
+  { label: "Skaldjur", value: "6" },
+  { label: "Nötter", value: "7" },
+  { label: "Soja", value: "8" },
+  { label: "Fröer", value: "9" },
 ];
 
 function Allergies() {
@@ -20,7 +21,7 @@ function Allergies() {
     if (value || isFocus) {
       return (
         <Text style={[styles.label, isFocus && { color: "blue" }]}>
-          Dropdown label
+          Välj en matallergi
         </Text>
       );
     }
@@ -72,7 +73,6 @@ const styles = StyleSheet.create({
   },
   label: {
     position: "absolute",
-    backgroundColor: "white",
     left: 22,
     top: 8,
     zIndex: 999,

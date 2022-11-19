@@ -14,7 +14,9 @@ router.get("/:id", userController.userInfo);
 router.get("/:id/userfood", userController.userFood);
 
 //update user info
-router.put("/:id", userController.updateUser);
+router.put("/:id/allergy", userController.updateUserAllergy);
+router.put("/:id/diet", userController.updateUserDiet);
+
 //add and remove food from fridge
 router.put("/addfood/:id", userController.addFoodToFridge);
 router.put("/removefood/:id", userController.removeFoodFromFridge);

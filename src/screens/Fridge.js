@@ -291,28 +291,15 @@ return(
       console.log(today);
 
       function dateDiff() {
-        if (item.foodExpirationDate) {
-          console.log(item.foodExpirationDate);
-          console.log(today);
-          let dateDiff = differenceInDays(
-            Date.parse(item.foodExpirationDate),
-            Date.parse(today)
-          );
-          console.log(dateDiff);
-          return (
-            <Text>
-              {dateDiff} {dateDiff > 1 ? "dagar" : " dag"}
-            </Text>
-          );
-        } else {
-          return (
-            <Text>
-              {item.foodExpiration}
-              {item.foodExpiration > 1 ? " dagar" : " dag"}
-            </Text>
-          );
-        }
+        console.log(item.foodExpirationDate);
+        console.log(today);
+        let dateDiff = differenceInDays(
+          Date.parse(item.foodExpirationDate),
+          Date.parse(today)
+        );
+        return dateDiff;
       }
+
       const id = item._id;
       const name = item.foodName;
       const expiration = item.foodExpiration;
@@ -321,6 +308,7 @@ return(
       const carbon = item.foodCarbon;
       const logo = item.foodLogo;
       const quantity = "";
+
       return (
         <>
           <ScrollView>
@@ -339,8 +327,20 @@ return(
                 <View style={styles.itemView}>
                   <Text style={styles.itemName}>{item.foodName}</Text>
                 </View>
+
                 <View style={styles.expView}>
-                  <Text style={styles.itemExp}>{dateDiff()}</Text>
+                  <Text style={styles.itemExp}>
+                    {item.foodExpirationDate ? (
+                      <Text>
+                        {dateDiff()} {dateDiff() > 1 ? "dagar" : " dag"}
+                      </Text>
+                    ) : (
+                      <Text>
+                        {item.foodExpiration}
+                        {item.foodExpiration > 1 ? " dagar" : " dag"}
+                      </Text>
+                    )}
+                  </Text>
                 </View>
                 <View style={styles.carbonView}>
                   <Text style={styles.itemCarbon}>{item.foodCarbon}</Text>

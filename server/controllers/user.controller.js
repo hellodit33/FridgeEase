@@ -54,7 +54,7 @@ module.exports.getFoodToRecipe = (req, res) => {
  *
  * @returns new information about user into db, while onboarding or changing info on profile
  */
-module.exports.updateUser = (req, res) => {
+module.exports.updateUserAllergy = (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
@@ -63,7 +63,30 @@ module.exports.updateUser = (req, res) => {
       { _id: req.params.id },
       {
         $set: {
-          bio: req.body.bio,
+          allergies: [req.body.allergies],
+        },
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true },
+      (err, data) => {
+        if (!err) return res.send(data);
+        if (err) return res.status(500).send({ message: err });
+      }
+    );
+  } catch (err) {
+    return res.status(500).json({ message: err });
+  }
+};
+
+module.exports.updateUserDiet = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    UserModel.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          diet: [req.body.diet],
         },
       },
       { new: true, upsert: true, setDefaultsOnInsert: true },
