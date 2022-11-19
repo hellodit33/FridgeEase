@@ -103,11 +103,12 @@ function Fridge({ props, navigation, route }) {
 
   const [passedData, setPassedData] = useState([]);
 
-  function openModal({ name, expiration, carbon, logo }) {
+  function openModal({ id, name, expiration, expirationDate, carbon, logo }) {
     setModalIsVisible(true);
-    setPassedData({ name, expiration, carbon, logo });
+    setPassedData({ id, name, expiration, expirationDate, carbon, logo });
   }
   function closeModal() {
+    dispatch(getUser(userData._id));
     setPassedData({});
     setModalIsVisible(false);
   }
@@ -258,11 +259,10 @@ return(
   /* const userFridge = fridge.filter((item) => item._id !== userFood);
   console.log("myfood" + userFridge);
   console.log(JSON.stringify(userFridge));*/
+  const userId = userData._id;
 
   function renderMyFridge() {
-    const editInFridge = (foodId) => {
-      dispatch(editFoodFromFridge(userData._id, foodId));
-      console.log("edited");
+    const editInFridge = () => {
       dispatch(getUser(userData._id));
       closeModal();
     };
@@ -284,11 +284,14 @@ return(
         if (userData.usersfood[i] === item._id) */
 
       {
+        const id = item._id;
         const name = item.foodName;
         const expiration = item.foodExpiration;
+        const expirationDate = item.foodExpirationDate;
+
         const carbon = item.foodCarbon;
         const logo = item.foodLogo;
-
+        const quantity = "";
         return (
           <>
             <ScrollView>
@@ -326,9 +329,10 @@ return(
 
                         () => {
                           openModal({
+                            id,
                             name,
                             expiration,
-
+                            expirationDate,
                             carbon,
                             logo,
                           });
@@ -348,7 +352,8 @@ return(
                     <EditModal
                       passedData={passedData}
                       visible={modalIsVisible}
-                      onEditFood={() => editInFridge()}
+                      closeModal={closeModal}
+                      editFoodInFridge={editInFridge}
                     />
                   </View>
                 </View>

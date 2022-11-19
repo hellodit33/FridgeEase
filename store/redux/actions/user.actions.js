@@ -9,7 +9,7 @@ export const GET_FOOD_TO_RECIPE = "GET_FOOD_TO_RECIPE";
 export const ADD_FOOD_TO_SHOPPING_LIST = "ADD_FOOD_TO_SHOPPING_LIST";
 export const ADD_FAV_RECIPE = "ADD_FAV_RECIPE";
 
-const BASE_URL = "https://5d3f-213-163-151-83.eu.ngrok.io";
+const BASE_URL = "https://d216-213-163-151-83.eu.ngrok.io";
 
 export const getUser = (uid) => {
   return (dispatch) => {
@@ -22,17 +22,22 @@ export const getUser = (uid) => {
       .catch((err) => console.log(err));
   };
 };
-export const editFoodFromFridge = (userId, foodId) => {
+export const editFoodFromFridge = (
+  userId,
+  foodId,
+  foodExpirationDate,
+  foodQuantity
+) => {
   return (dispatch) => {
     return axios({
       method: "patch",
       url: `${BASE_URL}/api/user/editfood/${userId}`,
-      data: { foodId },
+      data: { foodId, foodExpirationDate, foodQuantity },
     })
       .then((res) => {
         dispatch({
           type: EDIT_FOOD,
-          payload: { userId, foodId },
+          payload: { userId, foodId, foodExpirationDate, foodQuantity },
         });
       })
       .catch((err) => console.log(err));

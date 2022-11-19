@@ -9,7 +9,7 @@ import Colors from "../../constants/Colors";
 
 function Logout({ onPress }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const BASE_URL = "https://5d3f-213-163-151-83.eu.ngrok.io";
+  const BASE_URL = "https://d216-213-163-151-83.eu.ngrok.io";
   const removeCookie = (key) => {
     if (window !== undefined) {
       cookie.remove(key, { expires: 1 });

@@ -165,9 +165,9 @@ module.exports.editFoodFromFridge = (req, res) => {
       );
 
       if (!theFood) return res.status(404).send("Food not found");
-      /*theFood.foodExpiration = req.body.foodExpiration;
+      theFood.foodExpirationDate = req.body.foodExpirationDate;
 
-      theFood.foodQuantity = req.body.foodQuantity;*/
+      theFood.foodQuantity = req.body.foodQuantity;
 
       return data.save((err) => {
         if (!err) return res.status(200).send(data);

@@ -27,8 +27,8 @@ export default function userReducer(state = initialState, action) {
               if (food._id === action.payload.foodId) {
                 return {
                   ...usersfood,
-                  /*foodName: action.payload.foodName,*/
-                  /*foodExpiration: action.payload.foodExpiration,
+                  foodName: action.payload.foodName,
+                  /*  foodExpirationDate: action.payload.foodExpirationDate,
                   foodQuantity: action.payload.foodQuantity,*/
                 };
               } else {

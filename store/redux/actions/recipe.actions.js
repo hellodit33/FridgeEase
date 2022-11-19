@@ -3,7 +3,7 @@ import axios from "axios";
 export const FETCH_RECIPES = "FETCH_RECIPES";
 export const SELECT_RECIPE = "SELECT_RECIPE";
 
-const BASE_URL = "https://5d3f-213-163-151-83.eu.ngrok.io";
+const BASE_URL = "https://d216-213-163-151-83.eu.ngrok.io";
 export const fetchRecipes = () => {
   return (dispatch) => {
     return axios
