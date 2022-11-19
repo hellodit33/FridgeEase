@@ -8,12 +8,13 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import YearGridTile from "../components/YearGridTile.js";
+import { useFonts } from "expo-font";
+import LoadingOverlay from "../UI/LoadingOverlay.js";
 import Colors from "../../constants/Colors.js";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import IcoButton from "../components/IcoButton.js";
-import EditModal from "../components/EditModal.js";
+import EditModalShopping from "../components/EditModalShopping.js";
 import { useDispatch } from "react-redux";
 import { getUser } from "../../store/redux/actions/user.actions.js";
 import { fetchFood } from "../../store/redux/actions/fridge.actions.js";
@@ -110,14 +111,15 @@ function Shopping({ navigation }) {
   const [selectToShopping, setSelectToShopping] = useState([]);
 
   const [modalIsVisible, setModalIsVisible] = useState(false);
-  function openModal(item) {
+
+  const [passedData, setPassedData] = useState([]);
+
+  function openModal({ name, carbon, logo }) {
     setModalIsVisible(true);
-    console.log(item._id);
-    console.log(item.foodName);
-    setItemToEdit(item._id);
-    console.log(itemToEdit);
+    setPassedData({ name, carbon, logo });
   }
   function closeModal() {
+    setPassedData({});
     setModalIsVisible(false);
   }
 
@@ -142,7 +144,7 @@ function Shopping({ navigation }) {
       console.log(selectToShopping);
     };
     const editInFridge = (item) => {
-      dispatch(
+      /* dispatch(
         editFoodFromFridge(
           userData._id,
           item._id,
@@ -150,7 +152,7 @@ function Shopping({ navigation }) {
           item.foodQuantity
         )
       );
-      dispatch(getUser(userData._id));
+      dispatch(getUser(userData._id));*/
       closeModal();
     };
     const deleteInFridge = (item) => {
@@ -169,6 +171,10 @@ function Shopping({ navigation }) {
     return fridge.map((item) => {
       for (let i = 0; i < userShopping.length; i++) {
         if (item.title === userShopping[i]) {
+          const name = item.title;
+
+          const carbon = item.carbon;
+          const logo = item.logo;
           return (
             <>
               <ScrollView>
@@ -223,7 +229,14 @@ function Shopping({ navigation }) {
                         icon="create-outline"
                         size={24}
                         color={Colors.green}
-                        onPress={() => openModal(item)}
+                        onPress={() => {
+                          openModal({
+                            name,
+
+                            carbon,
+                            logo,
+                          });
+                        }}
                       />
                     </View>
 
@@ -235,9 +248,9 @@ function Shopping({ navigation }) {
                         onPress={() => deleteInFridge(item)}
                       />
 
-                      <EditModal
+                      <EditModalShopping
                         visible={modalIsVisible}
-                        foodItem={item}
+                        passedData={passedData}
                         onEditFood={() => editInFridge()}
                       />
                     </View>
@@ -354,12 +367,31 @@ function Shopping({ navigation }) {
         contentContainerStyle={{}}
       ></FlatList>
     );*/
+  const [loaded] = useFonts({
+    alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
+    Intermedium: require("../../assets/fonts/Inter-Medium.ttf"),
+    Interbold: require("../../assets/fonts/Inter-Bold.ttf"),
+    Interlight: require("../../assets/fonts/Inter-Light.ttf"),
+  });
 
+  if (!loaded) {
+    return <LoadingOverlay message="Ge oss en kort stund..." />;
+  }
   return (
     <>
       <View style={styles.shoppingList}>
         <View>{renderFoodCategories()}</View>
-        <View>{renderShoppingFridge()}</View>
+        <View
+          style={[
+            {
+              flex: 1,
+              opacity: modalIsVisible ? 0.5 : !modalIsVisible ? 1 : null,
+              backgroundColor: modalIsVisible ? Colors.lightblue : null,
+            },
+          ]}
+        >
+          <View>{renderShoppingFridge()}</View>
+        </View>
       </View>
     </>
   );

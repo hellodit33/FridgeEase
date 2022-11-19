@@ -11,7 +11,7 @@ import {
   editFoodFromFridge,
 } from "../../store/redux/actions/user.actions";
 import { getUser } from "../../store/redux/actions/user.actions";
-import EditModal from "../components/EditModal";
+import EditModal from "../components/EditModalFridge";
 import {
   View,
   Image,
@@ -42,7 +42,7 @@ import IcoButton from "../components/IcoButton";
 import PrimaryButton from "../components/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function Fridge(props) {
+function Fridge({ props, navigation, route }) {
   const [itemToEdit, setItemToEdit] = useState();
   const [filteredData, setFilteredData] = useState([]);
   const searchFilterFunction = (text) => {
@@ -100,14 +100,15 @@ function Fridge(props) {
   ];
 
   const [modalIsVisible, setModalIsVisible] = useState(false);
-  function openModal(item) {
+
+  const [passedData, setPassedData] = useState([]);
+
+  function openModal({ name, expiration, carbon, logo }) {
     setModalIsVisible(true);
-    console.log(item._id);
-    console.log(item.foodName);
-    setItemToEdit(item._id);
-    console.log(itemToEdit);
+    setPassedData({ name, expiration, carbon, logo });
   }
   function closeModal() {
+    setPassedData({});
     setModalIsVisible(false);
   }
 
@@ -259,8 +260,8 @@ return(
   console.log(JSON.stringify(userFridge));*/
 
   function renderMyFridge() {
-    const editInFridge = (item) => {
-      dispatch(
+    const editInFridge = () => {
+      /* dispatch(
         editFoodFromFridge(
           userData._id,
           item._id,
@@ -268,7 +269,7 @@ return(
           item.foodQuantity
         )
       );
-      dispatch(getUser(userData._id));
+      dispatch(getUser(userData._id));*/
       closeModal();
     };
     const deleteInFridge = (item) => {
@@ -276,17 +277,25 @@ return(
       dispatch(getUser(userData._id));
     };
 
-    function renderCarbon({ item }) {
+    /*function renderCarbon({ item }) {
       if (item.foodCarbon > 300) {
         return <Text style={styles.itemCarbon}>B</Text>;
       }
       if (item.foodCarbon <= 300) {
         return <Text style={styles.itemCarbon}>A</Text>;
       }
-    }
+    }*/
     const renderFridge = ({ item }) => {
       /*   for (let i = 0; i < userData.usersfood.length; i++) {
-        if (userData.usersfood[i] === item._id) */ {
+        if (userData.usersfood[i] === item._id) */
+
+      {
+        const name = item.foodName;
+        const expiration = item.foodExpiration;
+        const carbon = item.foodCarbon;
+        const category = item.foodCategory;
+        const logo = item.foodLogo;
+
         return (
           <>
             <ScrollView>
@@ -311,14 +320,27 @@ return(
                     </Text>
                   </View>
                   <View style={styles.carbonView}>
-                    {renderCarbon({ item })}
+                    <Text style={styles.itemCarbon}>{item.foodCarbon}</Text>
+                    {/* renderCarbon({ item })*/}
                   </View>
                   <View style={styles.editItem}>
                     <IcoButton
                       icon="create-outline"
                       size={24}
                       color={Colors.green}
-                      onPress={() => openModal(item)}
+                      onPress={
+                        /*() => openEditFridge()*/
+
+                        () => {
+                          openModal({
+                            name,
+                            expiration,
+
+                            carbon,
+                            logo,
+                          });
+                        }
+                      }
                     />
                   </View>
 
@@ -331,8 +353,8 @@ return(
                     />
 
                     <EditModal
+                      passedData={passedData}
                       visible={modalIsVisible}
-                      foodItem={item}
                       onEditFood={() => editInFridge()}
                     />
                   </View>
@@ -401,104 +423,122 @@ return(
 
   return (
     <>
-      <View>
-        <View style={styles.main}>{renderFoodCategories()}</View>
-      </View>
-      <View style={styles.fridge}>
-        <View style={styles.addKlar}>
-          <View
-            style={[
-              styles.addFood,
-              { width: foodComponents && hideFood ? "60%" : "90%" },
-            ]}
-          >
-            <View style={styles.addFoodIcon}>
-              <Ionicons name="add-sharp" size={24} />
-            </View>
-            <View style={styles.addFoodInput}>
-              <TextInput
-                style={styles.addFoodInput}
-                placeholderTextColor={Colors.green}
-                placeholder="Lägg till matvara...."
-                keyboardType="default"
-                multiline={false}
-                onTouchStart={showFoodComponents}
-                /* onChangeText={(e) => searchFilterFunction(e.nativeEvent.text)}*/
-              />
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        <View>
+          <View style={styles.main}>{renderFoodCategories()}</View>
+        </View>
+        <View
+          style={[
+            {
+              flex: 1,
+              opacity: modalIsVisible ? 0.5 : !modalIsVisible ? 1 : null,
+              backgroundColor: modalIsVisible ? Colors.lightblue : null,
+            },
+          ]}
+        >
+          <View style={styles.fridge}>
+            <View style={styles.addKlar}>
+              <View
+                style={[
+                  styles.addFood,
+                  { width: foodComponents && hideFood ? "60%" : "90%" },
+                ]}
+              >
+                <View style={styles.addFoodIcon}>
+                  <Ionicons name="add-sharp" size={24} />
+                </View>
+                <View style={styles.addFoodInput}>
+                  <TextInput
+                    style={styles.addFoodInput}
+                    placeholderTextColor={Colors.green}
+                    placeholder="Lägg till matvara...."
+                    keyboardType="default"
+                    multiline={false}
+                    onTouchStart={showFoodComponents}
+                    /* onChangeText={(e) => searchFilterFunction(e.nativeEvent.text)}*/
+                  />
+                </View>
+              </View>
+              {foodComponents && hideFood && (
+                <View style={styles.readyView}>
+                  <Pressable style={styles.readyButton} onPress={() => hello()}>
+                    <Text style={styles.readyText}>Klar</Text>
+                  </Pressable>
+                </View>
+              )}
             </View>
           </View>
+
+          {messageFoodComponents && !userData.usersfood && (
+            <View style={styles.message}>
+              <Text style={styles.textMessage}>
+                Ditt kylskåp är tomt, lägg till matvaror för att se vilka
+                matvaror som behöver ätas upp snart och få inspiration till
+                matlagning!
+              </Text>
+            </View>
+          )}
+
+          {userData.usersfood && !hideFood && (
+            <View style={styles.fridgeView}>
+              <View style={styles.fridgeInstView}>
+                {/*<Text>{userData.usersfood.length} products in your fridge</Text>*/}
+                <Text style={styles.fridgeToRecipe}>
+                  Markera de matvaror du vill laga mat på och klicka på
+                  receptikonen
+                </Text>
+              </View>
+              {renderMyFridge()}
+            </View>
+          )}
+
           {foodComponents && hideFood && (
-            <View style={styles.readyView}>
-              <Pressable style={styles.readyButton} onPress={() => hello()}>
-                <Text style={styles.readyText}>Klar</Text>
-              </Pressable>
+            <View style={{ flex: 1 }}>
+              <View>
+                <View>
+                  <FlatList
+                    legacyImplementation={true}
+                    contentContainerStyle={styles.foodList}
+                    numColumns={3}
+                    data={foodlist}
+                    extraData={foodlist}
+                    keyExtractor={(item) => item._id}
+                    renderItem={({ item }) => (
+                      <Pressable
+                        onLongPress={FoodDetails}
+                        onPress={() => handlePress(item)}
+                      >
+                        <View style={styles.food}>
+                          <View style={styles.imageContainer}>
+                            <Image
+                              style={styles.image}
+                              source={{
+                                uri:
+                                  "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                                  item.logo,
+                              }}
+                            ></Image>
+                          </View>
+                          <View style={styles.textContainer}>
+                            <Text style={styles.item}>{item.title}</Text>
+                          </View>
+                        </View>
+                        {selectedItems.includes(item._id) && (
+                          <View style={styles.overlay} />
+                        )}
+                      </Pressable>
+                    )}
+                  ></FlatList>
+                </View>
+              </View>
             </View>
           )}
         </View>
       </View>
-
-      {messageFoodComponents && !userData.usersfood && (
-        <View style={styles.message}>
-          <Text style={styles.textMessage}>
-            Ditt kylskåp är tomt, lägg till matvaror för att se vilka matvaror
-            som behöver ätas upp snart och få inspiration till matlagning!
-          </Text>
-        </View>
-      )}
-
-      {userData.usersfood && !hideFood && (
-        <View style={styles.fridgeView}>
-          <View style={styles.fridgeInstView}>
-            {/*<Text>{userData.usersfood.length} products in your fridge</Text>*/}
-            <Text style={styles.fridgeToRecipe}>
-              Markera de matvaror du vill laga mat på och klicka på receptikonen
-            </Text>
-          </View>
-          {renderMyFridge()}
-        </View>
-      )}
-
-      {foodComponents && hideFood && (
-        <View style={{ flex: 1 }}>
-          <View>
-            <View>
-              <FlatList
-                legacyImplementation={true}
-                contentContainerStyle={styles.foodList}
-                numColumns={3}
-                data={foodlist}
-                extraData={foodlist}
-                keyExtractor={(item) => item._id}
-                renderItem={({ item }) => (
-                  <Pressable
-                    onLongPress={FoodDetails}
-                    onPress={() => handlePress(item)}
-                  >
-                    <View style={styles.food}>
-                      <View style={styles.imageContainer}>
-                        <Image
-                          style={styles.image}
-                          source={{
-                            uri:
-                              "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
-                              item.logo,
-                          }}
-                        ></Image>
-                      </View>
-                      <View style={styles.textContainer}>
-                        <Text style={styles.item}>{item.title}</Text>
-                      </View>
-                    </View>
-                    {selectedItems.includes(item._id) && (
-                      <View style={styles.overlay} />
-                    )}
-                  </Pressable>
-                )}
-              ></FlatList>
-            </View>
-          </View>
-        </View>
-      )}
     </>
   );
 }

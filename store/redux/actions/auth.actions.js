@@ -3,7 +3,7 @@ export const REGISTER_USER_FAIL = "REGISTER_USER_FAIL";
 export const LOGIN_USER_SUCCESS = "LOGIN_USER_SUCCESS";
 export const LOGIN_USER_FAIL = "LOGIN_USER_FAIL";
 
-const BASE_URL = "https://0e57-213-163-151-83.eu.ngrok.io";
+const BASE_URL = "https://5d3f-213-163-151-83.eu.ngrok.io";
 export const registerUser = (authData) => {
   const { email, password } = authData;
   return async (dispatch) => {

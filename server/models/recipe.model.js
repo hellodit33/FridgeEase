@@ -3,7 +3,14 @@ const mongoose = require("mongoose");
 var RecipeSchema = new mongoose.Schema({
   title: { type: String },
 
-  ingredients: [String],
+  ingredients: {
+    type: [
+      {
+        quantity: String,
+        name: String,
+      },
+    ],
+  },
 
   climateImpact: { type: String },
 

@@ -9,7 +9,7 @@ export const GET_FOOD_TO_RECIPE = "GET_FOOD_TO_RECIPE";
 export const ADD_FOOD_TO_SHOPPING_LIST = "ADD_FOOD_TO_SHOPPING_LIST";
 export const ADD_FAV_RECIPE = "ADD_FAV_RECIPE";
 
-const BASE_URL = "https://0e57-213-163-151-83.eu.ngrok.io";
+const BASE_URL = "https://5d3f-213-163-151-83.eu.ngrok.io";
 
 export const getUser = (uid) => {
   return (dispatch) => {

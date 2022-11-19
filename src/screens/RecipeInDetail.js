@@ -69,6 +69,7 @@ function RecipeInDetail({ route, navigation }) {
               paddingHorizontal: 20,
               paddingVertical: 5,
             }}
+            key={() => Math.random(userData._id)}
             onPress={() => addToShoppingList(userData._id, item)}
           >
             <Ionicons

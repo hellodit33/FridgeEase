@@ -15,6 +15,7 @@ const Colors = {
   lightred: "#E2A4A4",
   greygreen: "#9AA898",
   greyish: "#DEE0A2",
+  grey: "#EAEAEA",
   lightorange: "#FACC7A",
 };
 

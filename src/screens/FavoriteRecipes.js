@@ -76,6 +76,7 @@ function FavoriteRecipes({ route, navigation }) {
               <TouchableOpacity
                 style={styles.recipes}
                 recipeId={item._id}
+                key={() => Math.random(item._id)}
                 onPress={() => recipePressHandler(item._id)}
               >
                 <View>
