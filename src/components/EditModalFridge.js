@@ -17,7 +17,10 @@ import PrimaryButton from "./PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { editFoodFromFridge } from "../../store/redux/actions/user.actions";
+import {
+  editFoodFromFridge,
+  getUser,
+} from "../../store/redux/actions/user.actions";
 import DateTimePickerEvent from "@react-native-community/datetimepicker";
 import { differenceInDays, parseISO } from "date-fns";
 
@@ -102,6 +105,7 @@ function EditModalFridge(props) {
           enteredQuantityText
         )
       );
+      dispatch(getUser(userData._id));
       setEnteredExpirationText("");
       setEnteredQuantityText("");
       console.log("edited");

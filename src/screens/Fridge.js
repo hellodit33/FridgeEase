@@ -44,6 +44,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 import { faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { differenceInDays, parseISO } from "date-fns";
 
 function Fridge({ props, navigation, route }) {
   const [itemToEdit, setItemToEdit] = useState();
@@ -101,7 +102,7 @@ function Fridge({ props, navigation, route }) {
       name: "Desserter",
     },
   ];
-
+  const [today, setToday] = useState(new Date());
   const [modalIsVisible, setModalIsVisible] = useState(false);
 
   const [passedData, setPassedData] = useState([]);
@@ -267,6 +268,7 @@ return(
   function renderMyFridge() {
     const editInFridge = () => {
       dispatch(getUser(userData._id));
+
       closeModal();
     };
     const deleteInFridge = (item) => {
@@ -286,88 +288,109 @@ return(
       /*   for (let i = 0; i < userData.usersfood.length; i++) {
         if (userData.usersfood[i] === item._id) */
 
-      {
-        const id = item._id;
-        const name = item.foodName;
-        const expiration = item.foodExpiration;
-        const expirationDate = item.foodExpirationDate;
+      console.log(today);
 
-        const carbon = item.foodCarbon;
-        const logo = item.foodLogo;
-        const quantity = "";
-        return (
-          <>
-            <ScrollView>
-              <Pressable onPress={() => handlePressToRecipe(item)}>
-                <View style={styles.userFridgeItem}>
-                  <View style={styles.userImageView}>
-                    <Image
-                      style={styles.userImage}
-                      source={{
-                        uri:
-                          "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
-                          item.foodLogo,
-                      }}
-                    ></Image>
-                  </View>
-                  <View style={styles.itemView}>
-                    <Text style={styles.itemName}>{item.foodName}</Text>
-                  </View>
-                  <View style={styles.expView}>
-                    <Text style={styles.itemExp}>
-                      {item.foodExpiration} dagar
-                    </Text>
-                  </View>
-                  <View style={styles.carbonView}>
-                    <Text style={styles.itemCarbon}>{item.foodCarbon}</Text>
-                    {/* renderCarbon({ item })*/}
-                  </View>
-                  <View style={styles.editItem}>
-                    <IcoButton
-                      icon="create-outline"
-                      size={24}
-                      color={Colors.green}
-                      onPress={
-                        /*() => openEditFridge()*/
-
-                        () => {
-                          openModal({
-                            id,
-                            name,
-                            expiration,
-                            expirationDate,
-                            carbon,
-                            logo,
-                          });
-                        }
-                      }
-                    />
-                  </View>
-
-                  <View style={styles.deleteItem}>
-                    <IcoButton
-                      icon="close-outline"
-                      size={24}
-                      color={Colors.green}
-                      onPress={() => deleteInFridge(item)}
-                    />
-
-                    <EditModal
-                      passedData={passedData}
-                      visible={modalIsVisible}
-                      closeModal={closeModal}
-                      editFoodInFridge={editInFridge}
-                    />
-                  </View>
-                </View>
-                {selectToRecipe.includes(item._id) && (
-                  <View style={styles.overlayToRecipe} />
-                )}
-              </Pressable>
-            </ScrollView>
-          </>
-        );
+      function dateDiff() {
+        if (item.foodExpirationDate) {
+          console.log(item.foodExpirationDate);
+          console.log(today);
+          let dateDiff = differenceInDays(
+            Date.parse(item.foodExpirationDate),
+            Date.parse(today)
+          );
+          console.log(dateDiff);
+          return (
+            <Text>
+              {dateDiff} {dateDiff > 1 ? "dagar" : " dag"}
+            </Text>
+          );
+        } else {
+          return (
+            <Text>
+              {item.foodExpiration}
+              {item.foodExpiration > 1 ? " dagar" : " dag"}
+            </Text>
+          );
+        }
       }
+      const id = item._id;
+      const name = item.foodName;
+      const expiration = item.foodExpiration;
+      const expirationDate = item.foodExpirationDate;
+
+      const carbon = item.foodCarbon;
+      const logo = item.foodLogo;
+      const quantity = "";
+      return (
+        <>
+          <ScrollView>
+            <Pressable onPress={() => handlePressToRecipe(item)}>
+              <View style={styles.userFridgeItem}>
+                <View style={styles.userImageView}>
+                  <Image
+                    style={styles.userImage}
+                    source={{
+                      uri:
+                        "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                        item.foodLogo,
+                    }}
+                  ></Image>
+                </View>
+                <View style={styles.itemView}>
+                  <Text style={styles.itemName}>{item.foodName}</Text>
+                </View>
+                <View style={styles.expView}>
+                  <Text style={styles.itemExp}>{dateDiff()}</Text>
+                </View>
+                <View style={styles.carbonView}>
+                  <Text style={styles.itemCarbon}>{item.foodCarbon}</Text>
+                  {/* renderCarbon({ item })*/}
+                </View>
+                <View style={styles.editItem}>
+                  <IcoButton
+                    icon="create-outline"
+                    size={24}
+                    color={Colors.green}
+                    onPress={
+                      /*() => openEditFridge()*/
+
+                      () => {
+                        openModal({
+                          id,
+                          name,
+                          expiration,
+                          expirationDate,
+                          carbon,
+                          logo,
+                        });
+                      }
+                    }
+                  />
+                </View>
+
+                <View style={styles.deleteItem}>
+                  <IcoButton
+                    icon="close-outline"
+                    size={24}
+                    color={Colors.green}
+                    onPress={() => deleteInFridge(item)}
+                  />
+
+                  <EditModal
+                    passedData={passedData}
+                    visible={modalIsVisible}
+                    closeModal={closeModal}
+                    editFoodInFridge={editInFridge}
+                  />
+                </View>
+              </View>
+              {selectToRecipe.includes(item._id) && (
+                <View style={styles.overlayToRecipe} />
+              )}
+            </Pressable>
+          </ScrollView>
+        </>
+      );
     };
 
     return (
