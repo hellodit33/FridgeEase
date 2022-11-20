@@ -6,6 +6,7 @@ import {
   Pressable,
   ScrollView,
   Image,
+  TextInput,
   TouchableOpacity,
 } from "react-native";
 import { useFonts } from "expo-font";
@@ -16,10 +17,40 @@ import { useEffect, useState } from "react";
 import IcoButton from "../components/IcoButton.js";
 import EditModalShopping from "../components/EditModalShopping.js";
 import { useDispatch } from "react-redux";
-import { getUser } from "../../store/redux/actions/user.actions.js";
+import {
+  addFromFridgeToShopping,
+  getUser,
+} from "../../store/redux/actions/user.actions.js";
 import { fetchFood } from "../../store/redux/actions/fridge.actions.js";
 import { Ionicons } from "@expo/vector-icons";
 function Shopping({ navigation }) {
+  const handlePressToShoppingList = (food) => {
+    if (selectedItems.includes(food._id)) {
+      const newSelect = selectedItems.filter((foodId) => foodId !== food._id);
+      /* dispatch(removeFoodFromFridge(userData._id, food._id));*/
+      return setSelectedItems(newSelect);
+    }
+    setSelectedItems([...selectedItems, food._id]);
+
+    dispatch(addFromFridgeToShopping(userData._id, food.title));
+    dispatch(getUser(userData._id));
+  };
+  const foodsLists = useSelector((state) => state.intoFridgeReducer);
+  const [foodlist, setFoodlist] = useState(foodsLists);
+  const [foodComponents, setFoodComponents] = useState(false);
+  const [hideFood, setHideFood] = useState(false);
+  const [showShopping, setShowShopping] = useState(true);
+
+  const [selectedItems, setSelectedItems] = useState([]);
+  function showFoodComponents() {
+    setFoodComponents(true);
+    setHideFood(true);
+  }
+
+  const hello = () => {
+    setHideFood(false);
+    setFoodComponents(false);
+  };
   const categoryData = [
     {
       id: 1,
@@ -166,7 +197,7 @@ function Shopping({ navigation }) {
         return <Text style={styles.itemCarbon}>A</Text>;
       }
     }
-    const userShopping = userData.shoppingList2;
+    const userShopping = userData.shoppingList;
     const item = "";
     return fridge.map((fridge) => {
       for (let i = 0; i < userShopping.length; i++) {
@@ -210,9 +241,15 @@ function Shopping({ navigation }) {
                     <View style={styles.itemView}>
                       <Text style={styles.itemName}>{fridge.title}</Text>
                     </View>
-                    <View style={styles.quantityView}>
-                      <Text style={styles.quantityText}>{quantity}</Text>
-                    </View>
+                    {quantity ? (
+                      <View style={styles.quantityView}>
+                        <Text style={styles.quantityText}>{quantity}</Text>
+                      </View>
+                    ) : (
+                      <View style={styles.quantityView}>
+                        <Text style={styles.quantityText}>Okänd kvantité</Text>
+                      </View>
+                    )}
                     <View style={styles.carbonView}>
                       {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
                       <Text style={styles.itemCarbon}>{fridge.carbon}</Text>
@@ -393,7 +430,84 @@ function Shopping({ navigation }) {
             },
           ]}
         >
-          <View>{renderShoppingFridge()}</View>
+          <View style={styles.fridge}>
+            <View style={styles.addKlar}>
+              <View
+                style={[
+                  styles.addFood,
+                  { width: foodComponents && hideFood ? "65%" : "90%" },
+                ]}
+              >
+                <View style={styles.addFoodIcon}>
+                  <Ionicons name="add-sharp" size={24} />
+                </View>
+                <View style={styles.addFoodInput}>
+                  <TextInput
+                    style={styles.addFoodInput}
+                    placeholderTextColor={Colors.green}
+                    placeholder="Lägg till shoppinglistan...."
+                    keyboardType="default"
+                    multiline={false}
+                    onTouchStart={showFoodComponents}
+                    /* onChangeText={(e) => searchFilterFunction(e.nativeEvent.text)}*/
+                  />
+                </View>
+              </View>
+              {foodComponents && hideFood && (
+                <View style={styles.readyView}>
+                  <Pressable style={styles.readyButton} onPress={() => hello()}>
+                    <Text style={styles.readyText}>Klar</Text>
+                  </Pressable>
+                </View>
+              )}
+            </View>
+          </View>
+          {foodComponents && hideFood && (
+            <View style={{ flex: 1 }}>
+              <View>
+                <View>
+                  <FlatList
+                    legacyImplementation={true}
+                    contentContainerStyle={styles.foodList}
+                    numColumns={3}
+                    data={foodlist}
+                    extraData={foodlist}
+                    keyExtractor={(item) => item._id}
+                    renderItem={({ item }) => (
+                      <Pressable
+                        /* onLongPress={FoodDetails}*/
+                        onPress={() => handlePressToShoppingList(item)}
+                      >
+                        <View style={styles.food}>
+                          <View style={styles.imageContainer}>
+                            <Image
+                              style={styles.image}
+                              source={{
+                                uri:
+                                  "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                                  item.logo,
+                              }}
+                            ></Image>
+                          </View>
+                          <View style={styles.textContainer}>
+                            <Text style={styles.item}>{item.title}</Text>
+                          </View>
+                        </View>
+                        {selectedItems.includes(item._id) && (
+                          <View style={styles.overlay} />
+                        )}
+                      </Pressable>
+                    )}
+                  ></FlatList>
+                </View>
+              </View>
+            </View>
+          )}
+          <View style={{ flex: 1 }}>
+            {!foodComponents && !hideFood && (
+              <View>{renderShoppingFridge()}</View>
+            )}
+          </View>
         </View>
       </View>
     </>
@@ -411,7 +525,7 @@ const styles = StyleSheet.create({
   main: {
     backgroundColor: Colors.blue,
     margin: 50,
-    flex: 1,
+
     justifyContent: "center",
     alignItems: "center",
   },
@@ -442,9 +556,7 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 60,
     borderRadius: 30,
-
     borderColor: Colors.green,
-    borderWidth: 4,
     marginVertical: 10,
     marginHorizontal: 20,
   },
@@ -501,5 +613,114 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  fridge: {
+    backgroundColor: Colors.blue,
+    fontFamily: "Intermedium",
+  },
+  addKlar: {
+    flexDirection: "row",
+    marginHorizontal: -5,
+  },
+  addFood: {
+    backgroundColor: "white",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 120,
+    marginHorizontal: 20,
+    marginVertical: 5,
+    borderWidth: 4,
+    borderColor: Colors.green,
+    flexDirection: "row",
+    fontFamily: "Interlight",
+  },
+  addFoodInput: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: Colors.green,
+  },
+  addFoodIcon: {
+    paddingRight: 5,
+    paddingLeft: 10,
+  },
+  foodList: {
+    backgroundColor: Colors.blue,
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  food: {
+    height: 90,
+    width: 100,
+    marginHorizontal: 2,
+    marginVertical: 2,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    backgroundColor: "white",
+    borderRadius: 30,
+    borderColor: Colors.green,
+    borderWidth: 2,
+  },
+  overlay: {
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    borderRadius: 30,
+    borderColor: Colors.green,
+    borderWidth: 4,
+  },
+  foodList: {
+    backgroundColor: Colors.blue,
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  food: {
+    height: 90,
+    width: 100,
+    marginHorizontal: 2,
+    marginVertical: 2,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    backgroundColor: "white",
+    borderRadius: 30,
+    borderColor: Colors.green,
+    borderWidth: 2,
+  },
+
+  textContainer: {
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  },
+  item: {
+    fontWeight: "bold",
+    textAlign: "center",
+    color: Colors.green,
+  },
+  imageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: {
+    width: 50,
+    height: 50,
+    resizeMode: "contain",
+  },
+  readyView: {
+    backgroundColor: Colors.blue,
+    justifyContent: "center",
+    width: "40%",
+  },
+  readyButton: {
+    justifyContent: "center",
+    borderRadius: 40,
+    backgroundColor: Colors.green,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    width: "50%",
+  },
+  readyText: {
+    textAlign: "center",
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });

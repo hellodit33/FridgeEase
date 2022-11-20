@@ -23,8 +23,8 @@ const userSchema = new mongoose.Schema(
     diet: String,
     allergy: [String],
     foodToRecipe: [String],
-    shoppingList: [String],
-    shoppingList2: {
+
+    shoppingList: {
       type: [
         {
           foodName: String,

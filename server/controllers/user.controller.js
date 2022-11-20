@@ -236,7 +236,7 @@ module.exports.addFoodToShoppingList = (req, res) => {
       req.params.id,
       {
         $addToSet: {
-          shoppingList2: {
+          shoppingList: {
             foodName: req.body.foodName,
             foodQuantity: req.body.foodQuantity,
           },

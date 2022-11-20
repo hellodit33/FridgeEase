@@ -20,7 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Header from "../components/Header";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import {
-  addFoodToShopping,
+  addFromRecipeToShopping,
   addFavoriteRecipe,
   getUser,
 } from "../../store/redux/actions/user.actions";
@@ -40,7 +40,7 @@ function RecipeInDetail({ route, navigation }) {
   const climateImpact = ["A", "B", "C", "D", "E"];
 
   function addToShoppingList(uid, name, quantity) {
-    dispatch(addFoodToShopping(uid, name, quantity));
+    dispatch(addFromRecipeToShopping(uid, name, quantity));
     dispatch(getUser(uid));
   }
   const [favorite, setFavorite] = useState(false);

@@ -6,7 +6,11 @@ export const EDIT_FOOD = "EDIT_FOOD";
 export const DELETE_FOOD = "DELETE_FOOD";
 export const ADD_FOOD_TO_RECIPE = "ADD_FOOD_TO_RECIPE";
 export const GET_FOOD_TO_RECIPE = "GET_FOOD_TO_RECIPE";
-export const ADD_FOOD_TO_SHOPPING_LIST = "ADD_FOOD_TO_SHOPPING_LIST";
+export const ADD_FROM_RECIPE_TO_SHOPPING_LIST =
+  "ADD_FROM_RECIPE_TO_SHOPPING_LIST";
+export const ADD_FROM_FRIDGE_TO_SHOPPING_LIST =
+  "ADD_FROM_FRIDGE_TO_SHOPPING_LIST";
+
 export const ADD_FAV_RECIPE = "ADD_FAV_RECIPE";
 export const UPDATE_DIET = "UPDATE_DIET";
 
@@ -80,7 +84,7 @@ export const addFoodToRecipe = (userId, foodName) => {
   };
 };
 
-export const addFoodToShopping = (userId, foodName, foodQuantity) => {
+export const addFromRecipeToShopping = (userId, foodName, foodQuantity) => {
   return (dispatch) => {
     return axios({
       method: "put",
@@ -92,7 +96,7 @@ export const addFoodToShopping = (userId, foodName, foodQuantity) => {
     })
       .then((res) => {
         dispatch({
-          type: ADD_FOOD_TO_SHOPPING_LIST,
+          type: ADD_f,
           payload: {
             foodName,
             foodQuantity,
@@ -171,6 +175,27 @@ export const getFoodToRecipe = (userId) => {
       .get(`${BASE_URL}/api/user/gettorecipe/` + userId)
       .then((res) => {
         dispatch({ type: GET_FOOD_TO_RECIPE, payload: res.data.foodToRecipe });
+      })
+      .catch((err) => console.log(err));
+  };
+};
+
+export const addFromFridgeToShopping = (userId, foodName) => {
+  return (dispatch) => {
+    return axios({
+      method: "put",
+      url: `${BASE_URL}/api/user/addtoshoppinglist/` + userId,
+      data: {
+        foodName,
+      },
+    })
+      .then((res) => {
+        dispatch({
+          type: ADD_FROM_FRIDGE_TO_SHOPPING_LIST,
+          payload: {
+            foodName,
+          },
+        });
       })
       .catch((err) => console.log(err));
   };
