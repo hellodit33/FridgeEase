@@ -272,7 +272,7 @@ function AuthenticatedStack() {
       <Stack.Screen
         name="Diets"
         component={Diets}
-        options={{ title: "Mina dieter" }}
+        options={{ title: "Min kost" }}
       />
       <Stack.Screen
         name="Allergies"

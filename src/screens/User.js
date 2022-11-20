@@ -32,7 +32,7 @@ function User(props) {
             <IcoButton icon="heart-outline" color={Colors.darkpink}></IcoButton>
           </Pressable>
           <Pressable style={styles.buttons} onPress={DietPress}>
-            <Text style={styles.buttonsText}>Min diet</Text>
+            <Text style={styles.buttonsText}>Min kost</Text>
             <IcoButton icon="pizza" color={Colors.darkpink}></IcoButton>
           </Pressable>
 

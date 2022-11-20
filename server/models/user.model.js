@@ -20,10 +20,8 @@ const userSchema = new mongoose.Schema(
       minlength: 6,
     },
 
-    bio: {
-      type: String,
-      max: 1024,
-    },
+    diet: String,
+    allergy: [String],
     foodToRecipe: [String],
     shoppingList: [String],
     shoppingList2: {

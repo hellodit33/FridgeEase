@@ -85,11 +85,11 @@ module.exports.updateUserDiet = (req, res) => {
     UserModel.findOneAndUpdate(
       { _id: req.params.id },
       {
-        $set: {
-          diet: [req.body.diet],
+        $addToSet: {
+          diet: req.body.diet,
         },
       },
-      { new: true, upsert: true, setDefaultsOnInsert: true },
+      { new: true, upsert: true },
       (err, data) => {
         if (!err) return res.send(data);
         if (err) return res.status(500).send({ message: err });

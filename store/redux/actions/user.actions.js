@@ -8,8 +8,9 @@ export const ADD_FOOD_TO_RECIPE = "ADD_FOOD_TO_RECIPE";
 export const GET_FOOD_TO_RECIPE = "GET_FOOD_TO_RECIPE";
 export const ADD_FOOD_TO_SHOPPING_LIST = "ADD_FOOD_TO_SHOPPING_LIST";
 export const ADD_FAV_RECIPE = "ADD_FAV_RECIPE";
+export const UPDATE_DIET = "UPDATE_DIET";
 
-const BASE_URL = "https://d216-213-163-151-83.eu.ngrok.io";
+const BASE_URL = "https://f916-213-163-151-83.eu.ngrok.io";
 
 export const getUser = (uid) => {
   return (dispatch) => {
@@ -116,6 +117,27 @@ export const addFavoriteRecipe = (userId, recipeId) => {
           type: ADD_FAV_RECIPE,
           payload: {
             recipeId,
+          },
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+};
+
+export const updateDiet = (userId, diet) => {
+  return (dispatch) => {
+    return axios({
+      method: "put",
+      url: `${BASE_URL}/api/user/${userId}/diet`,
+      data: {
+        diet,
+      },
+    })
+      .then((res) => {
+        dispatch({
+          type: UPDATE_DIET,
+          payload: {
+            diet,
           },
         });
       })
