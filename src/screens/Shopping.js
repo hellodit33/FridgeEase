@@ -208,7 +208,10 @@ function Shopping({ navigation }) {
           const logo = fridge.logo;
           return (
             <>
-              <ScrollView>
+              <ScrollView
+                scrollToOverflowEnabled
+                style={styles.shoppingListScroll}
+              >
                 <Pressable
                   key={() => Math.random(userData._id)}
                   onPress={() =>
@@ -225,9 +228,6 @@ function Shopping({ navigation }) {
                       },
                     ]}
                   >
-                    {selectToShopping.includes(fridge._id) && (
-                      <View style={styles.overlay} />
-                    )}
                     <View style={styles.userImageView}>
                       <Image
                         style={styles.userImage}
@@ -247,7 +247,7 @@ function Shopping({ navigation }) {
                       </View>
                     ) : (
                       <View style={styles.quantityView}>
-                        <Text style={styles.quantityText}>Okänd kvantité</Text>
+                        <Text style={styles.quantityText}>Kvantité?</Text>
                       </View>
                     )}
                     <View style={styles.carbonView}>
@@ -264,40 +264,44 @@ function Shopping({ navigation }) {
                         />
                       </View>
                     )}
-                    <View style={styles.iconItem}>
-                      <IcoButton
-                        icon="create-outline"
-                        size={24}
-                        color={Colors.green}
-                        onPress={() => {
-                          openModal({
-                            name,
-                            quantity,
-                            carbon,
-                            logo,
-                          });
-                        }}
-                      />
-                    </View>
+                    {!selectToShopping.includes(fridge._id) && (
+                      <View style={styles.iconItem}>
+                        <IcoButton
+                          icon="create-outline"
+                          size={24}
+                          color={Colors.green}
+                          onPress={() => {
+                            openModal({
+                              name,
+                              quantity,
+                              carbon,
+                              logo,
+                            });
+                          }}
+                        />
+                      </View>
+                    )}
 
-                    <View style={styles.iconItem}>
-                      <IcoButton
-                        icon="close"
-                        size={24}
-                        color={Colors.darkpink}
-                        onPress={() => deleteInFridge(fridge)}
-                      />
+                    {!selectToShopping.includes(fridge._id) && (
+                      <View style={styles.iconItem}>
+                        <IcoButton
+                          icon="close"
+                          size={24}
+                          color={Colors.darkpink}
+                          onPress={() => deleteInFridge(fridge)}
+                        />
 
-                      <EditModalShopping
-                        visible={modalIsVisible}
-                        passedData={passedData}
-                        onEditFood={() => editInFridge()}
-                      />
-                    </View>
+                        <EditModalShopping
+                          visible={modalIsVisible}
+                          passedData={passedData}
+                          onEditFood={() => editInFridge()}
+                        />
+                      </View>
+                    )}
+                    {selectToShopping.includes(fridge._id) && (
+                      <View style={styles.overlayToShopping} />
+                    )}
                   </View>
-                  {selectToShopping.includes(fridge._id) && (
-                    <View style={styles.overlayToShopping} />
-                  )}
                 </Pressable>
               </ScrollView>
             </>
@@ -461,6 +465,11 @@ function Shopping({ navigation }) {
                 </View>
               )}
             </View>
+            <View style={styles.doneShopping}>
+              <Text style={styles.doneShoppingText}>
+                Jag är klar med mitt matinköp
+              </Text>
+            </View>
           </View>
           {foodComponents && hideFood && (
             <View style={{ flex: 1 }}>
@@ -543,22 +552,23 @@ const styles = StyleSheet.create({
   },
   userFridgeItem: {
     marginVertical: 10,
-    marginHorizontal: 20,
     borderRadius: 30,
     width: "90%",
     height: 60,
+    marginHorizontal: 20,
     flexDirection: "row",
     justifyContent: "space-evenly",
   },
 
   overlayToShopping: {
     position: "absolute",
-    width: "90%",
-    height: 60,
+    height: "100%",
+    width: "100%",
     borderRadius: 30,
+    marginLeft: -10,
+
     borderColor: Colors.green,
-    marginVertical: 10,
-    marginHorizontal: 20,
+    borderWidth: 4,
   },
   itemView: {
     justifyContent: "center",
@@ -723,4 +733,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
+  doneShopping: {
+    marginLeft: 20,
+    marginVertical: 5,
+  },
+  doneShoppingText: {
+    color: Colors.green,
+    fontWeight: "800",
+    fontSize: 16,
+    textDecorationLine: "underline",
+  },
+  shoppingListScroll: {},
 });
