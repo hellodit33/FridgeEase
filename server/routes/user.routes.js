@@ -20,11 +20,15 @@ router.put("/:id/diet", userController.updateUserDiet);
 //add and remove food from fridge
 router.put("/addfood/:id", userController.addFoodToFridge);
 router.put("/removefood/:id", userController.removeFoodFromFridge);
-router.patch("/editfood/:id", userController.editFoodFromFridge);
-router.patch("/deletefood/:id", userController.deleteFoodFromFridge);
+router.put("/editfood/:id", userController.editFoodFromFridge);
+router.put("/deletefood/:id", userController.deleteFoodFromFridge);
 router.put("/addtorecipe/:id", userController.addFoodToRecipe);
 router.get("/gettorecipe/:id", userController.getFoodToRecipe);
 router.put("/addtoshoppinglist/:id", userController.addFoodToShoppingList);
+router.put("/removeshoppinglist/:id", userController.removeShoppingList);
+router.put("/deleteshoppingitem/:id", userController.deleteShoppingItem);
+router.put("/editshoppingitem/:id", userController.editShoppingItem);
+
 router.put("/addfavrecipe/:id", userController.addFavoriteRecipe);
 
 module.exports = router;

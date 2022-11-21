@@ -113,7 +113,7 @@ function EditModalFridge(props) {
     } else {
       Alert.alert(
         "Oops!",
-        "Kvantité eller bäst-före-datum. Fyll gärna i någon av dem för att kunna gå vidare",
+        "Kvantité eller bäst-före-datum saknas. Fyll gärna i någon av dem för att kunna gå vidare",
         [{ text: "Okej", style: "default" }]
       );
     }

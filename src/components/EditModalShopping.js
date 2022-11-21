@@ -6,14 +6,63 @@ import {
   Modal,
   TextInput,
   Image,
+  Alert,
   KeyboardAvoidingView,
 } from "react-native";
+import Checkbox from "expo-checkbox";
+
 import IcoButton from "./IcoButton";
 import Colors from "../../constants/Colors";
 import PrimaryButton from "./PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
+import {
+  editFoodFromShopping,
+  getUser,
+} from "../../store/redux/actions/user.actions";
+import { useSelector, useDispatch } from "react-redux";
 
 function EditModalShopping(props) {
+  const [isChecked, setChecked] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const [enteredQuantityText, setEnteredQuantityText] = useState("");
+  const [enteredBioText, setEnteredBioText] = useState(false);
+  const userData = useSelector((state) => state.userReducer);
+
+  function quantityInputHandler(enteredQuantity) {
+    setEnteredQuantityText(enteredQuantity);
+  }
+
+  function bioInputHandler(enteredBio) {
+    setEnteredBioText(enteredBio);
+  }
+
+  async function editFoodInShopping() {
+    if (enteredQuantityText.length > 0 || isChecked || !isChecked) {
+      dispatch(
+        editFoodFromShopping(
+          userData._id,
+          props.passedData.id,
+          isChecked,
+          enteredQuantityText
+        )
+      );
+      dispatch(getUser(userData._id));
+      setEnteredBioText("");
+      setEnteredQuantityText("");
+      console.log("edited");
+      props.closeModal();
+    } else {
+      Alert.alert(
+        "Oops!",
+        "Kvantité eller ekologiska val saknas. Fyll gärna i någon av dem för att kunna gå vidare",
+        [{ text: "Okej", style: "default" }]
+      );
+    }
+  }
+
   return (
     <Modal
       style={styles.modal}
@@ -32,25 +81,45 @@ function EditModalShopping(props) {
             }}
           ></Image>
           <Text style={styles.foodText}>{props.passedData.name}</Text>
-          {/* <Text style={styles.foodExp}>
-            {props.passedData.expiration}
-            {props.passedData.expiration > 1 ? " dagar" : " dag"}
-          </Text>*/}
-          <Pressable style={styles.close} onPress={props.onEditFood}>
+          {props.passedData.existingBioQuality === true && <Text>Eko</Text>}
+          <Text style={styles.foodExp}>{props.passedData.quantity}</Text>
+
+          <Pressable onPress={props.onEditFood}>
             <Ionicons name="close" size={24} color={Colors.darkpink}></Ionicons>
           </Pressable>
         </View>
         <View styles={styles.moreInfoToChange}>
           <View style={styles.foodChange}>
-            <TextInput placeholder="Kvantité">
-              {props.passedData.quantity}
-            </TextInput>
+            <TextInput
+              placeholder="Ändra kvantité"
+              onChangeText={quantityInputHandler}
+              value={enteredQuantityText}
+            ></TextInput>
+
             <Ionicons name="create" color={Colors.green} size={20}></Ionicons>
           </View>
-          <View style={styles.foodChange}>
-            <TextInput placeholder="Ekologisk eller icke-ekologisk"></TextInput>
+          <View style={styles.ekoChange}>
+            <View style={styles.checkbox}>
+              <Checkbox
+                style={{ marginRight: 10 }}
+                value={isChecked}
+                onValueChange={setChecked}
+                color={isChecked ? Colors.green : undefined}
+              />
+              {!isChecked ? (
+                <Text>Icke-ekologisk</Text>
+              ) : (
+                <Text>Ekologisk</Text>
+              )}
+            </View>
+            {/*<TextInput
+              onChangeText={bioInputHandler}
+              value={enteredBioText}
+              placeholder="Ekologisk eller icke-ekologisk"
+            ></TextInput>*/}
             <Ionicons name="create" color={Colors.green} size={20}></Ionicons>
           </View>
+
           <View style={styles.carbonInfo}>
             <Text style={styles.recipesText}>
               {props.passedData.carbon === "A"
@@ -101,7 +170,8 @@ function EditModalShopping(props) {
           </View>
         </View>
 
-        <PrimaryButton onPress={props.onEditFood}>Spara</PrimaryButton>
+        <PrimaryButton onPress={editFoodInShopping}>Spara</PrimaryButton>
+        <PrimaryButton onPress={props.closeModal}>Avbryt</PrimaryButton>
         <Pressable style={styles.deleteFromList}>
           <Text style={styles.deleteFromListText}>
             Ta bort varan från min shoppinglista
@@ -130,6 +200,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   userImage: {
+    marginLeft: 5,
+    marginRight: 10,
     width: 30,
     height: 30,
     resizeMode: "contain",
@@ -137,7 +209,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
   },
 
   foodText: {
@@ -167,6 +239,19 @@ const styles = StyleSheet.create({
     padding: 10,
     marginHorizontal: 10,
     marginTop: 10,
+  },
+  ekoChange: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: Colors.grey,
+    borderRadius: 10,
+    padding: 10,
+    marginHorizontal: 10,
+    marginTop: 10,
+  },
+  checkbox: {
+    flexDirection: "row",
   },
 
   carbonInfo: {
@@ -200,8 +285,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 15,
     textAlign: "center",
-  },
-  close: {
-    marginLeft: 100,
   },
 });

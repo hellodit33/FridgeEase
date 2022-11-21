@@ -4,6 +4,8 @@ import {
   EDIT_FOOD,
   DELETE_FOOD,
   GET_FOOD_TO_RECIPE,
+  DELETE_SHOPPING_ITEM,
+  EDIT_SHOPPING_ITEM,
 } from "../actions/user.actions";
 
 const initialState = {};
@@ -39,6 +41,28 @@ export default function userReducer(state = initialState, action) {
         }
         return user;
       });
+
+    case EDIT_SHOPPING_ITEM:
+      return state.map((user) => {
+        if (user._id === action.payload.userId) {
+          return {
+            ...user,
+            shoppingList: user.shoppingList.map((food) => {
+              if (food._id === action.payload.foodId) {
+                return {
+                  ...shoppingList,
+                  foodName: action.payload.foodName,
+                  foodBioQuality: action.payload.foodBioQuality,
+                  foodQuantity: action.payload.foodQuantity,
+                };
+              } else {
+                return usersfood;
+              }
+            }),
+          };
+        }
+        return user;
+      });
     case DELETE_FOOD:
       return state.map((user) => {
         if (user._id === action.payload.userId) {
@@ -51,6 +75,20 @@ export default function userReducer(state = initialState, action) {
         }
         return user;
       });
+    case DELETE_SHOPPING_ITEM:
+      return state.map((user) => {
+        if (user._id === action.payload.userId) {
+          return {
+            ...user,
+            shoppingList: user.shoppingList.filter(
+              (food) => food._id !== action.payload.foodId
+            ),
+          };
+        }
+        return user;
+      });
+    /*case DELETE_ALL_SHOPPING_ITEMS:
+      return action.payload;*/
     default:
       return state;
   }

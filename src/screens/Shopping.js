@@ -20,9 +20,13 @@ import { useDispatch } from "react-redux";
 import {
   addFromFridgeToShopping,
   getUser,
+  deleteFoodFromShopping,
+  editFoodFromShopping,
 } from "../../store/redux/actions/user.actions.js";
 import { fetchFood } from "../../store/redux/actions/fridge.actions.js";
 import { Ionicons } from "@expo/vector-icons";
+import { removeShoppingList } from "../../store/redux/actions/user.actions.js";
+import id from "date-fns/locale/id/index";
 function Shopping({ navigation }) {
   const handlePressToShoppingList = (food) => {
     if (selectedItems.includes(food._id)) {
@@ -145,17 +149,39 @@ function Shopping({ navigation }) {
 
   const [passedData, setPassedData] = useState([]);
 
-  function openModal({ name, carbon, logo, quantity }) {
+  function openModal({
+    id,
+    name,
+    carbon,
+    logo,
+    quantity,
+    bioquality,
+    existingBioQuality,
+  }) {
     setModalIsVisible(true);
-    setPassedData({ name, carbon, logo, quantity });
+    setPassedData({
+      id,
+      name,
+      carbon,
+      logo,
+      quantity,
+      bioquality,
+      existingBioQuality,
+    });
   }
   function closeModal() {
+    dispatch(getUser(userData._id));
     setPassedData({});
     setModalIsVisible(false);
   }
 
   const userData = useSelector((state) => state.userReducer);
   const fridge = useSelector((state) => state.intoFridgeReducer);
+
+  const removeShopping = () => {
+    dispatch(removeShoppingList(userData._id));
+    dispatch(getUser(userData._id));
+  };
 
   function renderShoppingFridge() {
     const handlePressToShopping = (food) => {
@@ -172,21 +198,9 @@ function Shopping({ navigation }) {
     dispatch(getUser(userData._id));*/
       console.log(selectToShopping);
     };
-    const editInFridge = (item) => {
-      /* dispatch(
-        editFoodFromFridge(
-          userData._id,
-          item._id,
-          item.foodExpiration,
-          item.foodQuantity
-        )
-      );
-      dispatch(getUser(userData._id));*/
-      closeModal();
-    };
-    const deleteInFridge = (fridge) => {
-      dispatch(deleteFoodFromFridge(userData._id, fridge._id));
+    const editInShopping = (item) => {
       dispatch(getUser(userData._id));
+      closeModal();
     };
 
     function renderCarbon({ fridge }) {
@@ -204,16 +218,23 @@ function Shopping({ navigation }) {
         if (fridge.title === userShopping[i].foodName) {
           const name = fridge.title;
           const quantity = userShopping[i].foodQuantity;
+          const id = userShopping[i]._id;
           const carbon = fridge.carbon;
           const logo = fridge.logo;
+          const bioquality = "";
+          const existingBioQuality = userShopping[i].foodBioQuality;
+
+          const removeShoppingItem = () => {
+            dispatch(deleteFoodFromShopping(userData._id, id));
+            dispatch(getUser(userData._id));
+          };
           return (
             <>
               <ScrollView
-                scrollToOverflowEnabled
+                key={() => Math.random(id)}
                 style={styles.shoppingListScroll}
               >
                 <Pressable
-                  key={() => Math.random(userData._id)}
                   onPress={() =>
                     handlePressToShopping(fridge)
                   } /*onPress={() => handlePressToRecipe(item)}*/
@@ -240,6 +261,9 @@ function Shopping({ navigation }) {
                     </View>
                     <View style={styles.itemView}>
                       <Text style={styles.itemName}>{fridge.title}</Text>
+                      {existingBioQuality === true && (
+                        <Text style={styles.itemEko}>Eko</Text>
+                      )}
                     </View>
                     {quantity ? (
                       <View style={styles.quantityView}>
@@ -273,7 +297,10 @@ function Shopping({ navigation }) {
                           onPress={() => {
                             openModal({
                               name,
+                              id,
                               quantity,
+                              bioquality,
+                              existingBioQuality,
                               carbon,
                               logo,
                             });
@@ -288,13 +315,14 @@ function Shopping({ navigation }) {
                           icon="close"
                           size={24}
                           color={Colors.darkpink}
-                          onPress={() => deleteInFridge(fridge)}
+                          onPress={() => removeShoppingItem()}
                         />
 
                         <EditModalShopping
                           visible={modalIsVisible}
                           passedData={passedData}
-                          onEditFood={() => editInFridge()}
+                          closeModal={closeModal}
+                          editFoodInShopping={editInShopping}
                         />
                       </View>
                     )}
@@ -465,11 +493,6 @@ function Shopping({ navigation }) {
                 </View>
               )}
             </View>
-            <View style={styles.doneShopping}>
-              <Text style={styles.doneShoppingText}>
-                Jag är klar med mitt matinköp
-              </Text>
-            </View>
           </View>
           {foodComponents && hideFood && (
             <View style={{ flex: 1 }}>
@@ -514,7 +537,19 @@ function Shopping({ navigation }) {
           )}
           <View style={{ flex: 1 }}>
             {!foodComponents && !hideFood && (
-              <View>{renderShoppingFridge()}</View>
+              <>
+                {userData.shoppingList.length >= 1 && (
+                  <Pressable
+                    onPress={removeShopping}
+                    style={styles.doneShopping}
+                  >
+                    <Text style={styles.doneShoppingText}>
+                      Jag är klar med mitt matinköp
+                    </Text>
+                  </Pressable>
+                )}
+                <View>{renderShoppingFridge()}</View>
+              </>
             )}
           </View>
         </View>
@@ -578,6 +613,11 @@ const styles = StyleSheet.create({
     color: Colors.green,
     fontWeight: "bold",
     fontSize: 17,
+  },
+  itemEko: {
+    color: Colors.green,
+    fontWeight: "bold",
+    fontSize: 14,
   },
   carbonView: {
     marginVertical: 10,

@@ -156,6 +156,23 @@ module.exports.addFoodToFridge = (req, res) => {
   }
 };
 
+module.exports.removeShoppingList = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown: " + req.params.id);
+  try {
+    UserModel.findByIdAndUpdate(
+      req.params.id,
+      { $set: { shoppingList: "" } },
+
+      (err, data) => {
+        if (!err) res.status(201).json(data);
+        else return res.status(400).json(err);
+      }
+    );
+  } catch (err) {
+    return res.status(500).json({ message: err });
+  }
+};
 module.exports.removeFoodFromFridge = (req, res) => {
   if (
     !ObjectID.isValid(req.params.id) ||
@@ -226,6 +243,31 @@ module.exports.deleteFoodFromFridge = (req, res) => {
   }
 };
 
+module.exports.deleteShoppingItem = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    return UserModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: {
+          shoppingList: {
+            _id: req.body.foodId,
+          },
+        },
+      },
+      { new: true },
+      (err, data) => {
+        if (!err) return res.send(data);
+        else return res.status(400).send(err);
+      }
+    );
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+};
+
 module.exports.addFoodToShoppingList = (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown: " + req.params.id);
@@ -274,5 +316,30 @@ module.exports.addFavoriteRecipe = (req, res) => {
     );
   } catch (err) {
     return res.status(500).json({ message: err });
+  }
+};
+
+module.exports.editShoppingItem = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    return UserModel.findById(req.params.id, (err, data) => {
+      const theShoppingItem = data.shoppingList.find((food) =>
+        food._id.equals(req.body.foodId)
+      );
+
+      if (!theShoppingItem) return res.status(404).send("Food not found");
+      theShoppingItem.foodBioQuality = req.body.foodBioQuality;
+
+      theShoppingItem.foodQuantity = req.body.foodQuantity;
+
+      return data.save((err) => {
+        if (!err) return res.status(200).send(data);
+        return res.status(500).send(err);
+      });
+    });
+  } catch (err) {
+    return res.status(400).send(err);
   }
 };
