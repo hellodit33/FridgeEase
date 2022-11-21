@@ -57,6 +57,7 @@ function RecipeInDetail({ route, navigation }) {
     }
 
     dispatch(addFavoriteRecipe(uid, recipe._id));
+    dispatch(getUser(userData._id));
   }
 
   const renderIngredients = () => {
@@ -292,19 +293,49 @@ function RecipeInDetail({ route, navigation }) {
           <View style={styles.climateView}>
             <Text style={styles.climateText}>Klimatpåverkan</Text>
             <View style={styles.climateGraphs}>
-              <View style={styles.climateGraphA}>
+              <View
+                style={
+                  recipeToShow.climateImpact === "A"
+                    ? styles.bigClimateGraphA
+                    : styles.climateGraphA
+                }
+              >
                 <Text style={styles.graphAText}>A</Text>
               </View>
-              <View style={styles.climateGraphB}>
+              <View
+                style={
+                  recipeToShow.climateImpact === "B"
+                    ? styles.bigClimateGraphB
+                    : styles.climateGraphB
+                }
+              >
                 <Text style={styles.graphBText}>B</Text>
               </View>
-              <View style={styles.climateGraphC}>
+              <View
+                style={
+                  recipeToShow.climateImpact === "C"
+                    ? styles.bigClimateGraphC
+                    : styles.climateGraphC
+                }
+              >
                 <Text style={styles.graphCText}>C</Text>
               </View>
-              <View style={styles.climateGraphD}>
+              <View
+                style={
+                  recipeToShow.climateImpact === "D"
+                    ? styles.bigClimateGraphD
+                    : styles.climateGraphD
+                }
+              >
                 <Text style={styles.graphDText}>D</Text>
               </View>
-              <View style={styles.climateGraphE}>
+              <View
+                style={
+                  recipeToShow.climateImpact === "E"
+                    ? styles.bigClimateGraphE
+                    : styles.climateGraphE
+                }
+              >
                 <Text style={styles.graphEText}>E</Text>
               </View>
             </View>
@@ -521,8 +552,38 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  climateGraphA: {
+    borderTopStartRadius: 20,
+    borderBottomStartRadius: 20,
+    backgroundColor: Colors.darkgreen,
+    width: 60,
+    height: 70,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bigClimateGraphA: {
+    borderTopStartRadius: 20,
+    borderBottomStartRadius: 20,
+    backgroundColor: Colors.darkgreen,
+    width: 60,
+    height: 90,
+    elevation: 6,
+    marginLeft: 2,
+    marginTop: -10,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   graphAText: { color: Colors.greygreen, fontWeight: "600", fontSize: 30 },
   climateGraphB: {
+    backgroundColor: Colors.lightgreen,
+    width: 60,
+    height: 70,
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bigClimateGraphB: {
     backgroundColor: Colors.lightgreen,
     width: 60,
     height: 90,
@@ -534,10 +595,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   graphBText: { color: "white", fontWeight: "600", fontSize: 30 },
+
   climateGraphC: {
     backgroundColor: Colors.lightyellow,
     width: 60,
     height: 70,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bigClimateGraphC: {
+    backgroundColor: Colors.lightyellow,
+    width: 60,
+    height: 90,
+    elevation: 6,
+    marginLeft: 2,
+    marginTop: -10,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -549,11 +622,35 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  graphDText: { color: Colors.lightorange, fontWeight: "600", fontSize: 30 },
+  bigClimateGraphD: {
+    backgroundColor: Colors.orange,
+    width: 60,
+    height: 90,
+    elevation: 6,
+    marginLeft: 2,
+    marginTop: -10,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  graphDText: { color: "white", fontWeight: "600", fontSize: 30 },
   climateGraphE: {
     backgroundColor: Colors.red,
     width: 60,
     height: 70,
+    justifyContent: "center",
+    alignItems: "center",
+    borderTopEndRadius: 20,
+    borderBottomEndRadius: 20,
+  },
+  bigClimateGraphE: {
+    backgroundColor: Colors.red,
+    width: 60,
+    height: 90,
+    elevation: 6,
+    marginLeft: 2,
+    marginTop: -10,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
     borderTopEndRadius: 20,

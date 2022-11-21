@@ -8,6 +8,7 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../UI/LoadingOverlay.js";
@@ -25,12 +26,13 @@ import {
 } from "../../store/redux/actions/user.actions.js";
 import {
   addFoodToFridge,
-  addShoppingToFridge,
+  addItemsToFridge,
   fetchFood,
 } from "../../store/redux/actions/fridge.actions.js";
 import { Ionicons } from "@expo/vector-icons";
 import { removeShoppingList } from "../../store/redux/actions/user.actions.js";
 import id from "date-fns/locale/id/index";
+import ShoppingDoneModal from "../components/ShoppingDoneModal.js";
 function Shopping({ navigation }) {
   const handlePressToShoppingList = (food) => {
     if (selectedItems.includes(food._id)) {
@@ -150,8 +152,16 @@ function Shopping({ navigation }) {
   const [selectToShopping, setSelectToShopping] = useState([]);
 
   const [modalIsVisible, setModalIsVisible] = useState(false);
+  const [doneModalIsVisible, setDoneModalIsVisible] = useState(false);
 
   const [passedData, setPassedData] = useState([]);
+
+  function openDoneModal() {
+    setDoneModalIsVisible(true);
+  }
+  function closeDoneModal() {
+    setDoneModalIsVisible(false);
+  }
 
   function openModal({
     id,
@@ -182,37 +192,7 @@ function Shopping({ navigation }) {
   const userData = useSelector((state) => state.userReducer);
   const fridge = useSelector((state) => state.intoFridgeReducer);
 
-  const removeShopping = () => {
-    dispatch(removeShoppingList(userData._id));
-    /*dispatch(addShoppingToFridge(userData._id));*/
-    dispatch(getUser(userData._id));
-  };
-
   function renderShoppingFridge() {
-    const handlePressToShopping = (food) => {
-      if (selectToShopping.includes(food._id)) {
-        const newListItem = selectToShopping.filter(
-          (foodId) => foodId !== food._id
-        );
-
-        return setSelectToShopping(newListItem);
-      }
-
-      setSelectToShopping([...selectToShopping, food._id]);
-      dispatch(
-        addShoppingToFridge(
-          userData._id,
-          food._id,
-          food.title,
-          food.carbon,
-          food.expiration,
-          food.category,
-          food.logo
-        )
-      );
-      dispatch(getUser(userData._id));
-      console.log(selectToShopping);
-    };
     const editInShopping = (item) => {
       dispatch(getUser(userData._id));
       closeModal();
@@ -235,6 +215,9 @@ function Shopping({ navigation }) {
           const quantity = userShopping[i].foodQuantity;
           const id = userShopping[i]._id;
           const carbon = fridge.carbon;
+          const expiration = fridge.expiration;
+          const category = fridge.category;
+
           const logo = fridge.logo;
           const bioquality = "";
           const existingBioQuality = userShopping[i].foodBioQuality;
@@ -242,6 +225,28 @@ function Shopping({ navigation }) {
           const removeShoppingItem = () => {
             dispatch(deleteFoodFromShopping(userData._id, id));
             dispatch(getUser(userData._id));
+          };
+          const handlePressToShopping = async (food) => {
+            if (selectToShopping.includes(food._id)) {
+              const newListItem = selectToShopping.filter(
+                (foodId) => foodId !== food._id
+              );
+
+              return setSelectToShopping(newListItem);
+            } else {
+              setSelectToShopping([...selectToShopping, food._id]);
+
+              await dispatch(
+                addItemsToFridge(
+                  userData._id,
+                  food.title,
+                  food.logo,
+                  food.carbon,
+                  food.category,
+                  food.expiration
+                )
+              );
+            }
           };
           return (
             <>
@@ -553,15 +558,22 @@ function Shopping({ navigation }) {
           <View style={{ flex: 1 }}>
             {!foodComponents && !hideFood && (
               <>
-                {userData.shoppingList.length >= 1 && (
-                  <Pressable
-                    onPress={removeShopping}
-                    style={styles.doneShopping}
-                  >
-                    <Text style={styles.doneShoppingText}>
-                      Jag är klar med mitt matinköp
-                    </Text>
-                  </Pressable>
+                {userData.shoppingList.length > 1 && (
+                  <>
+                    <Pressable
+                      onPress={openDoneModal}
+                      style={styles.doneShopping}
+                    >
+                      <Text style={styles.doneShoppingText}>
+                        Jag är klar med mitt matinköp
+                      </Text>
+                    </Pressable>
+                    <ShoppingDoneModal
+                      visible={doneModalIsVisible}
+                      closeModal={closeDoneModal}
+                      /*editFoodInShopping={editInShopping}*/
+                    />
+                  </>
                 )}
                 <View>{renderShoppingFridge()}</View>
               </>

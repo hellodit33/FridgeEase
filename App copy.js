@@ -48,7 +48,6 @@ import QuoteDetails from "./src/screens/QuoteDetails";
 import FavoriteRecipes from "./src/screens/FavoriteRecipes";
 import RecipesDetails from "./src/screens/RecipesDetails";
 import Header from "./src/components/Header";
-import FoodDetails from "./src/components/FoodDetails";
 import Diets from "./src/screens/Diets";
 
 import Allergies from "./src/screens/Allergies";
@@ -267,12 +266,6 @@ function AuthenticatedStack() {
         name="Allergies"
         component={Allergies}
         options={{ title: "Mina allergier" }}
-      />
-
-      <Stack.Screen
-        name="FoodDetails"
-        component={FoodDetails}
-        options={{ title: "Food Details" }}
       />
     </Stack.Navigator>
   );

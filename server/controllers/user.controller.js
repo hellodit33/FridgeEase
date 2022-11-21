@@ -167,7 +167,6 @@ module.exports.addShoppingToFridge = (req, res) => {
       {
         $addToSet: {
           usersfood: {
-            foodId: req.body.foodId,
             foodName: req.body.foodName,
             foodCarbon: req.body.foodCarbon,
             foodExpiration: req.body.foodExpiration,
@@ -177,7 +176,7 @@ module.exports.addShoppingToFridge = (req, res) => {
           },
         },
       },
-      { new: true, upsert: true },
+      { new: true, upsert: true, setDefaultsOnInsert: true },
       (err, data) => {
         if (!err) res.status(201).json(data);
         else return res.status(400).json(err);
