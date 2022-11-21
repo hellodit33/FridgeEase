@@ -31,6 +31,7 @@ export const getUser = (uid) => {
       .catch((err) => console.log(err));
   };
 };
+
 export const editFoodFromFridge = (
   userId,
   foodId,

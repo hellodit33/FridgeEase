@@ -118,12 +118,8 @@ function Fridge({ props, navigation, route }) {
   }
 
   const userData = useSelector((state) => state.userReducer);
-  const userFood = useSelector((state) => state.usersfood);
-
+  const userFood = userData.usersfood;
   const fridge = useSelector((state) => state.intoFridgeReducer);
-
-  const [categories, setCategories] = useState(categoryData);
-  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [newFood, setNewFood] = useState([]);
   const [messageFoodComponents, setMessageFoodComponents] = useState(true);
@@ -188,7 +184,6 @@ function Fridge({ props, navigation, route }) {
     setSelectToRecipe([...selectToRecipe, food._id]);
     dispatch(addFoodToRecipe(userData._id, food.foodName));
     dispatch(getUser(userData._id));
-    console.log(selectToRecipe);
   };
 
   /*
@@ -202,7 +197,28 @@ function Fridge({ props, navigation, route }) {
   function FoodDetails() {
     navigation.navigate("FoodDetails");
   }
+  const [categories, setCategories] = useState(categoryData);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  async function onSelectCategory(category) {
+    setSelectedCategory(category.name);
+    console.log(selectedCategory);
 
+    const newArray = [];
+    userFood.map((item) => {
+      for (let i = 0; i < userFood.length; i++) {
+        if (userFood[i].foodCategory === selectedCategory) {
+          console.log(userFood[i]);
+          return (
+            <View>
+              <Text>{userFood[i].title}</Text>
+            </View>
+          );
+        }
+      }
+    });
+
+    console.log(newArray);
+  }
   function renderFoodCategories() {
     const renderItem = ({ item }) => {
       return (
@@ -214,7 +230,7 @@ function Fridge({ props, navigation, route }) {
             alignItems: "center",
             justifyContent: "center",
           }}
-          /* onPress={() => onSelectCategory(item)}*/
+          onPress={() => onSelectCategory(item)}
         >
           <Text
             style={{
@@ -288,11 +304,7 @@ return(
       /*   for (let i = 0; i < userData.usersfood.length; i++) {
         if (userData.usersfood[i] === item._id) */
 
-      console.log(today);
-
       function dateDiff() {
-        console.log(item.foodExpirationDate);
-        console.log(today);
         let dateDiff = differenceInDays(
           Date.parse(item.foodExpirationDate),
           Date.parse(today)
@@ -434,16 +446,6 @@ return(
   };
 
   /*const { addFood } = useContext(AuthContext);*/
-
-  function onSelectCategory(category) {
-    //filter restaurant
-    let filteredFridge = fridge.filter((foodcat) =>
-      foodcat.category.includes(categories.name)
-    );
-    setNewFood(filteredFridge);
-
-    setSelectedCategory(category);
-  }
 
   return (
     <>

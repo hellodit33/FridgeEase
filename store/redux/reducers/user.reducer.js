@@ -15,8 +15,6 @@ export default function userReducer(state = initialState, action) {
     case GET_USER:
       return action.payload;
 
-    case GET_USER_FOOD:
-      return action.payload;
     case GET_FOOD_TO_RECIPE:
       return action.payload;
 

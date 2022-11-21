@@ -28,7 +28,6 @@ function EditModalFridge(props) {
   const [today, setToday] = useState(new Date());
 
   const [date, setDate] = useState(new Date());
-  console.log(today);
   const [show, setShow] = useState(false);
   const [text, setText] = useState();
   let nowDate =
@@ -37,13 +36,10 @@ function EditModalFridge(props) {
 
   function dateDiff() {
     if (props.passedData.expirationDate) {
-      console.log(props.passedData.expirationDate);
-      console.log(today);
       let dateDiff = differenceInDays(
         Date.parse(props.passedData.expirationDate),
         Date.parse(today)
       );
-      console.log(dateDiff);
       return (
         <Text>
           {dateDiff} {dateDiff > 1 ? " dagar" : " dag"}
@@ -92,7 +88,6 @@ function EditModalFridge(props) {
 
   function expirationInputHandler(enteredExpiration) {
     setEnteredExpirationText(enteredExpiration);
-    console.log(enteredExpirationText);
   }
 
   function editFoodInFridge() {
