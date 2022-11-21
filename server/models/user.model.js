@@ -45,6 +45,7 @@ const userSchema = new mongoose.Schema(
           foodCategory: String,
           foodLogo: String,
           foodQuantity: String,
+          foodBioQuality: Boolean,
           timestamp: Number,
         },
       ],

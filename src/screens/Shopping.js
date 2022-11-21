@@ -23,7 +23,11 @@ import {
   deleteFoodFromShopping,
   editFoodFromShopping,
 } from "../../store/redux/actions/user.actions.js";
-import { fetchFood } from "../../store/redux/actions/fridge.actions.js";
+import {
+  addFoodToFridge,
+  addShoppingToFridge,
+  fetchFood,
+} from "../../store/redux/actions/fridge.actions.js";
 import { Ionicons } from "@expo/vector-icons";
 import { removeShoppingList } from "../../store/redux/actions/user.actions.js";
 import id from "date-fns/locale/id/index";
@@ -180,6 +184,7 @@ function Shopping({ navigation }) {
 
   const removeShopping = () => {
     dispatch(removeShoppingList(userData._id));
+    /*dispatch(addShoppingToFridge(userData._id));*/
     dispatch(getUser(userData._id));
   };
 
@@ -194,8 +199,18 @@ function Shopping({ navigation }) {
       }
 
       setSelectToShopping([...selectToShopping, food._id]);
-      /* dispatch(addFoodToRecipe(userData._id, food.foodName));
-    dispatch(getUser(userData._id));*/
+      dispatch(
+        addShoppingToFridge(
+          userData._id,
+          food._id,
+          food.title,
+          food.carbon,
+          food.expiration,
+          food.category,
+          food.logo
+        )
+      );
+      dispatch(getUser(userData._id));
       console.log(selectToShopping);
     };
     const editInShopping = (item) => {

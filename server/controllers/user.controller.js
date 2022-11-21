@@ -156,6 +156,38 @@ module.exports.addFoodToFridge = (req, res) => {
   }
 };
 
+module.exports.addShoppingToFridge = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown: " + req.params.id);
+
+  try {
+    //add to the food list
+    UserModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $addToSet: {
+          usersfood: {
+            foodId: req.body.foodId,
+            foodName: req.body.foodName,
+            foodCarbon: req.body.foodCarbon,
+            foodExpiration: req.body.foodExpiration,
+            foodCategory: req.body.foodCategory,
+            foodLogo: req.body.foodLogo,
+            timestamp: new Date().getTime(),
+          },
+        },
+      },
+      { new: true, upsert: true },
+      (err, data) => {
+        if (!err) res.status(201).json(data);
+        else return res.status(400).json(err);
+      }
+    );
+  } catch (err) {
+    return res.status(500).json({ message: err });
+  }
+};
+
 module.exports.removeShoppingList = (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown: " + req.params.id);

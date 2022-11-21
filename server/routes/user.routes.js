@@ -19,6 +19,8 @@ router.put("/:id/diet", userController.updateUserDiet);
 
 //add and remove food from fridge
 router.put("/addfood/:id", userController.addFoodToFridge);
+router.put("/addshoppingtofridge/:id", userController.addShoppingToFridge);
+
 router.put("/removefood/:id", userController.removeFoodFromFridge);
 router.put("/editfood/:id", userController.editFoodFromFridge);
 router.put("/deletefood/:id", userController.deleteFoodFromFridge);
