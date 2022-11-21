@@ -206,18 +206,16 @@ function Fridge({ props, navigation, route }) {
     const newArray = [];
     userFood.map((item) => {
       for (let i = 0; i < userFood.length; i++) {
-        if (userFood[i].foodCategory === selectedCategory) {
-          console.log(userFood[i]);
+        if (item.foodCategory === selectedCategory) {
+          console.log(item.foodName);
           return (
             <View>
-              <Text>{userFood[i].title}</Text>
+              <Text>{item.foodName}</Text>
             </View>
           );
         }
       }
     });
-
-    console.log(newArray);
   }
   function renderFoodCategories() {
     const renderItem = ({ item }) => {
