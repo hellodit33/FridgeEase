@@ -23,6 +23,7 @@ import { AuthContext } from "../../store/context/auth-context";
 import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
+  deleteRecipeFoodFilter,
   getFoodToRecipe,
   getUser,
 } from "../../store/redux/actions/user.actions";
@@ -34,6 +35,7 @@ import {
 import LoadingOverlay from "../UI/LoadingOverlay";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import IcoButton from "../components/IcoButton";
 function Recipes({ navigation }) {
   const categoryData = [
     {
@@ -122,28 +124,36 @@ function Recipes({ navigation }) {
       ></FlatList>
     );
   }
+  function removeFoodRecipeFilter(filter) {
+    console.log(filter);
+    dispatch(deleteRecipeFoodFilter(userData._id, filter));
+    dispatch(getUser(userData._id));
+    dispatch(getFoodToRecipe());
+  }
 
   function renderFoodToRecipe() {
     const renderFood = ({ item }) => {
       return (
-        <TouchableOpacity
-          style={{
-            padding: 4,
+        <View
 
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          /*onPress={() => onSelectCategory(item)}*/
+        /*onPress={() => onSelectCategory(item)}*/
         >
           <View style={styles.foodToRecipeView}>
             <Text style={styles.foodToRecipeText}>{item}</Text>
+            <IcoButton
+              icon="close"
+              size={24}
+              color={Colors.darkpink}
+              onPress={() => removeFoodRecipeFilter(item)}
+            />
           </View>
-        </TouchableOpacity>
+        </View>
       );
     };
     return (
       <FlatList
         data={userIngredients}
+        extraData={userIngredients}
         horizontal
         showsHorizontalScrollIndicator={true}
         keyExtractor={() => Math.random()}
@@ -868,22 +878,20 @@ const styles = StyleSheet.create({
     borderColor: Colors.green,
     backgroundColor: "white",
     borderWidth: 2,
-    width: "100%",
+    marginHorizontal: 5,
+
     height: 40,
-    justifyContent: "center",
     alignItems: "center",
-    alignContent: "center",
+    justifyContent: "space-evenly",
     paddingHorizontal: 5,
+    flexDirection: "row",
   },
   foodToRecipeText: {
-    paddingLeft: 5,
-    marginRight: 12,
+    paddingHorizontal: 8,
     fontSize: 18,
     textAlign: "center",
     fontWeight: "bold",
     color: Colors.green,
-    textDecorationStyle: "solid",
-    textDecorationColor: Colors.darkpink,
   },
   ingredientsView: {
     marginTop: 10,

@@ -136,7 +136,7 @@ function Shopping({ navigation }) {
         data={categories}
         horizontal
         showsHorizontalScrollIndicator={true}
-        keyExtractor={(item) => `${item.id}`}
+        keyExtractor={(item) => Math.random(item.id)}
         renderItem={renderItem}
         contentContainerStyle={{}}
       ></FlatList>
@@ -504,7 +504,7 @@ function Shopping({ navigation }) {
                     numColumns={3}
                     data={foodlist}
                     extraData={foodlist}
-                    keyExtractor={(item) => item._id}
+                    keyExtractor={(item) => Math.random(item._id)}
                     renderItem={({ item }) => (
                       <Pressable
                         /* onLongPress={FoodDetails}*/

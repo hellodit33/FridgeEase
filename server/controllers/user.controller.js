@@ -268,6 +268,29 @@ module.exports.deleteShoppingItem = (req, res) => {
   }
 };
 
+module.exports.deleteRecipeFoodFilter = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    return UserModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: {
+          foodToRecipe: req.body.foodName,
+        },
+      },
+      { new: true },
+      (err, data) => {
+        if (!err) return res.send(data);
+        else return res.status(400).send(err);
+      }
+    );
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+};
+
 module.exports.addFoodToShoppingList = (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown: " + req.params.id);

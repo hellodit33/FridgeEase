@@ -28,6 +28,7 @@ router.put("/addtoshoppinglist/:id", userController.addFoodToShoppingList);
 router.put("/removeshoppinglist/:id", userController.removeShoppingList);
 router.put("/deleteshoppingitem/:id", userController.deleteShoppingItem);
 router.put("/editshoppingitem/:id", userController.editShoppingItem);
+router.put("/deleterecipefood/:id", userController.deleteRecipeFoodFilter);
 
 router.put("/addfavrecipe/:id", userController.addFavoriteRecipe);
 
