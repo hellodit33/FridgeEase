@@ -13,11 +13,10 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
-
     "android": {
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "permissions": ["android.permission.RECORD_AUDIO"],
@@ -26,7 +25,10 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-
-    "extra": {}
+    "extra": {
+      "eas": {
+        "projectId": "ed74b4a0-eaf8-4430-bc16-7926758e1020"
+      }
+    }
   }
 }
