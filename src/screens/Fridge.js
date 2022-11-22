@@ -85,25 +85,18 @@ function Fridge({ props, navigation, route }) {
       id: 5,
       name: "Kött & Fisk",
     },
+
     {
       id: 6,
-      name: "Bageri & Spannmål",
+      name: "Skafferi",
     },
     {
       id: 7,
-      name: "Fryst",
+      name: "Pasta & Ris",
     },
     {
       id: 8,
       name: "Kryddor",
-    },
-    {
-      id: 9,
-      name: "Pasta & Ris",
-    },
-    {
-      id: 10,
-      name: "Desserter",
     },
   ];
   const [today, setToday] = useState(new Date());
@@ -400,7 +393,7 @@ return(
     const renderFridge = ({ item }) => {
       /*   for (let i = 0; i < userData.usersfood.length; i++) {
         if (userData.usersfood[i] === item._id) */
-
+      dispatch(fetchFood());
       function dateDiff() {
         let dateDiff = differenceInDays(
           Date.parse(item.foodExpirationDate),
@@ -671,17 +664,17 @@ return(
             </View>
           </View>
 
-          {messageFoodComponents && !userData.usersfood && (
+          {messageFoodComponents && !hideFood && !selectedUserFilter && (
             <View style={styles.message}>
               <Text style={styles.textMessage}>
                 Ditt kylskåp är tomt, lägg till matvaror för att se vilka
-                matvaror som behöver ätas upp snart och få inspiration till
+                matvaror som snart behöver ätas upp och få inspiration till
                 matlagning!
               </Text>
             </View>
           )}
 
-          {userData.usersfood && !hideFood && !selectedUserFilter && (
+          {userFood.length > 0 && !hideFood && !selectedUserFilter && (
             <View style={styles.fridgeView}>
               <View style={styles.fridgeInstView}>
                 {/*<Text>{userData.usersfood.length} products in your fridge</Text>*/}
@@ -706,7 +699,7 @@ return(
             </View>
           )}
 
-          {userData.usersfood &&
+          {userFood.length === 0 &&
             !hideFood &&
             selectedUserFilter &&
             userFood.map((item) => {
