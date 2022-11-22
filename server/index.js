@@ -1,5 +1,6 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const foodRoutes = require("./routes/food.routes");
 const userRoutes = require("./routes/user.routes");
@@ -7,9 +8,9 @@ const recipeRoutes = require("./routes/recipe.routes");
 
 require("dotenv").config();
 require("./config/database");
-//const cors = require("cors");
 const path = require("path");
 const app = express();
+app.use(cors());
 const { checkUser, requireAuth } = require("./middleware/auth.middleware");
 const verifyToken = require("./middleware/verifyToken");
 
