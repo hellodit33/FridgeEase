@@ -18,6 +18,7 @@ export const ADD_FROM_FRIDGE_TO_SHOPPING_LIST =
 
 export const ADD_FAV_RECIPE = "ADD_FAV_RECIPE";
 export const UPDATE_DIET = "UPDATE_DIET";
+export const UPDATE_ALLERGY = "UPDATE_ALLERGY";
 
 export const DELETE_ALL_SHOPPING_ITEMS = "DELETE_ALL_SHOPPING_ITEMS";
 const BASE_URL = "https://263f-213-163-151-83.eu.ngrok.io";
@@ -209,7 +210,7 @@ export const updateDiet = (userId, diet) => {
   return (dispatch) => {
     return axios({
       method: "put",
-      url: `${BASE_URL}/api/user/${userId}/diet`,
+      url: `${BASE_URL}/api/user/${userId}/updatediet`,
       data: {
         diet,
       },
@@ -219,6 +220,28 @@ export const updateDiet = (userId, diet) => {
           type: UPDATE_DIET,
           payload: {
             diet,
+          },
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+};
+
+export const updateAllergy = (userId, allergy) => {
+  return (dispatch) => {
+    return axios({
+      method: "put",
+      url: `${BASE_URL}/api/user/${userId}/updateallergy`,
+      data: {
+        allergy,
+      },
+    })
+      .then((res) => {
+        dispatch({
+          type: UPDATE_ALLERGY,
+          payload: {
+            userId,
+            allergy,
           },
         });
       })

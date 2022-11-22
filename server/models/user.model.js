@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
       minlength: 6,
     },
 
-    diet: String,
+    diet: [String],
     allergy: [String],
     foodToRecipe: [String],
 

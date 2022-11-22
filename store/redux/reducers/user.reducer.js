@@ -7,6 +7,7 @@ import {
   DELETE_SHOPPING_ITEM,
   EDIT_SHOPPING_ITEM,
   DELETE_FAVORITE_RECIPE,
+  UPDATE_ALLERGY,
 } from "../actions/user.actions";
 
 const initialState = {};
@@ -18,7 +19,15 @@ export default function userReducer(state = initialState, action) {
 
     case GET_FOOD_TO_RECIPE:
       return action.payload;
-
+    case UPDATE_ALLERGY:
+      return state.map((user) => {
+        if (user._id === action.payload.userId) {
+          return {
+            ...user,
+            allergy: action.payload.allergy,
+          };
+        } else return user;
+      });
     case EDIT_FOOD:
       return state.map((user) => {
         if (user._id === action.payload.userId) {

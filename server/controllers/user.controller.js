@@ -63,7 +63,7 @@ module.exports.updateUserAllergy = (req, res) => {
       { _id: req.params.id },
       {
         $set: {
-          allergies: [req.body.allergies],
+          allergy: req.body.allergy,
         },
       },
       { new: true, upsert: true, setDefaultsOnInsert: true },
@@ -85,7 +85,7 @@ module.exports.updateUserDiet = (req, res) => {
     UserModel.findOneAndUpdate(
       { _id: req.params.id },
       {
-        $addToSet: {
+        $set: {
           diet: req.body.diet,
         },
       },

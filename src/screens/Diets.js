@@ -12,9 +12,11 @@ import { Component, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../UI/LoadingOverlay";
-import { updateDiet } from "../../store/redux/actions/user.actions";
+import { getUser, updateDiet } from "../../store/redux/actions/user.actions";
 import { useDispatch, useSelector } from "react-redux";
 import Checkbox from "expo-checkbox";
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 function Diets(props) {
   const items = [
@@ -45,8 +47,20 @@ function Diets(props) {
 
   const onSelectedItemsChange = (selectedDiets) => {
     // Set Selected Items
-    setSelectedDiets(selectedDiets);
+    setSelectedDiets([...selectedDiets], selectedDiets);
+    console.log(selectedDiets);
   };
+
+  function updateDiets() {
+    showMessage({
+      duration: 4000,
+      message: "Din kost är nu uppdaterad",
+      backgroundColor: Colors.green,
+      color: "white",
+    });
+    dispatch(updateDiet(userData._id, selectedDiets));
+    dispatch(getUser(userData._id));
+  }
 
   const [loaded] = useFonts({
     alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
@@ -74,6 +88,11 @@ function Diets(props) {
             du ändrar dig.
           </Text>
         </View>
+        <View style={styles.updateView}>
+          <Pressable style={styles.updateButton} onPress={() => updateDiets()}>
+            <Text style={styles.updateText}>Uppdatera din kost</Text>
+          </Pressable>
+        </View>
         <View style={styles.selectDiet}>
           <MultiSelect
             hideTags
@@ -97,26 +116,27 @@ function Diets(props) {
             itemTextColor={Colors.darkgreen}
             displayKey="name"
             styleDropdownMenuSubsection={styles.dropdown}
-            submitButtonColor={Colors.green}
-            submitButtonText="Uppdatera din kost"
+            hideSubmitButton
             styleInputGroup={styles.searchinput}
             styleTextDropdown={styles.selectText}
             styleTextDropdownSelected={styles.selectTextSelected}
           />
         </View>
-        <View style={styles.diets}>
-          <FlatList
-            data={selectedDiets}
-            extraData={selectedDiets}
-            contentContainerStyle={styles.flatlistDiet}
-            keyExtractor={() => Math.random()}
-            renderItem={({ item }) => (
-              <Pressable>
+
+        {userData.diet.length > 0 && (
+          <View style={styles.diets}>
+            <Text style={styles.dietsTitle}>Din nuvarande kost:</Text>
+            <FlatList
+              data={userData.diet}
+              extraData={userData.diet}
+              contentContainerStyle={styles.flatlistDiet}
+              keyExtractor={() => Math.random()}
+              renderItem={({ item }) => (
                 <Text style={styles.dietsItem}>{item}</Text>
-              </Pressable>
-            )}
-          />
-        </View>
+              )}
+            />
+          </View>
+        )}
       </View>
     </>
   );
@@ -132,21 +152,25 @@ const styles = StyleSheet.create({
   },
   diets: {
     width: "80%",
-    height: "100%",
 
     marginHorizontal: 30,
     justifyContent: "center",
     alignContent: "center",
   },
   flatlistDiet: { paddingHorizontal: 10 },
+  dietsTitle: {
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+  },
   dietsItem: {
     textAlign: "center",
-    color: "white",
-    backgroundColor: Colors.green,
+    color: Colors.darkgreen,
+    backgroundColor: Colors.darkblue,
     fontWeight: "bold",
     borderRadius: 30,
     padding: 10,
-    borderColor: Colors.lightblue,
+    borderColor: "black",
     borderWidth: 2,
     marginVertical: 10,
   },
@@ -185,5 +209,27 @@ const styles = StyleSheet.create({
     fontFamily: "Intermedium",
     fontSize: 15,
     color: Colors.lightgreen,
+  },
+  updateButton: {
+    padding: 10,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: Colors.darkgreen,
+    width: "60%",
+    borderRadius: 30,
+  },
+  updateText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+
+  updateView: {
+    marginVertical: 10,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
   },
 });

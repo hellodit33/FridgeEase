@@ -18,6 +18,8 @@ import { useEffect, useState } from "react";
 import IcoButton from "../components/IcoButton.js";
 import EditModalShopping from "../components/EditModalShopping.js";
 import { useDispatch } from "react-redux";
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 import {
   addFromFridgeToShopping,
   getUser,
@@ -38,10 +40,21 @@ function Shopping({ navigation }) {
     if (selectedItems.includes(food._id)) {
       const newSelect = selectedItems.filter((foodId) => foodId !== food._id);
       /* dispatch(removeFoodFromFridge(userData._id, food._id));*/
+      showMessage({
+        duration: 4000,
+        message: "Denna vara är redan i din shoppinglista.",
+        backgroundColor: Colors.green,
+        color: "white",
+      });
       return setSelectedItems(newSelect);
     }
     setSelectedItems([...selectedItems, food._id]);
-
+    showMessage({
+      duration: 4000,
+      message: "Denna vara har lagts till din shoppinglista.",
+      backgroundColor: Colors.green,
+      color: "white",
+    });
     dispatch(addFromFridgeToShopping(userData._id, food.title));
     dispatch(getUser(userData._id));
   };
@@ -291,11 +304,22 @@ function Shopping({ navigation }) {
               const newListItem = selectToShopping.filter(
                 (foodId) => foodId !== food._id
               );
-
+              showMessage({
+                duration: 6000,
+                message:
+                  "Denna vara är redan i ditt kylskåp. Du kan ta bort den i ditt kylskåp.",
+                backgroundColor: Colors.green,
+                color: "white",
+              });
               return setSelectToShopping(newListItem);
             } else {
               setSelectToShopping([...selectToShopping, food._id]);
-
+              showMessage({
+                duration: 6000,
+                message: "Denna vara har lagts till i ditt kylskåp.",
+                backgroundColor: Colors.green,
+                color: "white",
+              });
               await dispatch(
                 addItemsToFridge(
                   userData._id,
@@ -660,7 +684,9 @@ function Shopping({ navigation }) {
                 renderItem={({ item }) => {
                   if (item.category === selectedCat) {
                     return (
-                      <Pressable onPress={() => handlePress(item)}>
+                      <Pressable
+                        onPress={() => handlePressToShoppingList(item)}
+                      >
                         <View style={styles.food}>
                           <View style={styles.imageContainer}>
                             <Image

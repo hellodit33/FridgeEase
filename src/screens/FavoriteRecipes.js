@@ -17,6 +17,7 @@ import {
   getUser,
 } from "../../store/redux/actions/user.actions";
 import PrimaryButton from "../components/PrimaryButton";
+import { showMessage } from "react-native-flash-message";
 function FavoriteRecipes({ route, navigation }) {
   const recipesData = useSelector((state) => state.recipesReducer);
   const userData = useSelector((state) => state.userReducer);
@@ -24,6 +25,12 @@ function FavoriteRecipes({ route, navigation }) {
   const dispatch = useDispatch();
 
   function removeFavRecipe(item) {
+    showMessage({
+      duration: 4000,
+      message: "Detta recept är nu borttaget från dina favoritrecept.",
+      backgroundColor: Colors.green,
+      color: "white",
+    });
     dispatch(deleteFavoriteRecipe(userData._id, item._id));
     dispatch(getUser(userData._id));
   }

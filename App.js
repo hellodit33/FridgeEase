@@ -369,6 +369,9 @@ import { configureStore } from "@reduxjs/toolkit";
 import { StatusBar } from "expo-status-bar";
 import { fetchRecipes } from "./store/redux/actions/recipe.actions";
 import FavoritesContextProvider from "./store/context/favorites-context";
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 const store = configureStore({ reducer: rootReducer });
 
 store.dispatch(fetchFood());
@@ -385,6 +388,7 @@ export default function App() {
 
       <Provider store={store}>
         <Root />
+        <FlashMessage position="top" />
       </Provider>
     </>
   );

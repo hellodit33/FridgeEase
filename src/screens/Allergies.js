@@ -12,8 +12,11 @@ import { Component, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../UI/LoadingOverlay";
-import { updateDiet } from "../../store/redux/actions/user.actions";
+import { getUser, updateAllergy } from "../../store/redux/actions/user.actions";
 import { useDispatch, useSelector } from "react-redux";
+import Checkbox from "expo-checkbox";
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 function Allergies(props) {
   const items = [
@@ -33,8 +36,20 @@ function Allergies(props) {
 
   const onSelectedItemsChange = (selectedAllergies) => {
     // Set Selected Items
-    setSelectedAllergies(selectedAllergies);
+    setSelectedAllergies([...selectedAllergies], selectedAllergies);
+    console.log(selectedAllergies);
   };
+
+  function updateAllergies() {
+    showMessage({
+      duration: 4000,
+      message: "Dina allergier är nu uppdaterade",
+      backgroundColor: Colors.green,
+      color: "white",
+    });
+    dispatch(updateAllergy(userData._id, selectedAllergies));
+    dispatch(getUser(userData._id));
+  }
 
   const [loaded] = useFonts({
     alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
@@ -58,9 +73,16 @@ function Allergies(props) {
           />
           <Text style={styles.text}>
             Här kan du fylla i dina allergier så att du bara får upp recept som
-            inte innehåller det du inte kan äta. Det går alltid att ändra dessa
-            allergier.
+            passar dig i vår app. Det går alltid att justera dina allergier.
           </Text>
+        </View>
+        <View style={styles.updateView}>
+          <Pressable
+            style={styles.updateButton}
+            onPress={() => updateAllergies()}
+          >
+            <Text style={styles.updateText}>Uppdatera dina allergier</Text>
+          </Pressable>
         </View>
         <View style={styles.selectAllergy}>
           <MultiSelect
@@ -78,33 +100,36 @@ function Allergies(props) {
             tagRemoveIconColor={Colors.green}
             tagBorderColor={Colors.green}
             tagTextColor={Colors.green}
-            searchInputPlaceholderText="Sök din allergi"
+            searchInputPlaceholderText="Sök dina allergier"
             searchInputStyle={styles.search}
             selectedItemTextColor={Colors.lightgreen}
             selectedItemIconColor={Colors.lightgreen}
             itemTextColor={Colors.darkgreen}
             displayKey="name"
             styleDropdownMenuSubsection={styles.dropdown}
-            submitButtonColor={Colors.green}
-            submitButtonText="Uppdatera dina allergier"
+            hideSubmitButton
             styleInputGroup={styles.searchinput}
             styleTextDropdown={styles.selectText}
             styleTextDropdownSelected={styles.selectTextSelected}
           />
         </View>
-        <View style={styles.allergies}>
-          <FlatList
-            data={selectedAllergies}
-            extraData={selectedAllergies}
-            contentContainerStyle={styles.flatlistAllergy}
-            keyExtractor={() => Math.random()}
-            renderItem={({ item }) => (
-              <Pressable>
+
+        {userData.allergy.length > 0 && (
+          <View style={styles.allergies}>
+            <Text style={styles.allergiesTitle}>
+              Dina nuvarande allergier är:
+            </Text>
+            <FlatList
+              data={userData.allergy}
+              extraData={userData.allergy}
+              contentContainerStyle={styles.flatlistAllergy}
+              keyExtractor={() => Math.random()}
+              renderItem={({ item }) => (
                 <Text style={styles.allergiesItem}>{item}</Text>
-              </Pressable>
-            )}
-          />
-        </View>
+              )}
+            />
+          </View>
+        )}
       </View>
     </>
   );
@@ -120,21 +145,25 @@ const styles = StyleSheet.create({
   },
   allergies: {
     width: "80%",
-    height: "100%",
 
     marginHorizontal: 30,
     justifyContent: "center",
     alignContent: "center",
   },
   flatlistAllergy: { paddingHorizontal: 10 },
+  allergiesTitle: {
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+  },
   allergiesItem: {
     textAlign: "center",
-    color: "white",
-    backgroundColor: Colors.green,
+    color: Colors.darkgreen,
+    backgroundColor: Colors.darkblue,
     fontWeight: "bold",
     borderRadius: 30,
     padding: 10,
-    borderColor: Colors.lightblue,
+    borderColor: "black",
     borderWidth: 2,
     marginVertical: 10,
   },
@@ -173,5 +202,27 @@ const styles = StyleSheet.create({
     fontFamily: "Intermedium",
     fontSize: 15,
     color: Colors.lightgreen,
+  },
+  updateButton: {
+    padding: 10,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: Colors.darkgreen,
+    width: "60%",
+    borderRadius: 30,
+  },
+  updateText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+
+  updateView: {
+    marginVertical: 10,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
   },
 });
