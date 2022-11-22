@@ -19,7 +19,7 @@ export const ADD_FAV_RECIPE = "ADD_FAV_RECIPE";
 export const UPDATE_DIET = "UPDATE_DIET";
 
 export const DELETE_ALL_SHOPPING_ITEMS = "DELETE_ALL_SHOPPING_ITEMS";
-const BASE_URL = "https://0bbe-213-163-151-83.eu.ngrok.io";
+const BASE_URL = "https://bd23-213-163-151-83.eu.ngrok.io";
 
 export const getUser = (uid) => {
   return (dispatch) => {
@@ -70,7 +70,7 @@ export const editFoodFromShopping = (
       .then((res) => {
         dispatch({
           type: EDIT_SHOPPING_ITEM,
-          payload: { userId, foodId, foodBioQuality, foodQuantity },
+          payload: { foodId, foodBioQuality, foodQuantity },
         });
       })
       .catch((err) => console.log(err));

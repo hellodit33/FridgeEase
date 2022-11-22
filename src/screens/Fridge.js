@@ -60,7 +60,9 @@ function Fridge({ props, navigation, route }) {
     setFoodlist(newData);
   };
 
-  const [selectedFilter, setSelectedFilter] = useState(false);
+  const [selectedUserFilter, setSelectedUserFilter] = useState(false);
+  const [selectedFridgeFilter, setSelectedFridgeFilter] = useState(false);
+
   const categoryData = [
     {
       id: 1,
@@ -198,13 +200,20 @@ function Fridge({ props, navigation, route }) {
   const [categories, setCategories] = useState(categoryData);
   const [selectedCategory, setSelectedCategory] = useState(null);
   async function onUserFridgeCategory(category) {
-    setSelectedFilter(true);
+    setSelectedUserFilter(true);
     setSelectedCategory(category.name);
     console.log(selectedCategory);
 
     const newArray = [];
   }
-  function renderFoodCategories() {
+  async function onFridgeCategory(category) {
+    setSelectedFridgeFilter(true);
+    setSelectedCategory(category.name);
+    console.log(selectedCategory);
+
+    const newArray = [];
+  }
+  function renderUserFridgeCategories() {
     const renderItem = ({ item }) => {
       return (
         <TouchableOpacity
@@ -216,6 +225,49 @@ function Fridge({ props, navigation, route }) {
             justifyContent: "center",
           }}
           onPress={() => onUserFridgeCategory(item)}
+        >
+          <Text
+            style={{
+              paddingLeft: 5,
+              marginRight: 12,
+              fontSize: 18,
+              fontWeight: "bold",
+              color: Colors.green,
+              textDecorationStyle: "solid",
+              textDecorationColor: Colors.darkpink,
+              textDecorationLine:
+                selectedCategory?.id == item.id ? "underline" : "none",
+            }}
+          >
+            {item.name}
+          </Text>
+        </TouchableOpacity>
+      );
+    };
+    return (
+      <FlatList
+        data={categories}
+        horizontal
+        showsHorizontalScrollIndicator={true}
+        keyExtractor={(item) => `${item.id}`}
+        renderItem={renderItem}
+        contentContainerStyle={{}}
+      ></FlatList>
+    );
+  }
+
+  function renderFridgeCategories() {
+    const renderItem = ({ item }) => {
+      return (
+        <TouchableOpacity
+          style={{
+            padding: 4,
+            marginTop: 20,
+            backgroundColor: Colors.blue,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onPress={() => onFridgeCategory(item)}
         >
           <Text
             style={{
@@ -351,7 +403,25 @@ return(
                     )}
                   </Text>
                 </View>
-                <View style={styles.carbonView}>
+                <View
+                  style={[
+                    {
+                      backgroundColor:
+                        item.foodCarbon === "A"
+                          ? Colors.darkgreen
+                          : item.foodCarbon === "B"
+                          ? Colors.lightgreen
+                          : item.foodCarbon === "C"
+                          ? Colors.lightyellow
+                          : item.foodCarbon === "D"
+                          ? Colors.orange
+                          : item.foodCarbon === "E"
+                          ? Colors.red
+                          : null,
+                    },
+                    styles.carbonView,
+                  ]}
+                >
                   <Text style={styles.itemCarbon}>{item.foodCarbon}</Text>
                   {/* renderCarbon({ item })*/}
                 </View>
@@ -432,6 +502,7 @@ return(
 
   const hello = () => {
     setHideFood(false);
+    setFoodComponents(false);
   };
   /*const addNewFood = (id) => {
     setFood((userData) => {
@@ -451,9 +522,16 @@ return(
           flex: 1,
         }}
       >
-        <View>
-          <View style={styles.main}>{renderFoodCategories()}</View>
-        </View>
+        {userData.usersfood && !hideFood && (
+          <View>
+            <View style={styles.main}>{renderUserFridgeCategories()}</View>
+          </View>
+        )}
+        {foodComponents && hideFood && (
+          <View>
+            <View style={styles.main}>{renderFridgeCategories()}</View>
+          </View>
+        )}
         <View
           style={[
             {
@@ -507,7 +585,7 @@ return(
             </View>
           )}
 
-          {userData.usersfood && !hideFood && !selectedFilter && (
+          {userData.usersfood && !hideFood && !selectedUserFilter && (
             <View style={styles.fridgeView}>
               <View style={styles.fridgeInstView}>
                 {/*<Text>{userData.usersfood.length} products in your fridge</Text>*/}
@@ -534,7 +612,7 @@ return(
 
           {userData.usersfood &&
             !hideFood &&
-            selectedFilter &&
+            selectedUserFilter &&
             userFood.map((item) => {
               for (let i = 0; i < userFood.length; i++) {
                 if (item.foodCategory === selectedCategory) {
@@ -580,7 +658,25 @@ return(
                               )}
                             </Text>
                           </View>
-                          <View style={styles.carbonView}>
+                          <View
+                            style={[
+                              {
+                                backgroundColor:
+                                  item.foodCarbon === "A"
+                                    ? Colors.darkgreen
+                                    : item.foodCarbon === "B"
+                                    ? Colors.lightgreen
+                                    : item.foodCarbon === "C"
+                                    ? Colors.lightyellow
+                                    : item.foodCarbon === "D"
+                                    ? Colors.orange
+                                    : item.foodCarbon === "E"
+                                    ? Colors.red
+                                    : null,
+                              },
+                              styles.carbonView,
+                            ]}
+                          >
                             <Text style={styles.itemCarbon}>
                               {item.foodCarbon}
                             </Text>
@@ -630,11 +726,13 @@ return(
                       </Pressable>
                     </ScrollView>
                   );
+                } else if (selectedCategory === "Allt") {
+                  setSelectedUserFilter(false);
                 }
               }
             })}
 
-          {foodComponents && hideFood && (
+          {foodComponents && hideFood && !selectedFridgeFilter && (
             <View style={{ flex: 1 }}>
               <View>
                 <View>
@@ -670,6 +768,46 @@ return(
                   ></FlatList>
                 </View>
               </View>
+            </View>
+          )}
+
+          {foodComponents && hideFood && selectedFridgeFilter && (
+            <View style={{ flex: 1 }}>
+              <FlatList
+                contentContainerStyle={styles.selectedFoodList}
+                numColumns={3}
+                data={foodlist}
+                extraData={foodlist}
+                keyExtractor={(item) => Math.random(item._id)}
+                renderItem={({ item }) => {
+                  if (item.category === selectedCategory) {
+                    return (
+                      <Pressable onPress={() => handlePress(item)}>
+                        <View style={styles.food}>
+                          <View style={styles.imageContainer}>
+                            <Image
+                              style={styles.image}
+                              source={{
+                                uri:
+                                  "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                                  item.logo,
+                              }}
+                            ></Image>
+                          </View>
+                          <View style={styles.textContainer}>
+                            <Text style={styles.item}>{item.title}</Text>
+                          </View>
+                        </View>
+                        {selectedItems.includes(item._id) && (
+                          <View style={styles.overlay} />
+                        )}
+                      </Pressable>
+                    );
+                  } else if (selectedCategory === "Allt") {
+                    setSelectedFridgeFilter(false);
+                  }
+                }}
+              ></FlatList>
             </View>
           )}
         </View>
@@ -730,6 +868,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue,
     alignItems: "center",
     paddingVertical: 10,
+  },
+  selectedFoodList: {
+    backgroundColor: Colors.blue,
+    alignItems: "center",
+    justifyContent: "center",
   },
   food: {
     height: 90,
@@ -841,7 +984,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "green",
     height: 40,
     width: 40,
     padding: 10,

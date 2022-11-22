@@ -50,8 +50,8 @@ export default function userReducer(state = initialState, action) {
                 return {
                   ...shoppingList,
                   foodName: action.payload.foodName,
-                  foodBioQuality: action.payload.foodBioQuality,
-                  foodQuantity: action.payload.foodQuantity,
+                  /* foodBioQuality: action.payload.foodBioQuality,
+                  foodQuantity: action.payload.foodQuantity,*/
                 };
               } else {
                 return usersfood;

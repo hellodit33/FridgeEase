@@ -105,8 +105,22 @@ function Shopping({ navigation }) {
   ];
 
   const [categories, setCategories] = useState(categoryData);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  function renderFoodCategories() {
+  const [selectedCat, setSelectedCat] = useState(null);
+  const [selectedShoppingFilter, setSelectedShoppingFilter] = useState(false);
+  const [selectedFridgeFilter, setSelectedFridgeFilter] = useState(false);
+  async function onShoppingCategory(category) {
+    setSelectedShoppingFilter(true);
+
+    setSelectedCat(category.name);
+    console.log(selectedCat);
+  }
+
+  async function onFridgeCategory(category) {
+    setSelectedFridgeFilter(true);
+    setSelectedCat(category.name);
+    console.log(selectedCat);
+  }
+  function renderFridgeCategories() {
     const renderItem = ({ item }) => {
       return (
         <TouchableOpacity
@@ -117,7 +131,7 @@ function Shopping({ navigation }) {
             alignItems: "center",
             justifyContent: "center",
           }}
-          /* onPress={() => onSelectCategory(item)}*/
+          onPress={() => onFridgeCategory(item)}
         >
           <Text
             style={{
@@ -129,7 +143,50 @@ function Shopping({ navigation }) {
               textDecorationStyle: "solid",
               textDecorationColor: Colors.darkpink,
               textDecorationLine:
-                selectedCategory?.id == item.id ? "underline" : "none",
+                selectedCat?.id == item.id ? "underline" : "none",
+            }}
+          >
+            {item.name}
+          </Text>
+        </TouchableOpacity>
+      );
+    };
+    return (
+      <FlatList
+        data={categories}
+        horizontal
+        showsHorizontalScrollIndicator={true}
+        keyExtractor={(item) => Math.random(item.id)}
+        renderItem={renderItem}
+        contentContainerStyle={{}}
+      ></FlatList>
+    );
+  }
+
+  function renderShoppingCategories() {
+    const renderItem = ({ item }) => {
+      return (
+        <TouchableOpacity
+          style={{
+            padding: 4,
+            marginTop: 20,
+            backgroundColor: Colors.blue,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onPress={() => onShoppingCategory(item)}
+        >
+          <Text
+            style={{
+              paddingLeft: 5,
+              marginRight: 12,
+              fontSize: 18,
+              fontWeight: "bold",
+              color: Colors.green,
+              textDecorationStyle: "solid",
+              textDecorationColor: Colors.darkpink,
+              textDecorationLine:
+                selectedCat?.id == item.id ? "underline" : "none",
             }}
           >
             {item.name}
@@ -191,6 +248,7 @@ function Shopping({ navigation }) {
 
   const userData = useSelector((state) => state.userReducer);
   const fridge = useSelector((state) => state.intoFridgeReducer);
+  const userShopping = userData.shoppingList;
 
   function renderShoppingFridge() {
     const editInShopping = (item) => {
@@ -206,7 +264,6 @@ function Shopping({ navigation }) {
         return <Text style={styles.itemCarbon}>A</Text>;
       }
     }
-    const userShopping = userData.shoppingList;
     const item = "";
     return fridge.map((fridge) => {
       for (let i = 0; i < userShopping.length; i++) {
@@ -294,7 +351,25 @@ function Shopping({ navigation }) {
                         <Text style={styles.quantityText}>Kvantité?</Text>
                       </View>
                     )}
-                    <View style={styles.carbonView}>
+                    <View
+                      style={[
+                        {
+                          backgroundColor:
+                            fridge.carbon === "A"
+                              ? Colors.darkgreen
+                              : fridge.carbon === "B"
+                              ? Colors.lightgreen
+                              : fridge.carbon === "C"
+                              ? Colors.lightyellow
+                              : fridge.carbon === "D"
+                              ? Colors.orange
+                              : fridge.carbon === "E"
+                              ? Colors.red
+                              : null,
+                        },
+                        styles.carbonView,
+                      ]}
+                    >
                       {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
                       <Text style={styles.itemCarbon}>{fridge.carbon}</Text>
                       {/*renderCarbon({ fridge })*/}
@@ -471,8 +546,21 @@ function Shopping({ navigation }) {
   }
   return (
     <>
-      <View style={styles.shoppingList}>
-        <View>{renderFoodCategories()}</View>
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        {userData.shoppingList && !hideFood && (
+          <View>
+            <View style={styles.main}>{renderShoppingCategories()}</View>
+          </View>
+        )}
+        {foodComponents && hideFood && (
+          <View>
+            <View style={styles.main}>{renderFridgeCategories()}</View>
+          </View>
+        )}
         <View
           style={[
             {
@@ -497,7 +585,7 @@ function Shopping({ navigation }) {
                   <TextInput
                     style={styles.addFoodInput}
                     placeholderTextColor={Colors.green}
-                    placeholder="Lägg till shoppinglistan...."
+                    placeholder="Lägg till inköpslistan...."
                     keyboardType="default"
                     multiline={false}
                     onTouchStart={showFoodComponents}
@@ -514,7 +602,7 @@ function Shopping({ navigation }) {
               )}
             </View>
           </View>
-          {foodComponents && hideFood && (
+          {foodComponents && hideFood && !selectedFridgeFilter && (
             <View style={{ flex: 1 }}>
               <View>
                 <View>
@@ -555,8 +643,49 @@ function Shopping({ navigation }) {
               </View>
             </View>
           )}
-          <View style={{ flex: 1 }}>
-            {!foodComponents && !hideFood && (
+
+          {foodComponents && hideFood && selectedFridgeFilter && (
+            <View style={{ flex: 1 }}>
+              <FlatList
+                contentContainerStyle={styles.selectedFoodList}
+                numColumns={3}
+                data={foodlist}
+                extraData={foodlist}
+                keyExtractor={(item) => Math.random(item._id)}
+                renderItem={({ item }) => {
+                  if (item.category === selectedCat) {
+                    return (
+                      <Pressable onPress={() => handlePress(item)}>
+                        <View style={styles.food}>
+                          <View style={styles.imageContainer}>
+                            <Image
+                              style={styles.image}
+                              source={{
+                                uri:
+                                  "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                                  item.logo,
+                              }}
+                            ></Image>
+                          </View>
+                          <View style={styles.textContainer}>
+                            <Text style={styles.item}>{item.title}</Text>
+                          </View>
+                        </View>
+                        {selectedItems.includes(item._id) && (
+                          <View style={styles.overlay} />
+                        )}
+                      </Pressable>
+                    );
+                  } else if (selectedCat === "Allt") {
+                    setSelectedFridgeFilter(false);
+                  }
+                }}
+              ></FlatList>
+            </View>
+          )}
+
+          <View style={styles.fridgeView}>
+            {!foodComponents && !hideFood && !selectedShoppingFilter && (
               <>
                 {userData.shoppingList.length > 1 && (
                   <>
@@ -578,6 +707,132 @@ function Shopping({ navigation }) {
                 <View>{renderShoppingFridge()}</View>
               </>
             )}
+
+            {/*userData.shoppingList &&
+              !hideFood &&
+              selectedShoppingFilter &&
+              fridge.map((item) => {
+                for (let i = 0; i < fridge.length; i++) {
+                  if (item.foodCategory === selectedCat) {
+                    console.log(item.foodName);
+
+                    function dateDiff() {
+                      let dateDiff = differenceInDays(
+                        Date.parse(item.foodExpirationDate),
+                        Date.parse(today)
+                      );
+                      return dateDiff;
+                    }
+                    return (
+                      <ScrollView style={{ backgroundColor: Colors.blue }}>
+                        <Pressable onPress={() => handlePressToRecipe(item)}>
+                          <View style={styles.userFridgeItem}>
+                            <View style={styles.userImageView}>
+                              <Image
+                                style={styles.userImage}
+                                source={{
+                                  uri:
+                                    "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                                    item.foodLogo,
+                                }}
+                              ></Image>
+                            </View>
+                            <View style={styles.itemView}>
+                              <Text style={styles.itemName}>
+                                {item.foodName}
+                              </Text>
+                            </View>
+
+                            <View style={styles.expView}>
+                              <Text style={styles.itemExp}>
+                                {item.foodExpirationDate ? (
+                                  <Text>
+                                    {dateDiff()}{" "}
+                                    {dateDiff() > 1 ? "dagar" : " dag"}
+                                  </Text>
+                                ) : (
+                                  <Text>
+                                    {item.foodExpiration}
+                                    {item.foodExpiration > 1
+                                      ? " dagar"
+                                      : " dag"}
+                                  </Text>
+                                )}
+                              </Text>
+                            </View>
+                            <View
+                              style={[
+                                {
+                                  backgroundColor:
+                                    item.foodCarbon === "A"
+                                      ? Colors.darkgreen
+                                      : item.foodCarbon === "B"
+                                      ? Colors.lightgreen
+                                      : item.foodCarbon === "C"
+                                      ? Colors.lightyellow
+                                      : item.foodCarbon === "D"
+                                      ? Colors.orange
+                                      : item.foodCarbon === "E"
+                                      ? Colors.red
+                                      : null,
+                                },
+                                styles.carbonView,
+                              ]}
+                            >
+                              <Text style={styles.itemCarbon}>
+                                {item.foodCarbon}
+                              </Text>
+                              {/* renderCarbon({ item })}
+                            </View>
+                            <View style={styles.editItem}>
+                              <IcoButton
+                                icon="create-outline"
+                                size={24}
+                                color={Colors.green}
+                                onPress={
+                                  /*() => openEditFridge()
+
+                                  () => {
+                                    openModal({
+                                      id,
+                                      name,
+                                      expiration,
+                                      expirationDate,
+                                      carbon,
+                                      logo,
+                                    });
+                                  }
+                                }
+                              />
+                            </View>
+
+                            <View style={styles.deleteItem}>
+                              <IcoButton
+                                icon="close-outline"
+                                size={24}
+                                color={Colors.green}
+                                onPress={() => deleteInFridge(item)}
+                              />
+
+                              <EditModal
+                                passedData={passedData}
+                                visible={modalIsVisible}
+                                closeModal={closeModal}
+                                /* editFoodInFridge={editInFridge}
+                              />
+                            </View>
+                          </View>
+                          {selectToRecipe.includes(item._id) && (
+                            <View style={styles.overlayToRecipe} />
+                          )}
+                        </Pressable>
+                      </ScrollView>
+                    );
+                  } else if (selectedCat === "Allt") {
+                    setSelectedUserFilter(false);
+                  }
+                }
+              })}*/}
           </View>
         </View>
       </View>
@@ -595,14 +850,13 @@ const styles = StyleSheet.create({
   },
   main: {
     backgroundColor: Colors.blue,
-    margin: 50,
-
+    fontFamily: "Interbold",
     justifyContent: "center",
     alignItems: "center",
   },
   fridgeView: {
     backgroundColor: Colors.blue,
-    flex: 1,
+    /*flex: 1,*/
   },
   fridgeInstView: {
     paddingHorizontal: 30,
@@ -650,7 +904,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "green",
     height: 40,
     width: 40,
     padding: 10,
@@ -724,6 +977,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue,
     alignItems: "center",
     paddingVertical: 10,
+  },
+  selectedFoodList: {
+    backgroundColor: Colors.blue,
+    alignItems: "center",
+    justifyContent: "center",
   },
   food: {
     height: 90,

@@ -50,6 +50,7 @@ function EditModalShopping(props) {
         )
       );
       dispatch(getUser(userData._id));
+
       setEnteredBioText("");
       setEnteredQuantityText("");
       console.log("edited");
@@ -174,7 +175,7 @@ function EditModalShopping(props) {
         <PrimaryButton onPress={props.closeModal}>Avbryt</PrimaryButton>
         <Pressable style={styles.deleteFromList}>
           <Text style={styles.deleteFromListText}>
-            Ta bort varan från min shoppinglista
+            Ta bort varan från min inköpslista
           </Text>
         </Pressable>
       </KeyboardAvoidingView>
