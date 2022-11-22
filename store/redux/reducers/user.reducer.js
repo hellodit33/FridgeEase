@@ -6,6 +6,7 @@ import {
   GET_FOOD_TO_RECIPE,
   DELETE_SHOPPING_ITEM,
   EDIT_SHOPPING_ITEM,
+  DELETE_FAVORITE_RECIPE,
 } from "../actions/user.actions";
 
 const initialState = {};
@@ -83,6 +84,19 @@ export default function userReducer(state = initialState, action) {
             ),
           };
         }
+        return user;
+      });
+    case DELETE_FAVORITE_RECIPE:
+      return state.map((user) => {
+        if (user._id === action.payload.userId) {
+          return {
+            ...user,
+            favoriteRecipe: user.favoriteRecipe.filter(
+              (id) => id !== action.payload.recipeIdToRemove
+            ),
+          };
+        }
+
         return user;
       });
     /*case DELETE_ALL_SHOPPING_ITEMS:

@@ -91,7 +91,7 @@ function EditModalFridge(props) {
   }
 
   function editFoodInFridge() {
-    if (enteredQuantityText.length > 0 || enteredExpirationText.length > 0) {
+    if (enteredQuantityText.length > 0 || enteredExpirationText) {
       dispatch(
         editFoodFromFridge(
           userData._id,
@@ -212,7 +212,7 @@ function EditModalFridge(props) {
                       : props.passedData.carbon === "B"
                       ? Colors.lightgreen
                       : props.passedData.carbon === "C"
-                      ? Colors.lightyellow
+                      ? Colors.lightorange
                       : props.passedData.carbon === "D"
                       ? Colors.orange
                       : props.passedData.carbon === "E"
@@ -225,9 +225,10 @@ function EditModalFridge(props) {
             </Text>
           </View>
         </View>
-
-        <PrimaryButton onPress={editFoodInFridge}>Spara</PrimaryButton>
-        <PrimaryButton onPress={props.closeModal}>Avbryt</PrimaryButton>
+        <View style={styles.buttons}>
+          <PrimaryButton onPress={editFoodInFridge}>Spara</PrimaryButton>
+          <PrimaryButton onPress={props.closeModal}>Avbryt</PrimaryButton>
+        </View>
       </KeyboardAvoidingView>
     </Modal>
   );
@@ -311,5 +312,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     fontWeight: "bold",
+  },
+  buttons: {
+    marginBottom: 20,
   },
 });

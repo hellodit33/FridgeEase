@@ -253,7 +253,10 @@ function Shopping({ navigation }) {
   function renderShoppingFridge() {
     const editInShopping = (item) => {
       dispatch(getUser(userData._id));
-      closeModal();
+    };
+
+    const removeInShopping = (item) => {
+      dispatch(getUser(userData._id));
     };
 
     function renderCarbon({ fridge }) {
@@ -303,6 +306,7 @@ function Shopping({ navigation }) {
                   food.expiration
                 )
               );
+              await dispatch(getUser(userData._id));
             }
           };
           return (
@@ -360,7 +364,7 @@ function Shopping({ navigation }) {
                               : fridge.carbon === "B"
                               ? Colors.lightgreen
                               : fridge.carbon === "C"
-                              ? Colors.lightyellow
+                              ? Colors.lightorange
                               : fridge.carbon === "D"
                               ? Colors.orange
                               : fridge.carbon === "E"
@@ -417,6 +421,7 @@ function Shopping({ navigation }) {
                           visible={modalIsVisible}
                           passedData={passedData}
                           closeModal={closeModal}
+                          removeFoodInShopping={removeInShopping}
                           editFoodInShopping={editInShopping}
                         />
                       </View>
@@ -769,7 +774,7 @@ function Shopping({ navigation }) {
                                       : item.foodCarbon === "B"
                                       ? Colors.lightgreen
                                       : item.foodCarbon === "C"
-                                      ? Colors.lightyellow
+                                      ? Colors.lightorange
                                       : item.foodCarbon === "D"
                                       ? Colors.orange
                                       : item.foodCarbon === "E"

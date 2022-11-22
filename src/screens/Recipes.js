@@ -37,6 +37,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import IcoButton from "../components/IcoButton";
 function Recipes({ navigation }) {
+  async function onRecipeCategory(category) {
+    if (category.name === "Allt") {
+      setSelectedRecipeFilter(false);
+    } else {
+      setSelectedRecipeFilter(true);
+      setSelectedCategory(category.name);
+      console.log(selectedCategory);
+    }
+  }
+
   const categoryData = [
     {
       id: 1,
@@ -56,33 +66,26 @@ function Recipes({ navigation }) {
     },
     {
       id: 5,
-      name: "Förrätt",
+      name: "Lagom",
     },
     {
       id: 6,
-      name: "Varmrätt",
+      name: "Ambitiöst",
     },
     {
       id: 7,
-      name: "Dessert",
+      name: "Dejt",
     },
     {
       id: 8,
-      name: "Fika",
-    },
-    {
-      id: 9,
-      name: "Fest",
-    },
-    {
-      id: 10,
-      name: "Utflykt",
+      name: "Festligt",
     },
   ];
   const [categories, setCategories] = useState(categoryData);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedRecipeFilter, setSelectedRecipeFilter] = useState(false);
 
-  function renderFoodCategories() {
+  function renderRecipesCategories() {
     const renderItem = ({ item }) => {
       return (
         <TouchableOpacity
@@ -93,7 +96,7 @@ function Recipes({ navigation }) {
             alignItems: "center",
             justifyContent: "center",
           }}
-          /*onPress={() => onSelectCategory(item)}*/
+          onPress={() => onRecipeCategory(item)}
         >
           <Text
             style={{
@@ -323,7 +326,7 @@ function Recipes({ navigation }) {
                               : item.climateImpact === "B"
                               ? Colors.lightgreen
                               : item.climateImpact === "C"
-                              ? Colors.lightyellow
+                              ? Colors.lightorange
                               : item.climateImpact === "D"
                               ? Colors.orange
                               : item.climateImpact === "E"
@@ -476,7 +479,7 @@ function Recipes({ navigation }) {
           )}
         />
       );
-    } else
+    } else if (userIngredients.length === 0 && !selectedRecipeFilter) {
       return (
         <FlatList
           legacyImplementation={true}
@@ -515,7 +518,7 @@ function Recipes({ navigation }) {
                               : item.climateImpact === "B"
                               ? Colors.lightgreen
                               : item.climateImpact === "C"
-                              ? Colors.lightyellow
+                              ? Colors.lightorange
                               : item.climateImpact === "D"
                               ? Colors.orange
                               : item.climateImpact === "E"
@@ -668,7 +671,207 @@ function Recipes({ navigation }) {
           )}
         />
       );
+    } else if (userIngredients.length === 0 && selectedRecipeFilter) {
+      return (
+        <FlatList
+          legacyImplementation={true}
+          horizontal
+          data={recipesData}
+          extraData={recipesData}
+          keyExtractor={() => Math.random()}
+          renderItem={({ item }) => {
+            if (item.category === selectedCategory) {
+              return (
+                <TouchableOpacity
+                  style={styles.recipes}
+                  recipeId={item._id}
+                  onPress={() => recipePressHandler(item._id)}
+                >
+                  <View>
+                    <View style={styles.recipeView}>
+                      <Image
+                        style={styles.image}
+                        source={{
+                          uri:
+                            "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/recipesPictures/" +
+                            item.title +
+                            ".png",
+                        }}
+                      ></Image>
+                      <Text style={styles.recipeTitle}>{item.title}</Text>
+                    </View>
+                    <View style={styles.moreInfoView}>
+                      <View style={styles.leftView}>
+                        <View
+                          style={[
+                            styles.carbonView,
+                            {
+                              backgroundColor:
+                                item.climateImpact === "A"
+                                  ? Colors.darkgreen
+                                  : item.climateImpact === "B"
+                                  ? Colors.lightgreen
+                                  : item.climateImpact === "C"
+                                  ? Colors.lightorange
+                                  : item.climateImpact === "D"
+                                  ? Colors.orange
+                                  : item.climateImpact === "E"
+                                  ? Colors.red
+                                  : null,
+                            },
+                          ]}
+                        >
+                          <Text style={styles.recipesText}>
+                            {item.climateImpact === "A"
+                              ? "Mycket låg klimatpåverkan"
+                              : item.climateImpact === "B"
+                              ? "Relativt låg klimatpåverkan"
+                              : item.climateImpact === "C"
+                              ? "Medelhög klimatpåverkan"
+                              : item.climateImpact === "D"
+                              ? "Relativt hög klimatpåverkan"
+                              : item.climateImpact === "E"
+                              ? "Mycket hög klimatpåverkan"
+                              : null}
+                          </Text>
+                        </View>
+                        <Text style={[styles.levelText, styles.recipesText]}>
+                          Ambitionsnivå
+                        </Text>
+                        <View style={styles.levels}>
+                          <Text style={styles.low}></Text>
+                          <Text
+                            style={
+                              item.difficulty === "Simple"
+                                ? styles.low2
+                                : styles.middle
+                            }
+                          ></Text>
+                          <Text
+                            style={
+                              item.difficulty === "Simple"
+                                ? styles.low2
+                                : item.difficulty === "Normal"
+                                ? styles.low2
+                                : styles.high
+                            }
+                          ></Text>
+                        </View>
+
+                        {/* <Text>Svårighetsgrad</Text> 
+                  <View style={styles.difficultyView}>
+                    {item.difficulty === "Simple" ? (
+                      <>
+                        <Ionicons size={20} name="restaurant" />
+                        <Ionicons size={20} name="restaurant-outline" />
+                        <Ionicons size={20} name="restaurant-outline" />
+                      </>
+                    ) : null}
+                    {item.difficulty === "Normal" ? (
+                      <>
+                        <Ionicons size={20} name="restaurant" />
+                        <Ionicons size={20} name="restaurant" />
+                        <Ionicons size={20} name="restaurant-outline" />
+                      </>
+                    ) : null}
+                    {item.difficulty === "Difficult" ? (
+                      <>
+                        <Ionicons size={20} name="restaurant" />
+                        <Ionicons size={20} name="restaurant" />
+                        <Ionicons size={20} name="restaurant" />
+                      </>
+                    ) : null}
+                  </View>*/}
+                        {/*   <Text
+                    style={{
+                      color: item.difficulty === "Enkelt" ? "blue" : "black",
+                    }}
+                  >
+                    {item.difficulty}
+                  </Text>*/}
+
+                        <View>
+                          <Text style={[styles.levelText, styles.recipesText]}>
+                            Pris
+                          </Text>
+                          <View style={styles.levels}>
+                            <Text style={styles.low}></Text>
+                            <Text
+                              style={
+                                item.price <= 50
+                                  ? styles.low2
+                                  : item.price > 50
+                                  ? styles.middle
+                                  : null
+                              }
+                            ></Text>
+                            <Text
+                              style={
+                                item.price <= 50
+                                  ? styles.low3
+                                  : item.price > 50
+                                  ? styles.middle2
+                                  : item.price > 100
+                                  ? styles.high
+                                  : null
+                              }
+                            ></Text>
+                          </View>
+                          <View></View>
+                        </View>
+                      </View>
+                      <View style={styles.rightView}>
+                        <View style={styles.peopleView}>
+                          <Ionicons
+                            size={22}
+                            name="people-outline"
+                            color={Colors.green}
+                          ></Ionicons>
+                          <Text style={styles.recipesText}>
+                            {item.people} portioner
+                          </Text>
+                        </View>
+                        <View style={styles.durationView}>
+                          <Ionicons
+                            size={22}
+                            name="time-outline"
+                            color={Colors.green}
+                          />
+                          <Text style={styles.recipesText}>
+                            {renderDuration(item.duration)}
+                            {item.duration < 60 ? " min" : null}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View style={styles.ingredientsView}>
+                      <Text style={styles.recipesText}>Du behöver:</Text>
+                      <View style={styles.ingredientsItem}>
+                        <FlatList
+                          data={item.ingredients2}
+                          numColumns={3}
+                          contentContainerStyle={styles.centerItems}
+                          keyExtractor={() => Math.random()}
+                          renderItem={({ item }) => (
+                            <View style={styles.ingredientsItemText}>
+                              <Text style={styles.recipesText}>
+                                {item.name}
+                              </Text>
+                            </View>
+                          )}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            }
+          }}
+        />
+      );
+    }
   }
+
   const [loaded] = useFonts({
     alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
     Intermedium: require("../../assets/fonts/Inter-Medium.ttf"),
@@ -682,12 +885,16 @@ function Recipes({ navigation }) {
 
   return (
     <View style={styles.firstScreen}>
-      <View>
-        <View style={styles.main}>{renderFoodCategories()}</View>
-      </View>
-      <View>
-        <View style={styles.main}>{renderFoodToRecipe()}</View>
-      </View>
+      {userData.foodToRecipe.length === 0 && (
+        <View>
+          <View style={styles.main}>{renderRecipesCategories()}</View>
+        </View>
+      )}
+      {userData.foodToRecipe.length > 0 && (
+        <View>
+          <View style={styles.foodToRecipe}>{renderFoodToRecipe()}</View>
+        </View>
+      )}
       {/*<View>{renderIngredientsObject()}</View>*/}
 
       <View style={{ flex: 1 }}>
@@ -762,7 +969,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.blue,
   },
-  recipesList: {},
+
+  main: {
+    backgroundColor: Colors.blue,
+    fontFamily: "Interbold",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 30,
+  },
+  foodToRecipe: {
+    backgroundColor: Colors.blue,
+    fontFamily: "Interbold",
+    marginVertical: 30,
+  },
   recipes: {
     backgroundColor: "white",
     borderWidth: 2,
@@ -773,7 +992,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     width: 300,
     height: 440,
-    marginTop: 10,
+
     borderRadius: 30,
   },
   recipeView: {

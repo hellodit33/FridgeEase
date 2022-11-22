@@ -5,6 +5,7 @@ export const GET_USER_FOOD = "GET_USER_FOOD";
 export const EDIT_FOOD = "EDIT_FOOD";
 export const EDIT_SHOPPING_ITEM = "EDIT_SHOPPING_ITEM";
 export const DELETE_RECIPE_FOOD_FILTER = "DELETE_RECIPE_FOOD_FILTER";
+export const DELETE_FAVORITE_RECIPE = "DELETE_FAVORITE_RECIPE";
 
 export const DELETE_FOOD = "DELETE_FOOD";
 export const DELETE_SHOPPING_ITEM = "DELETE_SHOPPING_ITEM";
@@ -19,7 +20,7 @@ export const ADD_FAV_RECIPE = "ADD_FAV_RECIPE";
 export const UPDATE_DIET = "UPDATE_DIET";
 
 export const DELETE_ALL_SHOPPING_ITEMS = "DELETE_ALL_SHOPPING_ITEMS";
-const BASE_URL = "https://bd23-213-163-151-83.eu.ngrok.io";
+const BASE_URL = "https://263f-213-163-151-83.eu.ngrok.io";
 
 export const getUser = (uid) => {
   return (dispatch) => {
@@ -116,6 +117,23 @@ export const deleteRecipeFoodFilter = (userId, foodName) => {
         dispatch({
           type: DELETE_RECIPE_FOOD_FILTER,
           payload: { foodName },
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+};
+
+export const deleteFavoriteRecipe = (userId, recipeIdToRemove) => {
+  return (dispatch) => {
+    return axios({
+      method: "put",
+      url: `${BASE_URL}/api/user/removefavrecipe/${userId}`,
+      data: { recipeIdToRemove },
+    })
+      .then((res) => {
+        dispatch({
+          type: DELETE_FAVORITE_RECIPE,
+          payload: { userId, recipeIdToRemove },
         });
       })
       .catch((err) => console.log(err));

@@ -19,18 +19,20 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send("welcome to the auth system");
 });
-
+/*app.get("api/*", verifyToken, (req, res) => {
+  res.send({ success: true, data: req.user });
+});*/
 /*jwt
 app.get("*", verifyToken);
-/* app.get("/jwtid", requireAuth, (req, res) => {
+
+
+
+
+*/
+
+app.get("/jwtid", verifyToken, (req, res) => {
   res.status(200).send(res.locals.user._id);
 });
-
-
-app.get("/api/user/profile", verifyToken, (req, res) => {
-  res.send({ success: true, data: req.user });
-});
-*/
 
 app.use("/api/food", foodRoutes);
 

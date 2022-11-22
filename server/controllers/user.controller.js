@@ -145,7 +145,7 @@ module.exports.addFoodToFridge = (req, res) => {
           },
         },
       },
-      { new: true, upsert: true },
+      { new: true, upsert: true, setDefaultsOnInsert: true },
       (err, data) => {
         if (!err) res.status(201).json(data);
         else return res.status(400).json(err);
@@ -373,6 +373,26 @@ module.exports.addFavoriteRecipe = (req, res) => {
   }
 };
 
+module.exports.removeFavoriteRecipe = (req, res) => {
+  if (
+    !ObjectID.isValid(req.params.id) ||
+    !ObjectID.isValid(req.body.recipeIdToRemove)
+  )
+    return res.status(400).send("ID unknown: " + req.params.id);
+  try {
+    UserModel.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { favoriteRecipe: req.body.recipeIdToRemove } },
+
+      (err, data) => {
+        if (!err) res.status(201).json(data);
+        else return res.status(400).json(err);
+      }
+    );
+  } catch (err) {
+    return res.status(500).json({ message: err });
+  }
+};
 module.exports.editShoppingItem = (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);

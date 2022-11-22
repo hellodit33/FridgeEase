@@ -32,6 +32,8 @@ router.put("/editshoppingitem/:id", userController.editShoppingItem);
 router.put("/deleterecipefood/:id", userController.deleteRecipeFoodFilter);
 
 router.put("/addfavrecipe/:id", userController.addFavoriteRecipe);
+router.put("/removefavrecipe/:id", userController.removeFavoriteRecipe);
+
 router.put("/additems/:id", userController.addShoppingToFridge);
 
 module.exports = router;

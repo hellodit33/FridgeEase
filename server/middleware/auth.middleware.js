@@ -1,7 +1,7 @@
 //auth.middleware requirements
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user.model");
-/*
+
 module.exports.checkUser = (req, res, next) => {
   const token = req.cookies.jwt;
   //check if token
@@ -10,8 +10,8 @@ module.exports.checkUser = (req, res, next) => {
       if (err) {
         res.locals.user = null;
         /*res.cookie("jwt", "", { maxAge: 1 });*/
-/*next()*/
-/*     } else {
+        /*next()*/
+      } else {
         let user = await UserModel.findById(decodedToken.id);
         res.locals.user = user;
         console.log(user);
@@ -39,4 +39,3 @@ module.exports.requireAuth = (req, res, next) => {
     console.log("no token");
   }
 };
-*/

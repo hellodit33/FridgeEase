@@ -165,7 +165,7 @@ function RecipeInDetail({ route, navigation }) {
                         : recipeToShow.climateImpact === "B"
                         ? Colors.lightgreen
                         : recipeToShow.climateImpact === "C"
-                        ? Colors.lightyellow
+                        ? Colors.lightorange
                         : recipeToShow.climateImpact === "D"
                         ? Colors.orange
                         : recipeToShow.climateImpact === "E"
@@ -597,14 +597,14 @@ const styles = StyleSheet.create({
   graphBText: { color: "white", fontWeight: "600", fontSize: 30 },
 
   climateGraphC: {
-    backgroundColor: Colors.lightyellow,
+    backgroundColor: Colors.lightorange,
     width: 60,
     height: 70,
     justifyContent: "center",
     alignItems: "center",
   },
   bigClimateGraphC: {
-    backgroundColor: Colors.lightyellow,
+    backgroundColor: Colors.lightorange,
     width: 60,
     height: 90,
     elevation: 6,
@@ -614,7 +614,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  graphCText: { color: Colors.greyish, fontWeight: "600", fontSize: 30 },
+  graphCText: { color: "black", fontWeight: "600", fontSize: 30 },
   climateGraphD: {
     backgroundColor: Colors.orange,
     width: 60,

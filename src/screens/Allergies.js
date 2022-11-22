@@ -14,18 +14,19 @@ import { useFonts } from "expo-font";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import { updateDiet } from "../../store/redux/actions/user.actions";
 import { useDispatch, useSelector } from "react-redux";
-const items = [
-  { name: "Mjölk", id: "1" },
-  { name: "Gluten", id: "2" },
-  { name: "Ägg", id: "3" },
-  { name: "Jordnötter", id: "4" },
-  { name: "Fisk", id: "5" },
-  { name: "Skaldjur", id: "6" },
-  { name: "Nötter", id: "7" },
-  { name: "Soja", id: "8" },
-  { name: "Fröer", id: "9" },
-];
+
 function Allergies(props) {
+  const items = [
+    { name: "Mjölk", id: "1" },
+    { name: "Gluten", id: "2" },
+    { name: "Ägg", id: "3" },
+    { name: "Jordnötter", id: "4" },
+    { name: "Fisk", id: "5" },
+    { name: "Skaldjur", id: "6" },
+    { name: "Nötter", id: "7" },
+    { name: "Soja", id: "8" },
+    { name: "Fröer", id: "9" },
+  ];
   const userData = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   const [selectedAllergies, setSelectedAllergies] = useState([]);

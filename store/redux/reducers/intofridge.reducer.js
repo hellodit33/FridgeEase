@@ -32,6 +32,7 @@ export default function intoFridgeReducer(state = initialState, action) {
           (id) => id !== action.payload.foodIdToRemove
         ),
       };
+
     default:
       return state;
   }

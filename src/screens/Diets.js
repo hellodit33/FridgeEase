@@ -14,29 +14,31 @@ import { useFonts } from "expo-font";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import { updateDiet } from "../../store/redux/actions/user.actions";
 import { useDispatch, useSelector } from "react-redux";
-const items = [
-  {
-    id: "1",
-    name: "Vegetarisk",
-  },
-  {
-    id: "2",
-    name: "Vegansk",
-  },
-  {
-    id: "3",
-    name: "Glutenfritt",
-  },
-  {
-    id: "4",
-    name: "LCHF",
-  },
-  {
-    id: "5",
-    name: "Pescetariansk",
-  },
-];
+import Checkbox from "expo-checkbox";
+
 function Diets(props) {
+  const items = [
+    {
+      id: "1",
+      name: "Vegetarisk",
+    },
+    {
+      id: "2",
+      name: "Vegansk",
+    },
+    {
+      id: "3",
+      name: "Glutenfritt",
+    },
+    {
+      id: "4",
+      name: "LCHF",
+    },
+    {
+      id: "5",
+      name: "Pescetariansk",
+    },
+  ];
   const userData = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   const [selectedDiets, setSelectedDiets] = useState([]);

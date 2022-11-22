@@ -8,6 +8,7 @@ import {
 import {
   addFoodToRecipe,
   deleteFoodFromFridge,
+  deleteRecipeFoodFilter,
   editFoodFromFridge,
 } from "../../store/redux/actions/user.actions";
 import { getUser } from "../../store/redux/actions/user.actions";
@@ -45,6 +46,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 import { faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { differenceInDays, parseISO } from "date-fns";
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 function Fridge({ props, navigation, route }) {
   const [itemToEdit, setItemToEdit] = useState();
@@ -146,6 +149,10 @@ function Fridge({ props, navigation, route }) {
   const [isAdded, setIsAdded] = useState(false);
   const [addedItems, setAddedItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedCatItems, setSelectedCatItems] = useState([]);
+
+  const [selectedNames, setSelectedNames] = useState([]);
+
   const [selectToRecipe, setSelectToRecipe] = useState([]);
   const [unselectToRecipe, setUnselectToRecipe] = useState([]);
 
@@ -153,14 +160,52 @@ function Fridge({ props, navigation, route }) {
 
   const [titles, setTitles] = useState("");
 
-  const handlePress = (food) => {
-    if (selectedItems.includes(food._id)) {
+  function findCommonElement(array1, array2) {
+    // Loop for array1
+    for (let i = 0; i < array1.length; i++) {
+      // Loop for array2
+      for (let j = 0; j < array2.length; j++) {
+        // Compare the element of each and
+        // every element from both of the
+        // arrays
+        if (array1[i] === array2[j]) {
+          // Return if common element found
+          return true;
+        }
+      }
+    }
+
+    // Return if no common element exist
+    return false;
+  }
+
+  const handlePress = async (food) => {
+    findCommonElement(selectedNames, selectedCatItems);
+    if (
+      selectedItems.includes(food._id) ||
+      selectedNames.includes(food.title) ||
+      !findCommonElement
+    ) {
       const newSelect = selectedItems.filter((foodId) => foodId !== food._id);
-      dispatch(removeFoodFromFridge(userData._id, food._id));
+      showMessage({
+        duration: 6000,
+        message: "Denna vara finns redan i ditt kylskåp.",
+        backgroundColor: Colors.green,
+        color: "white",
+      });
       return setSelectedItems(newSelect);
     }
     setSelectedItems([...selectedItems, food._id]);
+    setSelectedNames([...selectedNames, food.title]);
+    setSelectedCatItems([...selectedCatItems, food.title]);
 
+    showMessage({
+      duration: 6000,
+      message:
+        'Denna vara har lagts till ditt kylskåp. För att ta bort den, klicka på knappen "Klar" för att gå tillbaka till ditt kylskåpsinnehåll. Klicka senare på krysset på den matvara som du vill ta bort.',
+      backgroundColor: Colors.green,
+      color: "white",
+    });
     dispatch(
       addFoodToFridge(
         userData._id,
@@ -180,10 +225,24 @@ function Fridge({ props, navigation, route }) {
       const newListItem = selectToRecipe.filter(
         (foodId) => foodId !== food._id
       );
-
+      dispatch(deleteRecipeFoodFilter(userData._id, food.foodName));
+      dispatch(getUser(userData._id));
+      showMessage({
+        duration: 3000,
+        message:
+          "Denna vara har tagits bort från de varorna du vill laga mat på.",
+        backgroundColor: Colors.green,
+        color: "white",
+      });
       return setSelectToRecipe(newListItem);
     }
 
+    showMessage({
+      duration: 3000,
+      message: "Denna vara har lagts till de varorna du vill laga mat på.",
+      backgroundColor: Colors.green,
+      color: "white",
+    });
     setSelectToRecipe([...selectToRecipe, food._id]);
     dispatch(addFoodToRecipe(userData._id, food.foodName));
     dispatch(getUser(userData._id));
@@ -207,11 +266,13 @@ function Fridge({ props, navigation, route }) {
     const newArray = [];
   }
   async function onFridgeCategory(category) {
-    setSelectedFridgeFilter(true);
-    setSelectedCategory(category.name);
-    console.log(selectedCategory);
-
-    const newArray = [];
+    if (category.name === "Allt") {
+      setSelectedFridgeFilter(false);
+    } else {
+      setSelectedFridgeFilter(true);
+      setSelectedCategory(category.name);
+      console.log(selectedCategory);
+    }
   }
   function renderUserFridgeCategories() {
     const renderItem = ({ item }) => {
@@ -360,6 +421,8 @@ return(
 
       return (
         <>
+          <FlashMessage position="top" />
+
           <ScrollView>
             <Pressable
               onLongPress={() => {
@@ -412,7 +475,7 @@ return(
                           : item.foodCarbon === "B"
                           ? Colors.lightgreen
                           : item.foodCarbon === "C"
-                          ? Colors.lightyellow
+                          ? Colors.lightorange
                           : item.foodCarbon === "D"
                           ? Colors.orange
                           : item.foodCarbon === "E"
@@ -422,7 +485,27 @@ return(
                     styles.carbonView,
                   ]}
                 >
-                  <Text style={styles.itemCarbon}>{item.foodCarbon}</Text>
+                  <Text
+                    style={[
+                      styles.itemCarbon,
+                      {
+                        color:
+                          item.foodCarbon === "A"
+                            ? "white"
+                            : item.foodCarbon === "B"
+                            ? "white"
+                            : item.foodCarbon === "C"
+                            ? "black"
+                            : item.foodCarbon === "D"
+                            ? "black"
+                            : item.foodCarbon === "E"
+                            ? "white"
+                            : null,
+                      },
+                    ]}
+                  >
+                    {item.foodCarbon}
+                  </Text>
                   {/* renderCarbon({ item })*/}
                 </View>
                 <View style={styles.editItem}>
@@ -565,13 +648,18 @@ return(
                 </View>
               </View>
 
-              {foodComponents && hideFood && (
-                <View style={styles.readyView}>
-                  <Pressable style={styles.readyButton} onPress={() => hello()}>
-                    <Text style={styles.readyText}>Klar</Text>
-                  </Pressable>
-                </View>
-              )}
+              {foodComponents &&
+                hideFood &&
+                (!selectedFridgeFilter || selectedFridgeFilter) && (
+                  <View style={styles.readyView}>
+                    <Pressable
+                      style={styles.readyButton}
+                      onPress={() => hello()}
+                    >
+                      <Text style={styles.readyText}>Klar</Text>
+                    </Pressable>
+                  </View>
+                )}
             </View>
           </View>
 
@@ -667,7 +755,7 @@ return(
                                     : item.foodCarbon === "B"
                                     ? Colors.lightgreen
                                     : item.foodCarbon === "C"
-                                    ? Colors.lightyellow
+                                    ? Colors.lightorange
                                     : item.foodCarbon === "D"
                                     ? Colors.orange
                                     : item.foodCarbon === "E"
@@ -734,6 +822,7 @@ return(
 
           {foodComponents && hideFood && !selectedFridgeFilter && (
             <View style={{ flex: 1 }}>
+              <FlashMessage position="top" />
               <View>
                 <View>
                   <FlatList
@@ -760,7 +849,7 @@ return(
                             <Text style={styles.item}>{item.title}</Text>
                           </View>
                         </View>
-                        {selectedItems.includes(item._id) && (
+                        {selectedCatItems.includes(item._id) && (
                           <View style={styles.overlay} />
                         )}
                       </Pressable>
@@ -803,8 +892,6 @@ return(
                         )}
                       </Pressable>
                     );
-                  } else if (selectedCategory === "Allt") {
-                    setSelectedFridgeFilter(false);
                   }
                 }}
               ></FlatList>

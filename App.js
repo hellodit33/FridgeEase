@@ -97,7 +97,13 @@ function BottomNav() {
 
         headerStyle: { backgroundColor: Colors.blue },
         headerTintColor: "white",
-        tabBarStyle: { backgroundColor: Colors.blue },
+        tabBarStyle: {
+          backgroundColor: Colors.blue,
+        },
+        tabBarLabelStyle: {
+          fontWeight: "bold",
+          fontSize: 12,
+        },
         tabBarActiveTintColor: Colors.green,
         tabBarInactiveTintColor: Colors.green,
         tabBarActiveBackgroundColor: Colors.darkblue,
@@ -227,41 +233,6 @@ function AuthenticatedStack() {
         }}
       />
       <Stack.Screen name="RecipeInDetail" component={RecipeInDetail} />
-
-      <Stack.Screen name="RecipesOverview" component={RecipesOverview} />
-      <Stack.Screen name="RecipesDetails" component={RecipesDetails} />
-
-      <Stack.Screen
-        name="RateItem"
-        component={RateItem}
-        options={{ presentation: "modal", title: "Ge ett betyg" }}
-      />
-      <Stack.Screen
-        name="AddQuote"
-        component={AddQuote}
-        options={{ title: "Lägg till ett foto på ett citat" }}
-      />
-      <Stack.Screen
-        name="AllQuotes"
-        component={AllQuotes}
-        options={({ navigation }) => ({
-          title: "Se alla citat",
-          headerRight: () => (
-            <IconButton
-              icon="add"
-              size={24}
-              color={"white"}
-              onPress={() => navigation.navigate("AddQuote")}
-            />
-          ),
-        })}
-      />
-
-      <Stack.Screen
-        name="QuoteDetails"
-        component={QuoteDetails}
-        options={{ title: "Citatet" }}
-      />
 
       <Stack.Screen
         name="FavoriteRecipes"

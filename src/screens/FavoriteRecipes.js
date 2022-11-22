@@ -6,23 +6,34 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext } from "react";
 import Colors from "../../constants/Colors";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import {
+  deleteFavoriteRecipe,
+  getUser,
+} from "../../store/redux/actions/user.actions";
+import PrimaryButton from "../components/PrimaryButton";
 function FavoriteRecipes({ route, navigation }) {
   const recipesData = useSelector((state) => state.recipesReducer);
   const userData = useSelector((state) => state.userReducer);
   const favoriteRecipes = userData.favoriteRecipe;
+  const dispatch = useDispatch();
 
+  function removeFavRecipe(item) {
+    dispatch(deleteFavoriteRecipe(userData._id, item._id));
+    dispatch(getUser(userData._id));
+  }
   function renderFavoriteRecipes() {
     function recipePressHandler(recipeId) {
       navigation.navigate("RecipeInDetail", {
         recipeId,
       });
     }
+
     /* const handlePressToShopping = (food) => {
       if (selectToShopping.includes(food._id)) {
         const newListItem = selectToShopping.filter(
@@ -58,11 +69,7 @@ function FavoriteRecipes({ route, navigation }) {
             return item.ingredients.map((item) => {
               return (
                 <>
-                  <TouchableOpacity
-                    style={styles.ingredientsItem}
-
-                    /* onPress={() => addToShoppingList(userData._id, item)}*/
-                  >
+                  <TouchableOpacity style={styles.ingredientsItem}>
                     <View style={styles.ingredientsItemText}>
                       <Text key={() => Math.random()}>{item}</Text>
                     </View>
@@ -78,8 +85,15 @@ function FavoriteRecipes({ route, navigation }) {
                 recipeId={item._id}
                 key={() => Math.random(item._id)}
                 onPress={() => recipePressHandler(item._id)}
+                onLongPress={() => removeFavRecipe(item)}
               >
                 <View>
+                  <Pressable
+                    onPress={() => removeFavRecipe(item)}
+                    style={styles.icon}
+                  >
+                    <Ionicons name="close" size={24}></Ionicons>
+                  </Pressable>
                   <View style={styles.recipeView}>
                     <Image
                       style={styles.image}
@@ -104,7 +118,7 @@ function FavoriteRecipes({ route, navigation }) {
                                 : item.climateImpact === "B"
                                 ? Colors.lightgreen
                                 : item.climateImpact === "C"
-                                ? Colors.lightyellow
+                                ? Colors.lightorange
                                 : item.climateImpact === "D"
                                 ? Colors.orange
                                 : item.climateImpact === "E"
@@ -263,15 +277,47 @@ function FavoriteRecipes({ route, navigation }) {
     });
   }
   return (
-    <ScrollView
-      contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}
-      horizontal
-      style={styles.main}
-    >
-      {renderFavoriteRecipes()}
-    </ScrollView>
+    <>
+      {userData.favoriteRecipe.length > 0 && (
+        <>
+          <ScrollView
+            contentContainerStyle={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            horizontal
+            style={styles.main}
+          >
+            {renderFavoriteRecipes()}
+          </ScrollView>
+        </>
+      )}
+
+      {userData.favoriteRecipe.length === 0 && (
+        <>
+          <View style={styles.noFavs}>
+            <View style={styles.deleteTitle}>
+              <Ionicons name="alert-circle-outline" size={30}></Ionicons>
+              <Text style={styles.infoTitle}>
+                Du har inga favoritrecept ännu.
+              </Text>
+            </View>
+            <View style={styles.infoView}>
+              <Text styles={styles.infoText}>
+                Gå till alla recept och markera dem du vill ha som favoriter med
+                ett hjärta.
+              </Text>
+            </View>
+            <PrimaryButton onPress={() => navigation.navigate("Recipes")}>
+              Alla recept
+            </PrimaryButton>
+          </View>
+        </>
+      )}
+    </>
   );
 }
+
 export default FavoriteRecipes;
 
 const styles = StyleSheet.create({
@@ -294,8 +340,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     width: 300,
-    height: 500,
+    height: 600,
     borderRadius: 30,
+  },
+  icon: {
+    alignItems: "flex-end",
   },
   recipeView: {
     marginBottom: 2,
@@ -419,7 +468,7 @@ const styles = StyleSheet.create({
   ingredientsView: {
     marginTop: 10,
     padding: 10,
-    height: 170,
+    height: 250,
     backgroundColor: Colors.lightblue,
     borderBottomEndRadius: 20,
     borderBottomStartRadius: 20,
@@ -440,6 +489,35 @@ const styles = StyleSheet.create({
   centerItems: {
     alignContent: "center",
     justifyContent: "center",
+    alignItems: "center",
+  },
+  noFavs: {
+    borderColor: Colors.darkgreen,
+    borderWidth: 2,
+    borderRadius: 30,
+    backgroundColor: "white",
+    marginVertical: 50,
+    marginHorizontal: 40,
+    padding: 30,
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  infoTitle: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: Colors.darkgreen,
+    marginLeft: 20,
+  },
+  infoView: {
+    marginVertical: 10,
+  },
+  infoText: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  deleteTitle: {
+    flexDirection: "row",
     alignItems: "center",
   },
 });

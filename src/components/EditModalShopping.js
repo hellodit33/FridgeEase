@@ -17,6 +17,7 @@ import PrimaryButton from "./PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
+  deleteFoodFromShopping,
   editFoodFromShopping,
   getUser,
 } from "../../store/redux/actions/user.actions";
@@ -38,6 +39,11 @@ function EditModalShopping(props) {
   function bioInputHandler(enteredBio) {
     setEnteredBioText(enteredBio);
   }
+  async function removeFoodInShopping() {
+    dispatch(deleteFoodFromShopping(userData._id, props.passedData.id));
+    dispatch(getUser(userData._id));
+    props.closeModal();
+  }
 
   async function editFoodInShopping() {
     if (enteredQuantityText.length > 0 || isChecked || !isChecked) {
@@ -58,7 +64,7 @@ function EditModalShopping(props) {
     } else {
       Alert.alert(
         "Oops!",
-        "Kvantité eller ekologiska val saknas. Fyll gärna i någon av dem för att kunna gå vidare",
+        "Kvantité eller ekologiska val saknas. Fyll gärna i någon av dem för att kunna gå vidare. Annars avbryt.",
         [{ text: "Okej", style: "default" }]
       );
     }
@@ -72,7 +78,16 @@ function EditModalShopping(props) {
       transparent={true}
     >
       <KeyboardAvoidingView style={styles.editView}>
-        <View style={styles.modalTitle}>
+        <View
+          style={[
+            styles.modalTitle,
+            {
+              justifyContent: props.passedData.quantity
+                ? "space-evenly"
+                : "space-between",
+            },
+          ]}
+        >
           <Image
             style={styles.userImage}
             source={{
@@ -83,9 +98,11 @@ function EditModalShopping(props) {
           ></Image>
           <Text style={styles.foodText}>{props.passedData.name}</Text>
           {props.passedData.existingBioQuality === true && <Text>Eko</Text>}
-          <Text style={styles.foodExp}>{props.passedData.quantity}</Text>
+          {props.passedData.quantity && (
+            <Text style={styles.foodExp}>{props.passedData.quantity}</Text>
+          )}
 
-          <Pressable onPress={props.onEditFood}>
+          <Pressable onPress={props.closeModal}>
             <Ionicons name="close" size={24} color={Colors.darkpink}></Ionicons>
           </Pressable>
         </View>
@@ -157,7 +174,7 @@ function EditModalShopping(props) {
                       : props.passedData.carbon === "B"
                       ? Colors.lightgreen
                       : props.passedData.carbon === "C"
-                      ? Colors.lightyellow
+                      ? Colors.lightorange
                       : props.passedData.carbon === "D"
                       ? Colors.orange
                       : props.passedData.carbon === "E"
@@ -170,10 +187,11 @@ function EditModalShopping(props) {
             </Text>
           </View>
         </View>
-
-        <PrimaryButton onPress={editFoodInShopping}>Spara</PrimaryButton>
-        <PrimaryButton onPress={props.closeModal}>Avbryt</PrimaryButton>
-        <Pressable style={styles.deleteFromList}>
+        <View style={styles.buttons}>
+          <PrimaryButton onPress={editFoodInShopping}>Spara</PrimaryButton>
+          <PrimaryButton onPress={props.closeModal}>Avbryt</PrimaryButton>
+        </View>
+        <Pressable onPress={removeFoodInShopping} style={styles.deleteFromList}>
           <Text style={styles.deleteFromListText}>
             Ta bort varan från min inköpslista
           </Text>
@@ -193,11 +211,13 @@ const styles = StyleSheet.create({
   },
   editView: {
     backgroundColor: "white",
+
+    backgroundColor: "white",
     borderRadius: 30,
     marginHorizontal: 20,
     paddingVertical: 20,
     paddingHorizontal: 10,
-    marginTop: 200,
+    marginTop: 20,
     justifyContent: "center",
   },
   userImage: {
@@ -210,7 +230,6 @@ const styles = StyleSheet.create({
   modalTitle: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly",
   },
 
   foodText: {
@@ -277,6 +296,7 @@ const styles = StyleSheet.create({
   },
   deleteFromList: {
     marginHorizontal: 15,
+
     justifyContent: "center",
     alignContent: "center",
   },
@@ -286,5 +306,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 15,
     textAlign: "center",
+  },
+  buttons: {
+    marginBottom: 20,
   },
 });
