@@ -11,9 +11,9 @@ import {
   Button,
   KeyboardAvoidingView,
 } from "react-native";
-import IcoButton from "./IcoButton";
+import IcoButton from "../UI/IcoButton";
 import Colors from "../../constants/Colors";
-import PrimaryButton from "./PrimaryButton";
+import PrimaryButton from "../UI/PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";

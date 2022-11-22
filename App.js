@@ -14,7 +14,6 @@ import {
   faCartShopping,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import {} from "@fortawesome/free-solid-svg-icons";
 
 import {
   StyleSheet,
@@ -27,37 +26,22 @@ import {
 } from "react-native";
 import Colors from "./constants/Colors";
 
-import SuggestionItem from "./src/screens/SuggestionItem";
-import SuggestionInput from "./src/screens/SuggestionInput";
 import Shopping from "./src/screens/Shopping";
-import RecipesOverview from "./src/screens/RecipesOverview";
 import Recipes from "./src/screens/Recipes";
 import RecipeInDetail from "./src/screens/RecipeInDetail";
 import Fridge from "./src/screens/Fridge";
-import MyFridge from "./src/screens/MyFridge";
-//import FavoritesContextProvider from "./store/context/favorites-context";
-import IconButton from "./src/components/IcoButton";
+import IcoButton from "./src/UI/IcoButton";
 
 import User from "./src/screens/User";
-import RateItem from "./src/screens/RateItem";
 import LoginScreen from "./src/screens/LoginScreen";
 import SignupScreen from "./src/screens/SignupScreen";
-import AddQuote from "./src/screens/AddQuote";
-import AllQuotes from "./src/screens/AllQuotes";
-import Map from "./src/screens/Map";
-import QuoteDetails from "./src/screens/QuoteDetails";
 import FavoriteRecipes from "./src/screens/FavoriteRecipes";
-import RecipesDetails from "./src/screens/RecipesDetails";
 import Header from "./src/components/Header";
 import Diets from "./src/screens/Diets";
 
 import Allergies from "./src/screens/Allergies";
 import LoadingOverlay from "./src/UI/LoadingOverlay";
-import {
-  AuthContext,
-  AuthProvider,
-  UidContext,
-} from "./src/components/AppContext";
+import { AuthContext, AuthProvider } from "./src/components/AppContext";
 import { getUser, getUserFood } from "./store/redux/actions/user.actions";
 import { useDispatch } from "react-redux";
 

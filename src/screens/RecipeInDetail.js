@@ -147,8 +147,7 @@ function RecipeInDetail({ route, navigation }) {
               source={{
                 uri:
                   "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/recipesPictures/" +
-                  recipeToShow.title +
-                  ".png",
+                  recipeToShow.image,
               }}
             />
             <Text style={styles.recipeTitle}>{recipeToShow.title}</Text>

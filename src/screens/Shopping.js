@@ -15,7 +15,7 @@ import LoadingOverlay from "../UI/LoadingOverlay.js";
 import Colors from "../../constants/Colors.js";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import IcoButton from "../components/IcoButton.js";
+import IcoButton from "../UI/IcoButton.js";
 import EditModalShopping from "../components/EditModalShopping.js";
 import { useDispatch } from "react-redux";
 import { showMessage, hideMessage } from "react-native-flash-message";

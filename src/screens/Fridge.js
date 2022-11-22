@@ -28,9 +28,6 @@ import {
   ScrollView,
   Modal,
 } from "react-native";
-import SuggestionInput from "./SuggestionInput";
-import SuggestionItem from "./SuggestionItem";
-import { storeSuggestions } from "../util/http";
 import { Ionicons } from "@expo/vector-icons";
 import IconButton from "../UI/IconButton";
 import FoodComponents from "../components/FoodComponents";
@@ -38,9 +35,8 @@ import LoadingOverlay from "../UI/LoadingOverlay";
 import { useDispatch, useSelector } from "react-redux";
 import { faHelicopterSymbol } from "@fortawesome/free-solid-svg-icons";
 import { useContext } from "react";
-import { cos } from "react-native-reanimated";
-import IcoButton from "../components/IcoButton";
-import PrimaryButton from "../components/PrimaryButton";
+import IcoButton from "../UI/IcoButton";
+import PrimaryButton from "../UI/PrimaryButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 

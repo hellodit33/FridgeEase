@@ -14,8 +14,6 @@ import { StatusBar } from "expo-status-bar";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 
-import SuggestionItem from "./SuggestionItem";
-import SuggestionInput from "./SuggestionInput";
 import Colors from "../../constants/Colors";
 import { useContext, useEffect, useState } from "react";
 import AuthContent from "../components/Auth/AuthContent";
@@ -35,7 +33,7 @@ import {
 import LoadingOverlay from "../UI/LoadingOverlay";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import IcoButton from "../components/IcoButton";
+import IcoButton from "../UI/IcoButton";
 function Recipes({ navigation }) {
   async function onRecipeCategory(category) {
     if (category.name === "Allt") {
@@ -308,8 +306,7 @@ function Recipes({ navigation }) {
                     source={{
                       uri:
                         "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/recipesPictures/" +
-                        item.title +
-                        ".png",
+                        item.image,
                     }}
                   ></Image>
                   <Text style={styles.recipeTitle}>{item.title}</Text>
@@ -500,8 +497,7 @@ function Recipes({ navigation }) {
                     source={{
                       uri:
                         "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/recipesPictures/" +
-                        item.title +
-                        ".png",
+                        item.image,
                     }}
                   ></Image>
                   <Text style={styles.recipeTitle}>{item.title}</Text>
@@ -694,8 +690,7 @@ function Recipes({ navigation }) {
                         source={{
                           uri:
                             "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/recipesPictures/" +
-                            item.title +
-                            ".png",
+                            item.image,
                         }}
                       ></Image>
                       <Text style={styles.recipeTitle}>{item.title}</Text>

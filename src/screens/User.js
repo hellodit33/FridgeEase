@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 import { useContext, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Colors from "../../constants/Colors";
-import IcoButton from "../components/IcoButton";
+import IcoButton from "../UI/IcoButton";
 import cookie from "js-cookie";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import { AuthContext } from "../components/AppContext";

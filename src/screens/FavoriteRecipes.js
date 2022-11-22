@@ -16,7 +16,7 @@ import {
   deleteFavoriteRecipe,
   getUser,
 } from "../../store/redux/actions/user.actions";
-import PrimaryButton from "../components/PrimaryButton";
+import PrimaryButton from "../UI/PrimaryButton";
 import { showMessage } from "react-native-flash-message";
 function FavoriteRecipes({ route, navigation }) {
   const recipesData = useSelector((state) => state.recipesReducer);
@@ -107,8 +107,7 @@ function FavoriteRecipes({ route, navigation }) {
                       source={{
                         uri:
                           "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/recipesPictures/" +
-                          item.title +
-                          ".png",
+                          item.image,
                       }}
                     ></Image>
                     <Text style={styles.recipeTitle}>{item.title}</Text>
