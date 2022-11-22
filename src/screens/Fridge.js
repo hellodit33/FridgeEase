@@ -3,6 +3,7 @@ import Colors from "../../constants/Colors";
 import { useFonts } from "expo-font";
 import {
   addFoodToFridge,
+  fetchFood,
   removeFoodFromFridge,
 } from "../../store/redux/actions/fridge.actions";
 import {
@@ -571,7 +572,16 @@ return(
     Interlight: require("../../assets/fonts/Inter-Light.ttf"),
   });
 
-  if (!loaded) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    dispatch(fetchFood())
+      .then(() => setIsLoading(false))
+      .catch(() => setIsLoading(false));
+  }, [dispatch]);
+
+  if (!loaded || isLoading) {
     return <LoadingOverlay message="Ge oss en kort stund..." />;
   }
 
