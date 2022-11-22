@@ -2,7 +2,7 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user.model");
 
-module.exports.checkUser = (req, res, next) => {
+/*module.exports.checkUser = (req, res, next) => {
   const token = req.cookies.jwt;
   //check if token
   if (token) {
@@ -10,7 +10,7 @@ module.exports.checkUser = (req, res, next) => {
       if (err) {
         res.locals.user = null;
         /*res.cookie("jwt", "", { maxAge: 1 });*/
-        /*next()*/
+/*next()
       } else {
         let user = await UserModel.findById(decodedToken.id);
         res.locals.user = user;
@@ -38,4 +38,4 @@ module.exports.requireAuth = (req, res, next) => {
   } else {
     console.log("no token");
   }
-};
+};*/

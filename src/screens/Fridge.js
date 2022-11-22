@@ -48,6 +48,7 @@ import { faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { differenceInDays, parseISO } from "date-fns";
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { fetchRecipes } from "../../store/redux/actions/recipe.actions";
 
 function Fridge({ props, navigation, route }) {
   const [itemToEdit, setItemToEdit] = useState();
@@ -246,6 +247,7 @@ function Fridge({ props, navigation, route }) {
     setSelectToRecipe([...selectToRecipe, food._id]);
     dispatch(addFoodToRecipe(userData._id, food.foodName));
     dispatch(getUser(userData._id));
+    dispatch(fetchRecipes());
   };
 
   /*

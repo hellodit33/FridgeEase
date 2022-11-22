@@ -11,8 +11,8 @@ require("./config/database");
 const path = require("path");
 const app = express();
 app.use(cors());
-const { checkUser, requireAuth } = require("./middleware/auth.middleware");
-const verifyToken = require("./middleware/verifyToken");
+/*const { checkUser, requireAuth } = require("./middleware/auth.middleware");
+const verifyToken = require("./middleware/verifyToken");*/
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,9 +31,9 @@ app.get("*", verifyToken);
 
 */
 
-app.get("/jwtid", verifyToken, (req, res) => {
+/*app.get("/jwtid", verifyToken, (req, res) => {
   res.status(200).send(res.locals.user._id);
-});
+});*/
 
 app.use("/api/food", foodRoutes);
 

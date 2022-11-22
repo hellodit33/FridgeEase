@@ -9,7 +9,7 @@ import Colors from "../../constants/Colors";
 
 function Logout({ onPress }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const BASE_URL = "https://263f-213-163-151-83.eu.ngrok.io";
+  const BASE_URL = "https://fridgeease-app.herokuapp.com";
   const removeCookie = (key) => {
     if (window !== undefined) {
       cookie.remove(key, { expires: 1 });
