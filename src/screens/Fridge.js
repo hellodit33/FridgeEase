@@ -116,6 +116,7 @@ function Fridge({ props, navigation, route }) {
 
   const userData = useSelector((state) => state.userReducer);
   const userFood = userData.usersfood;
+
   const fridge = useSelector((state) => state.intoFridgeReducer);
 
   const [newFood, setNewFood] = useState([]);
@@ -136,8 +137,8 @@ function Fridge({ props, navigation, route }) {
   const dispatch = useDispatch();
 
   const foodsLists = useSelector((state) => state.intoFridgeReducer);
-  const [foodlist, setFoodlist] = useState(foodsLists);
-  const [isAdded, setIsAdded] = useState(false);
+  const [foodlist, setFoodlist] = useState([foodsLists]);
+  const [addFood, setAddedFood] = useState(false);
   const [addedItems, setAddedItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedCatItems, setSelectedCatItems] = useState([]);
@@ -393,7 +394,6 @@ return(
     const renderFridge = ({ item }) => {
       /*   for (let i = 0; i < userData.usersfood.length; i++) {
         if (userData.usersfood[i] === item._id) */
-      dispatch(fetchFood());
       function dateDiff() {
         let dateDiff = differenceInDays(
           Date.parse(item.foodExpirationDate),
@@ -569,10 +569,15 @@ return(
 
   useEffect(() => {
     setIsLoading(true);
+    if (userData.usersfood) {
+      setAddedFood(true);
+    } else if (!userData.usersfood) {
+      setAddedFood(false);
+    }
     dispatch(fetchFood())
       .then(() => setIsLoading(false))
       .catch(() => setIsLoading(false));
-  }, [dispatch]);
+  }, [dispatch, userFood, userData]);
 
   if (!loaded || isLoading) {
     return <LoadingOverlay message="Ge oss en kort stund..." />;
@@ -664,17 +669,20 @@ return(
             </View>
           </View>
 
-          {messageFoodComponents && !hideFood && !selectedUserFilter && (
-            <View style={styles.message}>
-              <Text style={styles.textMessage}>
-                Ditt kylskåp är tomt, lägg till matvaror för att se vilka
-                matvaror som snart behöver ätas upp och få inspiration till
-                matlagning!
-              </Text>
-            </View>
-          )}
+          {!addFood &&
+            messageFoodComponents &&
+            !hideFood &&
+            !selectedUserFilter && (
+              <View style={styles.message}>
+                <Text style={styles.textMessage}>
+                  Ditt kylskåp är tomt, lägg till matvaror för att se vilka
+                  matvaror som snart behöver ätas upp och få inspiration till
+                  matlagning!
+                </Text>
+              </View>
+            )}
 
-          {userFood.length > 0 && !hideFood && !selectedUserFilter && (
+          {addFood && !hideFood && !selectedUserFilter && (
             <View style={styles.fridgeView}>
               <View style={styles.fridgeInstView}>
                 {/*<Text>{userData.usersfood.length} products in your fridge</Text>*/}
@@ -699,8 +707,7 @@ return(
             </View>
           )}
 
-          {userFood.length === 0 &&
-            !hideFood &&
+          {!hideFood &&
             selectedUserFilter &&
             userFood.map((item) => {
               for (let i = 0; i < userFood.length; i++) {
@@ -830,8 +837,8 @@ return(
                     legacyImplementation={true}
                     contentContainerStyle={styles.foodList}
                     numColumns={3}
-                    data={foodlist}
-                    extraData={foodlist}
+                    data={foodsLists}
+                    extraData={foodsLists}
                     keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
                       <Pressable onPress={() => handlePress(item)}>
@@ -866,8 +873,8 @@ return(
               <FlatList
                 contentContainerStyle={styles.selectedFoodList}
                 numColumns={3}
-                data={foodlist}
-                extraData={foodlist}
+                data={foodsLists}
+                extraData={foodsLists}
                 keyExtractor={(item) => Math.random(item._id)}
                 renderItem={({ item }) => {
                   if (item.category === selectedCategory) {
