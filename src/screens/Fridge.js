@@ -327,9 +327,10 @@ function Fridge({ props, navigation, route }) {
               fontWeight: "bold",
               color: Colors.green,
               textDecorationStyle: "solid",
-              textDecorationColor: Colors.darkpink,
+              textDecorationColor:
+                selectedCategory === item.name ? Colors.darkpink : "none",
               textDecorationLine:
-                selectedCategory?.id == item.id ? "underline" : "none",
+                selectedCategory === item.name ? "underline" : "none",
             }}
           >
             {item.name}
@@ -370,9 +371,10 @@ function Fridge({ props, navigation, route }) {
               fontWeight: "bold",
               color: Colors.green,
               textDecorationStyle: "solid",
-              textDecorationColor: Colors.darkpink,
+              textDecorationColor:
+                selectedCategory === item.name ? Colors.darkpink : "none",
               textDecorationLine:
-                selectedCategory?.id == item.id ? "underline" : "none",
+                selectedCategory === item.name ? "underline" : "none",
             }}
           >
             {item.name}
@@ -579,9 +581,9 @@ return(
 
                 <View style={styles.deleteItem}>
                   <IcoButton
-                    icon="close-outline"
+                    icon="close"
                     size={24}
-                    color={Colors.green}
+                    color={Colors.darkpink}
                     onPress={() => deleteInFridge(item)}
                   />
 
@@ -738,33 +740,37 @@ return(
             </View>
           )}
 
-          {addedFood &&
-            !messageFoodComponents &&
-            !hideFood &&
-            !selectedUserFilter && (
-              <View style={styles.fridgeView}>
-                <View style={styles.fridgeInstView}>
-                  {/*<Text>{userData.usersfood.length} products in your fridge</Text>*/}
-                  <Pressable
-                    onPress={() => {
-                      navigation.navigate("Recipes");
-                    }}
-                    style={{ marginHorizontal: 8 }}
-                  >
-                    <FontAwesomeIcon
-                      icon={faUtensils}
-                      color={Colors.green}
-                      size={28}
-                    />
-                  </Pressable>
-                  <Text style={styles.fridgeToRecipe}>
-                    Markera de matvaror du vill laga mat på och klicka på
-                    receptikonen
-                  </Text>
-                </View>
-                {renderMyFridge()}
+          {addedFood && !hideFood && !selectedUserFilter && (
+            <View style={styles.fridgeView}>
+              <View style={styles.fridgeInstView}>
+                {/*<Text>{userData.usersfood.length} products in your fridge</Text>*/}
+
+                <Text style={styles.fridgeToRecipe}>
+                  Markera de matvaror du vill laga mat på och klicka på
+                  receptikonen
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Recipes");
+                  }}
+                  style={{
+                    marginHorizontal: 8,
+                    padding: 7,
+                    borderRadius: 30,
+                    borderColor: Colors.green,
+                    borderWidth: 2,
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faUtensils}
+                    color={Colors.green}
+                    size={28}
+                  />
+                </TouchableOpacity>
               </View>
-            )}
+              {renderMyFridge()}
+            </View>
+          )}
 
           {!hideFood &&
             selectedUserFilter &&
@@ -866,9 +872,9 @@ return(
 
                           <View style={styles.deleteItem}>
                             <IcoButton
-                              icon="close-outline"
+                              icon="close"
                               size={24}
-                              color={Colors.green}
+                              color={Colors.darkpink}
                               onPress={() => deleteInFridge(item)}
                             />
 
@@ -905,7 +911,7 @@ return(
                     extraData={foodsLists}
                     keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
-                      <Pressable onPress={() => handlePress(item)}>
+                      <TouchableOpacity onPress={() => handlePress(item)}>
                         <View style={styles.food}>
                           <View style={styles.imageContainer}>
                             <Image
@@ -925,7 +931,7 @@ return(
                         {selectedCatItems.includes(item._id) && (
                           <View style={styles.overlay} />
                         )}
-                      </Pressable>
+                      </TouchableOpacity>
                     )}
                   ></FlatList>
                 </View>
@@ -1164,7 +1170,7 @@ const styles = StyleSheet.create({
     height: 60,
   },
   itemExp: {
-    color: "white",
+    color: Colors.darkgreen,
     fontWeight: "bold",
   },
   userImageView: {

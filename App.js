@@ -221,17 +221,29 @@ function AuthenticatedStack() {
       <Stack.Screen
         name="FavoriteRecipes"
         component={FavoriteRecipes}
-        options={{ title: "Mina favoritrecept" }}
+        options={{
+          title: "Mina favoritrecept",
+          headerTitle: () => <Header title="Mina favoritrecept" />,
+          headerTitleAlign: "center",
+        }}
       />
       <Stack.Screen
         name="Diets"
         component={Diets}
-        options={{ title: "Min kost" }}
+        options={{
+          title: "Min kost",
+          headerTitle: () => <Header title="Min kost" />,
+          headerTitleAlign: "center",
+        }}
       />
       <Stack.Screen
         name="Allergies"
         component={Allergies}
-        options={{ title: "Mina allergier" }}
+        options={{
+          title: "Mina allergier",
+          headerTitle: () => <Header title="Mina allergier" />,
+          headerTitleAlign: "center",
+        }}
       />
     </Stack.Navigator>
   );

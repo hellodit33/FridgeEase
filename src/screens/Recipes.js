@@ -102,11 +102,13 @@ function Recipes({ navigation }) {
               marginRight: 12,
               fontSize: 18,
               fontWeight: "bold",
+
               color: Colors.green,
               textDecorationStyle: "solid",
-              textDecorationColor: Colors.darkpink,
+              textDecorationColor:
+                selectedCategory === item.name ? Colors.darkpink : "none",
               textDecorationLine:
-                selectedCategory?.id == item.id ? "underline" : "none",
+                selectedCategory === item.name ? "underline" : "none",
             }}
           >
             {item.name}
@@ -141,12 +143,14 @@ function Recipes({ navigation }) {
         >
           <View style={styles.foodToRecipeView}>
             <Text style={styles.foodToRecipeText}>{item}</Text>
-            <IcoButton
-              icon="close"
-              size={24}
-              color={Colors.darkpink}
-              onPress={() => removeFoodRecipeFilter(item)}
-            />
+            <TouchableOpacity>
+              <IcoButton
+                icon="close"
+                size={24}
+                color={Colors.darkpink}
+                onPress={() => removeFoodRecipeFilter(item)}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       );

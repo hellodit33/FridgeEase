@@ -171,9 +171,10 @@ function Shopping({ navigation }) {
               fontWeight: "bold",
               color: Colors.green,
               textDecorationStyle: "solid",
-              textDecorationColor: Colors.darkpink,
+              textDecorationColor:
+                selectedCat === item.name ? Colors.darkpink : "none",
               textDecorationLine:
-                selectedCat?.id == item.id ? "underline" : "none",
+                selectedCat === item.name ? "underline" : "none",
             }}
           >
             {item.name}
@@ -214,9 +215,10 @@ function Shopping({ navigation }) {
               fontWeight: "bold",
               color: Colors.green,
               textDecorationStyle: "solid",
-              textDecorationColor: Colors.darkpink,
+              textDecorationColor:
+                selectedCat === item.name ? Colors.darkpink : "none",
               textDecorationLine:
-                selectedCat?.id == item.id ? "underline" : "none",
+                selectedCat === item.name ? "underline" : "none",
             }}
           >
             {item.name}

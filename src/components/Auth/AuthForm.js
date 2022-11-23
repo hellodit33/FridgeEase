@@ -5,6 +5,7 @@ import {
   Text,
   Image,
   ScrollView,
+  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
@@ -69,7 +70,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
       <ScrollView>
         <Input
           style={styles.input}
-          label="E-mail"
+          label="E-mail*"
           onUpdateValue={updateInputValueHandler.bind(this, "email")}
           value={enteredEmail}
           keyboardType="email-address"
@@ -80,7 +81,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
 
         <Input
           style={styles.input}
-          label="Lösenord"
+          label="Lösenord*"
           onUpdateValue={updateInputValueHandler.bind(this, "password")}
           secure
           value={enteredPassword}
@@ -95,7 +96,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         )}
         {!isLogin && (
           <Input
-            label="Bekräfta ditt lösenord"
+            label="Bekräfta ditt lösenord*"
             onUpdateValue={updateInputValueHandler.bind(
               this,
               "confirmPassword"
@@ -108,9 +109,11 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
           />
         )}
         <View style={styles.buttons}>
-          <FlatButton onPress={submitHandler} style={styles.flatbutton}>
-            {isLogin ? "Logga in" : "Bli medlem"}
-          </FlatButton>
+          <TouchableOpacity onPress={submitHandler} style={styles.flatbutton}>
+            <Text style={styles.buttonText}>
+              {isLogin ? "Logga in" : "Bli medlem"}
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -153,6 +156,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   flatbutton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    justifyContent: "center",
+  },
+
+  buttonText: {
+    textAlign: "center",
     color: Colors.green,
+    fontWeight: "bold",
   },
 });

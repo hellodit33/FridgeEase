@@ -29,16 +29,16 @@ function User(props) {
         <View style={styles.buttonsView}>
           <Pressable style={styles.buttons} onPress={FavoritesPress}>
             <Text style={styles.buttonsText}>Mina favoritrecept</Text>
-            <IcoButton icon="heart-outline" color={Colors.darkpink}></IcoButton>
+            <IcoButton icon="heart" color={Colors.middlepink}></IcoButton>
           </Pressable>
           <Pressable style={styles.buttons} onPress={DietPress}>
             <Text style={styles.buttonsText}>Min kost</Text>
-            <IcoButton icon="pizza" color={Colors.darkpink}></IcoButton>
+            <IcoButton icon="pizza" color={Colors.middlepink}></IcoButton>
           </Pressable>
 
           <Pressable style={styles.buttons} onPress={AllergyPress}>
             <Text style={styles.buttonsText}>Mina allergier</Text>
-            <IcoButton icon="alert" color={Colors.darkpink}></IcoButton>
+            <IcoButton icon="alert" color={Colors.middlepink}></IcoButton>
           </Pressable>
           <View style={styles.loggaUtView}>
             <Pressable style={styles.loggaUt}>

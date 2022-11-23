@@ -79,7 +79,7 @@ function Diets(props) {
           <Ionicons
             style={{ marginHorizontal: 8 }}
             name="pizza"
-            color={Colors.darkpink}
+            color={Colors.darkgreen}
             size={40}
           />
           <Text style={styles.text}>
