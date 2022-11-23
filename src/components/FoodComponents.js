@@ -85,6 +85,7 @@ function FoodComponents({ foodIdToAdd, type }) {
             <View style={styles.food}>
               <View style={styles.imageContainer}>
                 <Image
+                  accessibilityLabel={item.logo}
                   style={styles.image}
                   source={{
                     uri:

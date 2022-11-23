@@ -174,7 +174,8 @@ function Recipes({ navigation }) {
   const ingredients2 = recipesData.map((item) => item.ingredients2);
 
   const renderIngredientsObject = () => {
-    for (let i = 0; i < recipesData.length; i++) {
+    let recipesLength = recipesData.length;
+    for (let i = 0; i < recipesLength; i++) {
       console.log("length" + recipesData.length);
       return recipesData.map((item) => {
         const ingredients = recipesData[i].ingredients2[i];
@@ -210,8 +211,11 @@ function Recipes({ navigation }) {
 
   const getCommon = (arr1, arr2) => {
     var common = []; // Array to contain common elements
-    for (var i = 0; i < arr2.length; ++i) {
-      for (var j = 0; j < arr1.length; ++j) {
+    let arr1Length = arr1.length;
+
+    let arr2Length = arr2.length;
+    for (var i = 0; i < arr2Length; ++i) {
+      for (var j = 0; j < arr1Length; ++j) {
         if (arr2[i] == arr1[j]) {
           // If element is in both the arrays
           common.push(arr2[i]); // Push to common array
@@ -226,7 +230,9 @@ function Recipes({ navigation }) {
   console.log(commonElements);
 
   const getTrueOrFalse = (arr1, arr2) => {
-    for (var i = 0; i < arr1.length; ++i) {
+    let array1length = arr1.length;
+
+    for (var i = 0; i < array1length; ++i) {
       const newArray = arr1[i].some((item) => arr2.includes(item));
       return newArray;
     }
@@ -302,6 +308,7 @@ function Recipes({ navigation }) {
               <View>
                 <View style={styles.recipeView}>
                   <Image
+                    accessibilityLabel={item.image}
                     style={styles.image}
                     source={{
                       uri:
@@ -511,6 +518,7 @@ function Recipes({ navigation }) {
               <View>
                 <View style={styles.recipeView}>
                   <Image
+                    accessibilityLabel={item.image}
                     style={styles.image}
                     source={{
                       uri:
@@ -722,6 +730,7 @@ function Recipes({ navigation }) {
                   <View>
                     <View style={styles.recipeView}>
                       <Image
+                        accessibilityLabel={item.image}
                         style={styles.image}
                         source={{
                           uri:
@@ -917,7 +926,7 @@ function Recipes({ navigation }) {
     dispatch(fetchRecipes())
       .then(() => setIsLoading(false))
       .catch(() => setIsLoading(false));
-  }, [dispatch, userData]);
+  }, [dispatch, userIngredients, userData]);
 
   if (!loaded || isLoading) {
     return <LoadingOverlay message="Ge oss en kort stund" />;

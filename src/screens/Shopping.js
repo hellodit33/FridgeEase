@@ -299,7 +299,8 @@ function Shopping({ navigation }) {
     }
     const item = "";
     return fridge.map((fridge) => {
-      for (let i = 0; i < userShopping.length; i++) {
+      let userShoppingLength = userShopping.length;
+      for (let i = 0; i < userShoppingLength; i++) {
         if (fridge.title === userShopping[i].foodName) {
           const name = fridge.title;
           const quantity = userShopping[i].foodQuantity;
@@ -380,6 +381,7 @@ function Shopping({ navigation }) {
                     >
                       <View style={styles.userImageView}>
                         <Image
+                          accessibilityLabel={fridge.logo}
                           style={styles.userImage}
                           source={{
                             uri:
@@ -515,6 +517,7 @@ function Shopping({ navigation }) {
                       >
                         <View style={styles.userImageView}>
                           <Image
+                            accessibilityLabel={fridge.logo}
                             style={styles.userImage}
                             source={{
                               uri:
@@ -822,6 +825,7 @@ function Shopping({ navigation }) {
                           <View style={styles.food}>
                             <View style={styles.imageContainer}>
                               <Image
+                                accessibilityLabel={item.logo}
                                 style={styles.image}
                                 source={{
                                   uri:
@@ -864,6 +868,7 @@ function Shopping({ navigation }) {
                           <View style={styles.food}>
                             <View style={styles.imageContainer}>
                               <Image
+                                accessibilityLabel={item.logo}
                                 style={styles.image}
                                 source={{
                                   uri:
@@ -915,7 +920,8 @@ function Shopping({ navigation }) {
               !hideFood &&
               selectedShoppingFilter &&
               fridge.map((item) => {
-                for (let i = 0; i < fridge.length; i++) {
+                let fridgeLength = fridge.length;
+                for (let i = 0; i < fridgeLength; i++) {
                   if (item.foodCategory === selectedCat) {
                     console.log(item.foodName);
 
@@ -933,6 +939,7 @@ function Shopping({ navigation }) {
                             <View style={styles.userImageView}>
                               <Image
                                 style={styles.userImage}
+                                accessibilityLabel={item.foodLogo}
                                 source={{
                                   uri:
                                     "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +

@@ -6,6 +6,7 @@ function Header(props) {
     <>
       <View style={styles.header}>
         <Image
+          accessibilityLabel="Logo for Fridge Ease"
           style={styles.image}
           source={require("../.././assets/icon2.png")}
         />

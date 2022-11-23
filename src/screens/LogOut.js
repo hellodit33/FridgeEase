@@ -10,41 +10,37 @@ import Colors from "../../constants/Colors";
 function Logout({ onPress }) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const BASE_URL = "https://fridgeease-app.herokuapp.com";
-  const removeCookie = (key) => {
-    if (window !== undefined) {
-      cookie.remove(key, { expires: 1 });
-    }
-    async function logoutHandler() {
-      try {
-        await axios({
-          method: "get",
-          url: `${BASE_URL}/api/user/logout`,
-          withCredentials: true,
-        });
-        then(() => removeCookie("jwt"));
-      } catch (error) {
-        Alert.alert(
-          "Authentication failed",
-          "Could not log you in :( Please check your credentials or try again later."
-        );
-        setIsAuthenticating(true);
-      }
-    }
 
-    if (isLoggingOut) {
-      return <LoadingOverlay message="Vi loggar ut dig..." />;
+  async function logoutHandler() {
+    try {
+      await axios({
+        method: "get",
+        url: `${BASE_URL}/api/user/logout`,
+        withCredentials: true,
+      });
+      then(() => removeCookie("jwt"));
+    } catch (error) {
+      Alert.alert(
+        "Authentication failed",
+        "Could not log you in :( Please check your credentials or try again later."
+      );
+      setIsAuthenticating(true);
     }
+  }
 
-    return (
-      <>
-        <View style={styles.loggaUtView}>
-          <Pressable style={styles.loggaUt}>
-            <Text style={styles.loggaUtText}>Logga ut</Text>
-          </Pressable>
-        </View>
-      </>
-    );
-  };
+  if (isLoggingOut) {
+    return <LoadingOverlay message="Vi loggar ut dig..." />;
+  }
+
+  return (
+    <>
+      <View style={styles.loggaUtView}>
+        <Pressable style={styles.loggaUt}>
+          <Text style={styles.loggaUtText}>Logga ut</Text>
+        </Pressable>
+      </View>
+    </>
+  );
 }
 
 export default Logout;

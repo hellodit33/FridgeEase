@@ -7,9 +7,6 @@ import axios from "axios";
 import { Alert } from "react-native";
 import { useDispatch } from "react-redux";
 import * as authAction from "../../store/redux/actions/auth.actions";
-import * as userAction from "../../store/redux/actions/user.actions";
-
-import { createNextState } from "@reduxjs/toolkit";
 
 export const AuthContext = createContext();
 
@@ -45,8 +42,8 @@ export const AuthProvider = ({ children }) => {
         } else {
           setIsLoading(false);
           Alert.alert(
-            "Authentication failed",
-            "Could not log you in :( Please check your credentials or try again later."
+            "Inloggningen misslyckades.",
+            "Vi kunde inte logga in dig :( Kontrollera dina inloggningsuppgifter eller försök igen senare."
           );
         }
       })
@@ -54,6 +51,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    /* dispatch(authAction.logoutUser());*/
     setIsLoading(true);
     setUserToken(null);
     AsyncStorage.removeItem("userToken");
@@ -66,7 +64,6 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(true);
       let userToken = await AsyncStorage.getItem("userToken");
       let userId = await AsyncStorage.getItem("uid");
-      let userfood = await AsyncStorage.getItem("userfood");
       setUserToken(userToken);
       setUid(userId);
       console.log(userToken);
@@ -76,9 +73,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = ({ email, password }) => {
+  const register = async ({ email, password }) => {
     setIsLoading(true);
-    dispatch(authAction.registerUser({ email, password }))
+    await dispatch(authAction.registerUser({ email, password }))
       .then((resultData) => {
         if (resultData.success) {
           try {
@@ -95,8 +92,8 @@ export const AuthProvider = ({ children }) => {
           setIsLoading(false);
 
           Alert.alert(
-            "Sign up failed.",
-            "Could not create user, please check your input or try again later"
+            "Registreringen misslyckades.",
+            "Vi kunde inte skapa ditt konto. Kontrollera att du har skrivit rätt uppgifter eller försök igen senare."
           );
         }
       })

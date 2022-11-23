@@ -40,7 +40,10 @@ function AuthContent({ isLogin, onAuthenticate }) {
     const passwordsAreEqual = password === confirmPassword;
 
     if (!emailIsValid || !passwordIsValid || (!isLogin && !passwordsAreEqual)) {
-      Alert.alert("Invalid input", "Please check your entered credentials.");
+      Alert.alert(
+        "Ogiltiga uppgifter.",
+        "Kontrollera att du har skrivit rätt inloggningsupgifter."
+      );
       setCredentialsInvalid({
         email: !emailIsValid,
         password: !passwordIsValid,

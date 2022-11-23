@@ -31,13 +31,14 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
       case "email":
         setEnteredEmail(enteredValue);
         break;
-
       case "password":
         setEnteredPassword(enteredValue);
         break;
       case "confirmPassword":
         setEnteredConfirmPassword(enteredValue);
         break;
+      default:
+        "Unknown";
     }
   }
 
@@ -57,6 +58,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
         <Image
           source={require("../../../assets/icon2.png")}
           style={styles.imageTitle}
+          accessibilityLabel="logo for Fridge Ease"
         />
         {isLogin ? (
           <Text style={styles.title}>Logga in</Text>

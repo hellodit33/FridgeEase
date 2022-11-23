@@ -2,6 +2,7 @@ export const REGISTER_USER_SUCCESS = "REGISTER_USER_SUCCESS";
 export const REGISTER_USER_FAIL = "REGISTER_USER_FAIL";
 export const LOGIN_USER_SUCCESS = "LOGIN_USER_SUCCESS";
 export const LOGIN_USER_FAIL = "LOGIN_USER_FAIL";
+export const LOG_OUT = LOG_OUT;
 
 const BASE_URL = "https://fridgeease-app.herokuapp.com";
 export const registerUser = (authData) => {
@@ -66,5 +67,16 @@ export const loginUser = (authData) => {
       });
     }
     return resultData;
+  };
+};
+
+export const logoutUser = () => {
+  return async (dispatch) => {
+    await fetch(`${BASE_URL}/api/user/logout`, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   };
 };

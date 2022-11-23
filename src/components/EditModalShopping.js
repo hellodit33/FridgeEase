@@ -110,6 +110,7 @@ function EditModalShopping(props) {
           ]}
         >
           <Image
+            accessibilityLabel={props.passedData.logo}
             style={styles.userImage}
             source={{
               uri:

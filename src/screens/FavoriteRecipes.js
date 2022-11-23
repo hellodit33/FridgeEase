@@ -70,7 +70,8 @@ function FavoriteRecipes({ route, navigation }) {
       }
     };
     return recipesData.map((item) => {
-      for (let i = 0; i < favoriteRecipes.length; i++) {
+      let favoriteRecipesLength = favoriteRecipes.length;
+      for (let i = 0; i < favoriteRecipesLength; i++) {
         if (item._id === favoriteRecipes[i]) {
           const renderIngredients = () => {
             return item.ingredients2.slice(0, 4).map((item) => {
@@ -103,6 +104,7 @@ function FavoriteRecipes({ route, navigation }) {
                   </Pressable>
                   <View style={styles.recipeView}>
                     <Image
+                      accessibilityLabel={item.image}
                       style={styles.image}
                       source={{
                         uri:

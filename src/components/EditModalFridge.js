@@ -173,6 +173,7 @@ function EditModalFridge(props) {
       >
         <View style={styles.modalTitle}>
           <Image
+            accessibilityLabel={props.passedData.logo}
             style={styles.userImage}
             source={{
               uri:

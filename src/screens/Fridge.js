@@ -170,7 +170,7 @@ function Fridge({ props, navigation, route }) {
 
   const foodsLists = useSelector((state) => state.intoFridgeReducer);
   const [foodlist, setFoodlist] = useState([foodsLists]);
-  const [addFood, setAddedFood] = useState(false);
+  const [addedFood, setAddedFood] = useState(false);
   const [addedItems, setAddedItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedCatItems, setSelectedCatItems] = useState([]);
@@ -186,9 +186,12 @@ function Fridge({ props, navigation, route }) {
 
   function findCommonElement(array1, array2) {
     // Loop for array1
-    for (let i = 0; i < array1.length; i++) {
+    let firstArrayLength = array1.length;
+    let secondArrayLength = array2.length;
+
+    for (let i = 0; i < firstArrayLength; i++) {
       // Loop for array2
-      for (let j = 0; j < array2.length; j++) {
+      for (let j = 0; j < secondArrayLength; j++) {
         // Compare the element of each and
         // every element from both of the
         // arrays
@@ -479,6 +482,7 @@ return(
               <View style={styles.userFridgeItem}>
                 <View style={styles.userImageView}>
                   <Image
+                    accessibilityLabel={item.foodLogo}
                     style={styles.userImage}
                     source={{
                       uri:
@@ -620,9 +624,10 @@ return(
 
   useEffect(() => {
     setIsLoading(true);
-    if (userData.usersfood) {
+
+    if (userData.usersfood && userData.usersfood.length !== 0) {
       setAddedFood(true);
-    } else if (!userData.usersfood) {
+    } else {
       setAddedFood(false);
     }
     dispatch(fetchFood())
@@ -643,6 +648,9 @@ return(
   const hello = () => {
     setHideFood(false);
     setFoodComponents(false);
+    setSelectedItems([]);
+    setSelectedNames([]);
+    setSelectedCatItems([]);
   };
   /*const addNewFood = (id) => {
     setFood((userData) => {
@@ -720,48 +728,49 @@ return(
             </View>
           </View>
 
-          {!addFood &&
-            messageFoodComponents &&
-            !hideFood &&
-            !selectedUserFilter && (
-              <View style={styles.message}>
-                <Text style={styles.textMessage}>
-                  Ditt kylskåp är tomt, lägg till matvaror för att se vilka
-                  matvaror som snart behöver ätas upp och få inspiration till
-                  matlagning!
-                </Text>
-              </View>
-            )}
-
-          {addFood && !hideFood && !selectedUserFilter && (
-            <View style={styles.fridgeView}>
-              <View style={styles.fridgeInstView}>
-                {/*<Text>{userData.usersfood.length} products in your fridge</Text>*/}
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate("Recipes");
-                  }}
-                  style={{ marginHorizontal: 8 }}
-                >
-                  <FontAwesomeIcon
-                    icon={faUtensils}
-                    color={Colors.green}
-                    size={28}
-                  />
-                </Pressable>
-                <Text style={styles.fridgeToRecipe}>
-                  Markera de matvaror du vill laga mat på och klicka på
-                  receptikonen
-                </Text>
-              </View>
-              {renderMyFridge()}
+          {!addedFood && !hideFood && !selectedUserFilter && (
+            <View style={styles.message}>
+              <Text style={styles.textMessage}>
+                Ditt kylskåp är tomt, lägg till matvaror för att se vilka
+                matvaror som snart behöver ätas upp och få inspiration till
+                matlagning!
+              </Text>
             </View>
           )}
+
+          {addedFood &&
+            !messageFoodComponents &&
+            !hideFood &&
+            !selectedUserFilter && (
+              <View style={styles.fridgeView}>
+                <View style={styles.fridgeInstView}>
+                  {/*<Text>{userData.usersfood.length} products in your fridge</Text>*/}
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate("Recipes");
+                    }}
+                    style={{ marginHorizontal: 8 }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faUtensils}
+                      color={Colors.green}
+                      size={28}
+                    />
+                  </Pressable>
+                  <Text style={styles.fridgeToRecipe}>
+                    Markera de matvaror du vill laga mat på och klicka på
+                    receptikonen
+                  </Text>
+                </View>
+                {renderMyFridge()}
+              </View>
+            )}
 
           {!hideFood &&
             selectedUserFilter &&
             userFood.map((item) => {
-              for (let i = 0; i < userFood.length; i++) {
+              let userFoodLength = userFood.length;
+              for (let i = 0; i < userFoodLength; i++) {
                 if (item.foodCategory === selectedCategory) {
                   console.log(item.foodName);
 
@@ -779,6 +788,7 @@ return(
                         <View style={styles.userFridgeItem}>
                           <View style={styles.userImageView}>
                             <Image
+                              accessibilityLabel={item.foodLogo}
                               style={styles.userImage}
                               source={{
                                 uri:
@@ -899,6 +909,7 @@ return(
                         <View style={styles.food}>
                           <View style={styles.imageContainer}>
                             <Image
+                              accessibilityLabel={item.logo}
                               style={styles.image}
                               source={{
                                 uri:
@@ -937,6 +948,7 @@ return(
                         <View style={styles.food}>
                           <View style={styles.imageContainer}>
                             <Image
+                              accessibilityLabel={item.logo}
                               style={styles.image}
                               source={{
                                 uri:

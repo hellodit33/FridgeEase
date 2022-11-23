@@ -143,6 +143,7 @@ function RecipeInDetail({ route, navigation }) {
         <View style={styles.recipeDetails}>
           <View style={styles.recipeView}>
             <Image
+              accessibilityLabel={recipeToShow.image}
               style={styles.image}
               source={{
                 uri:
@@ -173,7 +174,25 @@ function RecipeInDetail({ route, navigation }) {
                   },
                 ]}
               >
-                <Text style={styles.recipesText}>
+                <Text
+                  style={[
+                    styles.recipesText,
+                    {
+                      color:
+                        recipeToShow.climateImpact === "A"
+                          ? "white"
+                          : recipeToShow.climateImpact === "B"
+                          ? "white"
+                          : recipeToShow.climateImpact === "C"
+                          ? "black"
+                          : recipeToShow.climateImpact === "D"
+                          ? "black"
+                          : recipeToShow.climateImpact === "E"
+                          ? "white"
+                          : null,
+                    },
+                  ]}
+                >
                   {recipeToShow.climateImpact === "A"
                     ? "Mycket låg klimatpåverkan"
                     : recipeToShow.climateImpact === "B"
@@ -364,7 +383,7 @@ function RecipeInDetail({ route, navigation }) {
               }
               linkText={(url) =>
                 url === "https://www.coop.se/hallbarhet/hallbarhetsdeklaration/"
-                  ? "Läs mer om hållbarhetsdeklaration och klimatpåverkan"
+                  ? "Läs mer om hållbarhetsdeklaration och klimatpåverkan på Coop.se"
                   : url
               }
             >
