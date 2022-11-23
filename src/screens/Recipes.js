@@ -161,7 +161,7 @@ function Recipes({ navigation }) {
         extraData={userIngredients}
         horizontal
         showsHorizontalScrollIndicator={true}
-        keyExtractor={() => Math.random()}
+        keyExtractor={() => Math.random(userData._id + userData._id)}
         renderItem={renderFood}
         contentContainerStyle={{}}
       ></FlatList>
@@ -199,8 +199,10 @@ function Recipes({ navigation }) {
                 size={20}
                 style={{ marginRight: 20 }}
               />
-              <Text key={() => Math.random()}>{ingredients.quantity}</Text>
-              <Text key={() => Math.random()}>{ingredients.name}</Text>
+              <Text key={() => Math.random(item._id + item._id)}>
+                {ingredients.quantity}
+              </Text>
+              <Text key={() => Math.random(item._id)}>{ingredients.name}</Text>
             </TouchableOpacity>
           </>
         );
@@ -302,7 +304,7 @@ function Recipes({ navigation }) {
           horizontal
           data={selectedRecipes}
           extraData={selectedRecipes}
-          keyExtractor={() => Math.random()}
+          keyExtractor={() => Math.random(item._id + item._id)}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.recipes}
@@ -491,7 +493,7 @@ function Recipes({ navigation }) {
                       data={item.ingredients2}
                       numColumns={3}
                       contentContainerStyle={styles.centerItems}
-                      keyExtractor={() => Math.random()}
+                      keyExtractor={() => Math.random(item._id)}
                       renderItem={({ item }) => (
                         <View style={styles.ingredientsItemText}>
                           <Text style={styles.recipesText}>{item.name}</Text>
@@ -512,7 +514,7 @@ function Recipes({ navigation }) {
           horizontal
           data={recipesData}
           extraData={recipesData}
-          keyExtractor={() => Math.random()}
+          keyExtractor={() => Math.random(userData._id * 3)}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.recipes}
@@ -701,7 +703,7 @@ function Recipes({ navigation }) {
                       data={item.ingredients2}
                       numColumns={3}
                       contentContainerStyle={styles.centerItems}
-                      keyExtractor={() => Math.random()}
+                      keyExtractor={() => Math.random(item.quantity)}
                       renderItem={({ item }) => (
                         <View style={styles.ingredientsItemText}>
                           <Text style={styles.recipesText}>{item.name}</Text>
@@ -722,7 +724,7 @@ function Recipes({ navigation }) {
           horizontal
           data={recipesData}
           extraData={recipesData}
-          keyExtractor={() => Math.random()}
+          keyExtractor={() => Math.random(userData._id * 10)}
           renderItem={({ item }) => {
             if (item.category === selectedCategory) {
               return (
@@ -895,7 +897,7 @@ function Recipes({ navigation }) {
                           data={item.ingredients2}
                           numColumns={3}
                           contentContainerStyle={styles.centerItems}
-                          keyExtractor={() => Math.random()}
+                          keyExtractor={() => Math.random(userData._id * 20)}
                           renderItem={({ item }) => (
                             <View style={styles.ingredientsItemText}>
                               <Text style={styles.recipesText}>

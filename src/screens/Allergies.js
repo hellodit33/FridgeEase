@@ -16,6 +16,7 @@ import { getUser, updateAllergy } from "../../store/redux/actions/user.actions";
 import { useDispatch, useSelector } from "react-redux";
 import Checkbox from "expo-checkbox";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import UpdateButton from "../UI/UpdateButton";
 
 function Allergies(props) {
   const items = [
@@ -75,14 +76,17 @@ function Allergies(props) {
             passar dig i vår app. Det går alltid att justera dina allergier.
           </Text>
         </View>
-        <View style={styles.updateView}>
+        <UpdateButton onPress={() => updateAllergies()}>
+          Uppdatera dina allergier
+        </UpdateButton>
+        {/*<View style={styles.updateView}>
           <Pressable
             style={styles.updateButton}
             onPress={() => updateAllergies()}
           >
             <Text style={styles.updateText}>Uppdatera dina allergier</Text>
           </Pressable>
-        </View>
+        </View>*/}
         <View style={styles.selectAllergy}>
           <MultiSelect
             hideTags

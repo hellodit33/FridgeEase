@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { useContext, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Colors from "../../constants/Colors";
@@ -27,25 +34,25 @@ function User(props) {
     <>
       <View style={styles.main}>
         <View style={styles.buttonsView}>
-          <Pressable style={styles.buttons} onPress={FavoritesPress}>
+          <TouchableOpacity style={styles.buttons} onPress={FavoritesPress}>
             <Text style={styles.buttonsText}>Mina favoritrecept</Text>
             <IcoButton icon="heart" color={Colors.middlepink}></IcoButton>
-          </Pressable>
-          <Pressable style={styles.buttons} onPress={DietPress}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttons} onPress={DietPress}>
             <Text style={styles.buttonsText}>Min kost</Text>
             <IcoButton icon="pizza" color={Colors.middlepink}></IcoButton>
-          </Pressable>
+          </TouchableOpacity>
 
-          <Pressable style={styles.buttons} onPress={AllergyPress}>
+          <TouchableOpacity style={styles.buttons} onPress={AllergyPress}>
             <Text style={styles.buttonsText}>Mina allergier</Text>
             <IcoButton icon="alert" color={Colors.middlepink}></IcoButton>
-          </Pressable>
+          </TouchableOpacity>
           <View style={styles.loggaUtView}>
-            <Pressable style={styles.loggaUt}>
+            <TouchableOpacity style={styles.loggaUt}>
               <Text style={styles.loggaUtText} onPress={() => logout()}>
                 Logga ut
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

@@ -162,6 +162,7 @@ function Shopping({ navigation }) {
             justifyContent: "center",
           }}
           onPress={() => onFridgeCategory(item)}
+          key={() => Math.random(item._id * 10)}
         >
           <Text
             style={{
@@ -187,7 +188,7 @@ function Shopping({ navigation }) {
         data={categories}
         horizontal
         showsHorizontalScrollIndicator={true}
-        keyExtractor={(item) => Math.random(item.id)}
+        keyExtractor={(item) => Math.random(item.id + item.id)}
         renderItem={renderItem}
         contentContainerStyle={{}}
       ></FlatList>
@@ -491,7 +492,7 @@ function Shopping({ navigation }) {
               return (
                 <>
                   <ScrollView
-                    key={() => Math.random(id)}
+                    key={() => Math.random(id * 30)}
                     style={styles.shoppingListScroll}
                     refreshControl={
                       <RefreshControl
@@ -818,7 +819,7 @@ function Shopping({ navigation }) {
                       numColumns={3}
                       data={foodlist}
                       extraData={foodlist}
-                      keyExtractor={(item) => Math.random(item._id)}
+                      keyExtractor={(item) => Math.random(item._id * 10)}
                       renderItem={({ item }) => (
                         <Pressable
                           /* onLongPress={FoodDetails}*/
@@ -1057,12 +1058,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue,
     fontFamily: "Intermedium",
     flex: 1,
+    flexDirection: "row",
   },
   main: {
     backgroundColor: Colors.blue,
     fontFamily: "Interbold",
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "row",
   },
   fridgeView: {
     backgroundColor: Colors.blue,

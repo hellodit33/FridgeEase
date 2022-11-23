@@ -15,6 +15,7 @@ import LoadingOverlay from "../UI/LoadingOverlay";
 import { getUser, updateDiet } from "../../store/redux/actions/user.actions";
 import { useDispatch, useSelector } from "react-redux";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import UpdateButton from "../UI/UpdateButton";
 
 function Diets(props) {
   const items = [
@@ -86,11 +87,10 @@ function Diets(props) {
             du ändrar dig.
           </Text>
         </View>
-        <View style={styles.updateView}>
-          <Pressable style={styles.updateButton} onPress={() => updateDiets()}>
-            <Text style={styles.updateText}>Uppdatera din kost</Text>
-          </Pressable>
-        </View>
+        <UpdateButton onPress={() => updateDiets()}>
+          Uppdatera din kost
+        </UpdateButton>
+
         <View style={styles.selectDiet}>
           <MultiSelect
             hideTags

@@ -993,6 +993,7 @@ const styles = StyleSheet.create({
     fontFamily: "Interbold",
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "row",
   },
   message: {
     flex: 1,
@@ -1004,6 +1005,7 @@ const styles = StyleSheet.create({
     color: Colors.green,
     textAlign: "center",
     width: "80%",
+    flexDirection: "row",
   },
   fridge: {
     backgroundColor: Colors.blue,

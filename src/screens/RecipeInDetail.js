@@ -80,8 +80,10 @@ function RecipeInDetail({ route, navigation }) {
               size={20}
               style={{ marginRight: 20 }}
             />
-            <Text key={() => Math.random()}>{item.quantity}</Text>
-            <Text key={() => Math.random()}> {item.name}</Text>
+            <Text key={() => Math.random(item.quantity * 3)}>
+              {item.quantity}
+            </Text>
+            <Text key={() => Math.random(item.quantity * 4)}> {item.name}</Text>
           </TouchableOpacity>
         </>
       );

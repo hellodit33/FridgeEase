@@ -91,7 +91,7 @@ function FavoriteRecipes({ route, navigation }) {
               <TouchableOpacity
                 style={styles.recipes}
                 recipeId={item._id}
-                key={() => Math.random(item._id)}
+                key={() => Math.random(item._id * 3)}
                 onPress={() => recipePressHandler(item._id)}
                 onLongPress={() => removeFavRecipe(item)}
               >
