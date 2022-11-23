@@ -73,14 +73,14 @@ function FavoriteRecipes({ route, navigation }) {
       for (let i = 0; i < favoriteRecipes.length; i++) {
         if (item._id === favoriteRecipes[i]) {
           const renderIngredients = () => {
-            return item.ingredients.map((item) => {
+            return item.ingredients2.slice(0, 4).map((item) => {
               return (
                 <>
-                  <TouchableOpacity style={styles.ingredientsItem}>
+                  <View style={styles.ingredientsItem}>
                     <View style={styles.ingredientsItemText}>
-                      <Text key={() => Math.random()}>{item}</Text>
+                      <Text key={() => Math.random()}>{item.name}</Text>
                     </View>
-                  </TouchableOpacity>
+                  </View>
                 </>
               );
             });
@@ -133,7 +133,25 @@ function FavoriteRecipes({ route, navigation }) {
                           },
                         ]}
                       >
-                        <Text style={styles.recipesText}>
+                        <Text
+                          style={[
+                            styles.recipesText,
+                            {
+                              color:
+                                item.climateImpact === "A"
+                                  ? "white"
+                                  : item.climateImpact === "B"
+                                  ? "white"
+                                  : item.climateImpact === "C"
+                                  ? "black"
+                                  : item.climateImpact === "D"
+                                  ? "black"
+                                  : item.climateImpact === "E"
+                                  ? "black"
+                                  : null,
+                            },
+                          ]}
+                        >
                           {item.climateImpact === "A"
                             ? "Mycket låg klimatpåverkan"
                             : item.climateImpact === "B"
@@ -260,8 +278,7 @@ function FavoriteRecipes({ route, navigation }) {
                     <Text style={styles.recipesText}>
                       Du behöver bland annat:
                     </Text>
-
-                    {renderIngredients()}
+                    <View>{renderIngredients()}</View>
                     {/*<FlatList
                             data={item.ingredients}
                             numColumns={3}
@@ -346,7 +363,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     width: 300,
-    height: 600,
+    height: 500,
     borderRadius: 30,
   },
   icon: {
@@ -474,20 +491,20 @@ const styles = StyleSheet.create({
   ingredientsView: {
     marginTop: 10,
     padding: 10,
-    height: 250,
+    height: 150,
     backgroundColor: Colors.lightblue,
     borderBottomEndRadius: 20,
     borderBottomStartRadius: 20,
   },
-  ingredientsItem: { flexDirection: "row" },
+  ingredientsItem: {
+    width: "50%",
+  },
   ingredientsItemText: {
-    alignItems: "center",
-    borderRadius: 30,
-    borderColor: Colors.green,
-    borderWidth: 2,
     backgroundColor: "white",
-    padding: 7,
+    borderRadius: 30,
     margin: 2,
+
+    paddingHorizontal: 10,
   },
   recipesText: {
     fontFamily: "Intermedium",

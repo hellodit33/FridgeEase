@@ -332,7 +332,25 @@ function Recipes({ navigation }) {
                         },
                       ]}
                     >
-                      <Text style={styles.recipesText}>
+                      <Text
+                        style={[
+                          styles.recipesText,
+                          {
+                            color:
+                              item.climateImpact === "A"
+                                ? "white"
+                                : item.climateImpact === "B"
+                                ? "white"
+                                : item.climateImpact === "C"
+                                ? "black"
+                                : item.climateImpact === "D"
+                                ? "black"
+                                : item.climateImpact === "E"
+                                ? "black"
+                                : null,
+                          },
+                        ]}
+                      >
                         {item.climateImpact === "A"
                           ? "Mycket låg klimatpåverkan"
                           : item.climateImpact === "B"
@@ -523,7 +541,25 @@ function Recipes({ navigation }) {
                         },
                       ]}
                     >
-                      <Text style={styles.recipesText}>
+                      <Text
+                        style={[
+                          styles.recipesText,
+                          {
+                            color:
+                              item.climateImpact === "A"
+                                ? "white"
+                                : item.climateImpact === "B"
+                                ? "white"
+                                : item.climateImpact === "C"
+                                ? "black"
+                                : item.climateImpact === "D"
+                                ? "black"
+                                : item.climateImpact === "E"
+                                ? "black"
+                                : null,
+                          },
+                        ]}
+                      >
                         {item.climateImpact === "A"
                           ? "Mycket låg klimatpåverkan"
                           : item.climateImpact === "B"
@@ -995,7 +1031,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     width: 300,
-    height: 440,
+    height: 460,
 
     borderRadius: 30,
   },
@@ -1119,7 +1155,7 @@ const styles = StyleSheet.create({
   ingredientsView: {
     marginTop: 10,
 
-    height: 120,
+    height: 140,
     backgroundColor: Colors.lightblue,
     borderBottomEndRadius: 20,
     borderBottomStartRadius: 20,
@@ -1132,11 +1168,9 @@ const styles = StyleSheet.create({
   ingredientsItemText: {
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 30,
-    borderColor: Colors.green,
-    borderWidth: 2,
+    paddingHorizontal: 5,
     backgroundColor: "white",
-    padding: 7,
+    borderRadius: 30,
     margin: 2,
   },
   recipesText: {
