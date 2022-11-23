@@ -868,13 +868,22 @@ function Recipes({ navigation }) {
   }
 
   const [loaded] = useFonts({
-    alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
     Intermedium: require("../../assets/fonts/Inter-Medium.ttf"),
     Interbold: require("../../assets/fonts/Inter-Bold.ttf"),
     Interlight: require("../../assets/fonts/Inter-Light.ttf"),
   });
 
-  if (!loaded) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    dispatch(getUser());
+    dispatch(fetchRecipes())
+      .then(() => setIsLoading(false))
+      .catch(() => setIsLoading(false));
+  }, [dispatch, userData]);
+
+  if (!loaded || isLoading) {
     return <LoadingOverlay message="Ge oss en kort stund" />;
   }
 

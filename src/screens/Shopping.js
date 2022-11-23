@@ -8,13 +8,14 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
+  RefreshControl,
   Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../UI/LoadingOverlay.js";
 import Colors from "../../constants/Colors.js";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import IcoButton from "../UI/IcoButton.js";
 import EditModalShopping from "../components/EditModalShopping.js";
 import { useDispatch } from "react-redux";
@@ -33,9 +34,19 @@ import {
 } from "../../store/redux/actions/fridge.actions.js";
 import { Ionicons } from "@expo/vector-icons";
 import { removeShoppingList } from "../../store/redux/actions/user.actions.js";
-import id from "date-fns/locale/id/index";
 import ShoppingDoneModal from "../components/ShoppingDoneModal.js";
+
 function Shopping({ navigation }) {
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   const handlePressToShoppingList = (food) => {
     if (selectedItems.includes(food._id)) {
       const newSelect = selectedItems.filter((foodId) => foodId !== food._id);
@@ -120,19 +131,25 @@ function Shopping({ navigation }) {
   const [categories, setCategories] = useState(categoryData);
   const [selectedCat, setSelectedCat] = useState(null);
   const [selectedShoppingFilter, setSelectedShoppingFilter] = useState(false);
-  const [selectedFridgeFilter, setSelectedFridgeFilter] = useState(false);
+  const [selectedShoppingFridgeFilter, setSelectedShoppingFridgeFilter] =
+    useState(false);
+
   async function onShoppingCategory(category) {
     setSelectedShoppingFilter(true);
+    setSelectedShoppingFridgeFilter(false);
 
     setSelectedCat(category.name);
     console.log(selectedCat);
   }
 
-  async function onFridgeCategory(category) {
-    setSelectedFridgeFilter(true);
+  function onFridgeCategory(category) {
+    setSelectedShoppingFridgeFilter(true);
+    setSelectedShoppingFilter(false);
+
     setSelectedCat(category.name);
     console.log(selectedCat);
   }
+
   function renderFridgeCategories() {
     const renderItem = ({ item }) => {
       return (
@@ -333,131 +350,274 @@ function Shopping({ navigation }) {
               await dispatch(getUser(userData._id));
             }
           };
-          return (
-            <>
-              <ScrollView
-                key={() => Math.random(id)}
-                style={styles.shoppingListScroll}
-              >
-                <Pressable
-                  onPress={() =>
-                    handlePressToShopping(fridge)
-                  } /*onPress={() => handlePressToRecipe(item)}*/
+          if (!selectedShoppingFilter || selectedCat === "Allt")
+            return (
+              <>
+                <ScrollView
+                  key={() => Math.random(id)}
+                  style={styles.shoppingListScroll}
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
                 >
-                  <View
-                    style={[
-                      styles.userFridgeItem,
-                      {
-                        backgroundColor: selectToShopping.includes(fridge._id)
-                          ? Colors.blue
-                          : "white",
-                      },
-                    ]}
+                  <Pressable
+                    onPress={() =>
+                      handlePressToShopping(fridge)
+                    } /*onPress={() => handlePressToRecipe(item)}*/
                   >
-                    <View style={styles.userImageView}>
-                      <Image
-                        style={styles.userImage}
-                        source={{
-                          uri:
-                            "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
-                            fridge.logo,
-                        }}
-                      ></Image>
-                    </View>
-                    <View style={styles.itemView}>
-                      <Text style={styles.itemName}>{fridge.title}</Text>
-                      {existingBioQuality === true && (
-                        <Text style={styles.itemEko}>Eko</Text>
-                      )}
-                    </View>
-                    {quantity ? (
-                      <View style={styles.quantityView}>
-                        <Text style={styles.quantityText}>{quantity}</Text>
-                      </View>
-                    ) : (
-                      <View style={styles.quantityView}>
-                        <Text style={styles.quantityText}>Kvantité?</Text>
-                      </View>
-                    )}
                     <View
                       style={[
+                        styles.userFridgeItem,
                         {
-                          backgroundColor:
-                            fridge.carbon === "A"
-                              ? Colors.darkgreen
-                              : fridge.carbon === "B"
-                              ? Colors.lightgreen
-                              : fridge.carbon === "C"
-                              ? Colors.lightorange
-                              : fridge.carbon === "D"
-                              ? Colors.orange
-                              : fridge.carbon === "E"
-                              ? Colors.red
-                              : null,
+                          backgroundColor: selectToShopping.includes(fridge._id)
+                            ? Colors.blue
+                            : "white",
                         },
-                        styles.carbonView,
                       ]}
                     >
-                      {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
-                      <Text style={styles.itemCarbon}>{fridge.carbon}</Text>
-                      {/*renderCarbon({ fridge })*/}
-                    </View>
-                    {selectToShopping.includes(fridge._id) && (
-                      <View style={styles.iconItem}>
-                        <Ionicons
-                          name="checkmark-done"
-                          size={29}
-                          color={Colors.green}
-                        />
-                      </View>
-                    )}
-                    {!selectToShopping.includes(fridge._id) && (
-                      <View style={styles.iconItem}>
-                        <IcoButton
-                          icon="create-outline"
-                          size={24}
-                          color={Colors.green}
-                          onPress={() => {
-                            openModal({
-                              name,
-                              id,
-                              quantity,
-                              bioquality,
-                              existingBioQuality,
-                              carbon,
-                              logo,
-                            });
+                      <View style={styles.userImageView}>
+                        <Image
+                          style={styles.userImage}
+                          source={{
+                            uri:
+                              "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                              fridge.logo,
                           }}
-                        />
+                        ></Image>
                       </View>
-                    )}
-
-                    {!selectToShopping.includes(fridge._id) && (
-                      <View style={styles.iconItem}>
-                        <IcoButton
-                          icon="close"
-                          size={24}
-                          color={Colors.darkpink}
-                          onPress={() => removeShoppingItem()}
-                        />
-
-                        <EditModalShopping
-                          visible={modalIsVisible}
-                          passedData={passedData}
-                          closeModal={closeModal}
-                          removeFoodInShopping={removeInShopping}
-                          editFoodInShopping={editInShopping}
-                        />
+                      <View style={styles.itemView}>
+                        <Text style={styles.itemName}>{fridge.title}</Text>
+                        {existingBioQuality === true && (
+                          <Text style={styles.itemEko}>Eko</Text>
+                        )}
                       </View>
-                    )}
-                    {selectToShopping.includes(fridge._id) && (
-                      <View style={styles.overlayToShopping} />
-                    )}
-                  </View>
-                </Pressable>
-              </ScrollView>
-            </>
-          );
+                      {quantity ? (
+                        <View style={styles.quantityView}>
+                          <Text style={styles.quantityText}>{quantity}</Text>
+                        </View>
+                      ) : (
+                        <View style={styles.quantityView}>
+                          <Text style={styles.quantityText}>Kvantité?</Text>
+                        </View>
+                      )}
+                      <View
+                        style={[
+                          {
+                            backgroundColor:
+                              fridge.carbon === "A"
+                                ? Colors.darkgreen
+                                : fridge.carbon === "B"
+                                ? Colors.lightgreen
+                                : fridge.carbon === "C"
+                                ? Colors.lightorange
+                                : fridge.carbon === "D"
+                                ? Colors.orange
+                                : fridge.carbon === "E"
+                                ? Colors.red
+                                : null,
+                          },
+                          styles.carbonView,
+                        ]}
+                      >
+                        {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
+                        <Text style={styles.itemCarbon}>{fridge.carbon}</Text>
+                        {/*renderCarbon({ fridge })*/}
+                      </View>
+                      {selectToShopping.includes(fridge._id) && (
+                        <View style={styles.iconItem}>
+                          <Ionicons
+                            name="checkmark-done"
+                            size={29}
+                            color={Colors.green}
+                          />
+                        </View>
+                      )}
+                      {!selectToShopping.includes(fridge._id) && (
+                        <View style={styles.iconItem}>
+                          <IcoButton
+                            icon="create-outline"
+                            size={24}
+                            color={Colors.green}
+                            onPress={() => {
+                              openModal({
+                                name,
+                                id,
+                                quantity,
+                                bioquality,
+                                existingBioQuality,
+                                carbon,
+                                logo,
+                              });
+                            }}
+                          />
+                        </View>
+                      )}
+
+                      {!selectToShopping.includes(fridge._id) && (
+                        <View style={styles.iconItem}>
+                          <IcoButton
+                            icon="close"
+                            size={24}
+                            color={Colors.darkpink}
+                            onPress={() => removeShoppingItem()}
+                          />
+
+                          <EditModalShopping
+                            visible={modalIsVisible}
+                            passedData={passedData}
+                            closeModal={closeModal}
+                            removeFoodInShopping={removeInShopping}
+                            editFoodInShopping={editInShopping}
+                          />
+                        </View>
+                      )}
+                      {selectToShopping.includes(fridge._id) && (
+                        <View style={styles.overlayToShopping} />
+                      )}
+                    </View>
+                  </Pressable>
+                </ScrollView>
+              </>
+            );
+          else if (selectedShoppingFilter) {
+            if (selectedCat === fridge.category && selectedCat !== "Allt")
+              return (
+                <>
+                  <ScrollView
+                    key={() => Math.random(id)}
+                    style={styles.shoppingListScroll}
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                      />
+                    }
+                  >
+                    <Pressable
+                      onPress={() =>
+                        handlePressToShopping(fridge)
+                      } /*onPress={() => handlePressToRecipe(item)}*/
+                    >
+                      <View
+                        style={[
+                          styles.userFridgeItem,
+                          {
+                            backgroundColor: selectToShopping.includes(
+                              fridge._id
+                            )
+                              ? Colors.blue
+                              : "white",
+                          },
+                        ]}
+                      >
+                        <View style={styles.userImageView}>
+                          <Image
+                            style={styles.userImage}
+                            source={{
+                              uri:
+                                "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                                fridge.logo,
+                            }}
+                          ></Image>
+                        </View>
+                        <View style={styles.itemView}>
+                          <Text style={styles.itemName}>{fridge.title}</Text>
+                          {existingBioQuality === true && (
+                            <Text style={styles.itemEko}>Eko</Text>
+                          )}
+                        </View>
+                        {quantity ? (
+                          <View style={styles.quantityView}>
+                            <Text style={styles.quantityText}>{quantity}</Text>
+                          </View>
+                        ) : (
+                          <View style={styles.quantityView}>
+                            <Text style={styles.quantityText}>Kvantité?</Text>
+                          </View>
+                        )}
+                        <View
+                          style={[
+                            {
+                              backgroundColor:
+                                fridge.carbon === "A"
+                                  ? Colors.darkgreen
+                                  : fridge.carbon === "B"
+                                  ? Colors.lightgreen
+                                  : fridge.carbon === "C"
+                                  ? Colors.lightorange
+                                  : fridge.carbon === "D"
+                                  ? Colors.orange
+                                  : fridge.carbon === "E"
+                                  ? Colors.red
+                                  : null,
+                            },
+                            styles.carbonView,
+                          ]}
+                        >
+                          {/*<Text style={styles.itemCarbon}>{item.foodCarbon} CO2</Text>*/}
+                          <Text style={styles.itemCarbon}>{fridge.carbon}</Text>
+                          {/*renderCarbon({ fridge })*/}
+                        </View>
+                        {selectToShopping.includes(fridge._id) && (
+                          <View style={styles.iconItem}>
+                            <Ionicons
+                              name="checkmark-done"
+                              size={29}
+                              color={Colors.green}
+                            />
+                          </View>
+                        )}
+                        {!selectToShopping.includes(fridge._id) && (
+                          <View style={styles.iconItem}>
+                            <IcoButton
+                              icon="create-outline"
+                              size={24}
+                              color={Colors.green}
+                              onPress={() => {
+                                openModal({
+                                  name,
+                                  id,
+                                  quantity,
+                                  bioquality,
+                                  existingBioQuality,
+                                  carbon,
+                                  logo,
+                                });
+                              }}
+                            />
+                          </View>
+                        )}
+
+                        {!selectToShopping.includes(fridge._id) && (
+                          <View style={styles.iconItem}>
+                            <IcoButton
+                              icon="close"
+                              size={24}
+                              color={Colors.darkpink}
+                              onPress={() => removeShoppingItem()}
+                            />
+
+                            <EditModalShopping
+                              visible={modalIsVisible}
+                              passedData={passedData}
+                              closeModal={closeModal}
+                              removeFoodInShopping={removeInShopping}
+                              editFoodInShopping={editInShopping}
+                            />
+                          </View>
+                        )}
+                        {selectToShopping.includes(fridge._id) && (
+                          <View style={styles.overlayToShopping} />
+                        )}
+                      </View>
+                    </Pressable>
+                  </ScrollView>
+                </>
+              );
+          }
         }
       }
     });
@@ -577,7 +737,7 @@ function Shopping({ navigation }) {
     dispatch(fetchFood())
       .then(() => setIsLoading(false))
       .catch(() => setIsLoading(false));
-  }, [dispatch]);
+  }, [dispatch, userData]);
 
   if (!loaded || isLoading) {
     return <LoadingOverlay message="Ge oss en kort stund..." />;
@@ -641,94 +801,96 @@ function Shopping({ navigation }) {
               )}
             </View>
           </View>
-          {foodComponents && hideFood && !selectedFridgeFilter && (
-            <View style={{ flex: 1 }}>
-              <View>
+          {foodComponents &&
+            hideFood &&
+            (!selectedShoppingFridgeFilter || selectedCat === "Allt") && (
+              <View style={{ flex: 1 }}>
                 <View>
-                  <FlatList
-                    legacyImplementation={true}
-                    contentContainerStyle={styles.foodList}
-                    numColumns={3}
-                    data={foodlist}
-                    extraData={foodlist}
-                    keyExtractor={(item) => Math.random(item._id)}
-                    renderItem={({ item }) => (
-                      <Pressable
-                        /* onLongPress={FoodDetails}*/
-                        onPress={() => handlePressToShoppingList(item)}
-                      >
-                        <View style={styles.food}>
-                          <View style={styles.imageContainer}>
-                            <Image
-                              style={styles.image}
-                              source={{
-                                uri:
-                                  "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
-                                  item.logo,
-                              }}
-                            ></Image>
+                  <View>
+                    <FlatList
+                      legacyImplementation={true}
+                      contentContainerStyle={styles.foodList}
+                      numColumns={3}
+                      data={foodlist}
+                      extraData={foodlist}
+                      keyExtractor={(item) => Math.random(item._id)}
+                      renderItem={({ item }) => (
+                        <Pressable
+                          /* onLongPress={FoodDetails}*/
+                          onPress={() => handlePressToShoppingList(item)}
+                        >
+                          <View style={styles.food}>
+                            <View style={styles.imageContainer}>
+                              <Image
+                                style={styles.image}
+                                source={{
+                                  uri:
+                                    "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                                    item.logo,
+                                }}
+                              ></Image>
+                            </View>
+                            <View style={styles.textContainer}>
+                              <Text style={styles.item}>{item.title}</Text>
+                            </View>
                           </View>
-                          <View style={styles.textContainer}>
-                            <Text style={styles.item}>{item.title}</Text>
-                          </View>
-                        </View>
-                        {selectedItems.includes(item._id) && (
-                          <View style={styles.overlay} />
-                        )}
-                      </Pressable>
-                    )}
-                  ></FlatList>
+                          {selectedItems.includes(item._id) && (
+                            <View style={styles.overlay} />
+                          )}
+                        </Pressable>
+                      )}
+                    ></FlatList>
+                  </View>
                 </View>
               </View>
-            </View>
-          )}
+            )}
 
-          {foodComponents && hideFood && selectedFridgeFilter && (
-            <View style={{ flex: 1 }}>
-              <FlatList
-                contentContainerStyle={styles.selectedFoodList}
-                numColumns={3}
-                data={foodlist}
-                extraData={foodlist}
-                keyExtractor={(item) => Math.random(item._id)}
-                renderItem={({ item }) => {
-                  if (item.category === selectedCat) {
-                    return (
-                      <Pressable
-                        onPress={() => handlePressToShoppingList(item)}
-                      >
-                        <View style={styles.food}>
-                          <View style={styles.imageContainer}>
-                            <Image
-                              style={styles.image}
-                              source={{
-                                uri:
-                                  "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
-                                  item.logo,
-                              }}
-                            ></Image>
+          {foodComponents &&
+            hideFood &&
+            (selectedShoppingFridgeFilter || selectedCat !== "Allt") && (
+              <View /*style={{flex:1}}*/>
+                <FlatList
+                  contentContainerStyle={styles.selectedFoodList}
+                  numColumns={3}
+                  data={foodlist}
+                  extraData={foodlist}
+                  keyExtractor={(item) => Math.random(item._id)}
+                  renderItem={({ item }) => {
+                    if (item.category === selectedCat) {
+                      return (
+                        <Pressable
+                          onPress={() => handlePressToShoppingList(item)}
+                        >
+                          <View style={styles.food}>
+                            <View style={styles.imageContainer}>
+                              <Image
+                                style={styles.image}
+                                source={{
+                                  uri:
+                                    "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                                    item.logo,
+                                }}
+                              ></Image>
+                            </View>
+                            <View style={styles.textContainer}>
+                              <Text style={styles.item}>{item.title}</Text>
+                            </View>
                           </View>
-                          <View style={styles.textContainer}>
-                            <Text style={styles.item}>{item.title}</Text>
-                          </View>
-                        </View>
-                        {selectedItems.includes(item._id) && (
-                          <View style={styles.overlay} />
-                        )}
-                      </Pressable>
-                    );
-                  } else if (selectedCat === "Allt") {
-                    setSelectedFridgeFilter(false);
-                  }
-                }}
-              ></FlatList>
-            </View>
-          )}
+                          {selectedItems.includes(item._id) && (
+                            <View style={styles.overlay} />
+                          )}
+                        </Pressable>
+                      );
+                    }
+                  }}
+                ></FlatList>
+              </View>
+            )}
 
           <View style={styles.fridgeView}>
-            {!foodComponents && !hideFood && !selectedShoppingFilter && (
+            {!foodComponents && !hideFood && (
               <>
-                {userData.shoppingList.length > 1 && (
+                {userData.shoppingList.length > 0 && (
                   <>
                     <Pressable
                       onPress={openDoneModal}
@@ -749,7 +911,7 @@ function Shopping({ navigation }) {
               </>
             )}
 
-            {/*userData.shoppingList &&
+            {userData.shoppingList &&
               !hideFood &&
               selectedShoppingFilter &&
               fridge.map((item) => {
@@ -823,7 +985,7 @@ function Shopping({ navigation }) {
                               <Text style={styles.itemCarbon}>
                                 {item.foodCarbon}
                               </Text>
-                              {/* renderCarbon({ item })}
+                              {/* renderCarbon({ item })*/}
                             </View>
                             <View style={styles.editItem}>
                               <IcoButton
@@ -831,7 +993,7 @@ function Shopping({ navigation }) {
                                 size={24}
                                 color={Colors.green}
                                 onPress={
-                                  /*() => openEditFridge()
+                                  /*() => openEditFridge()*/
 
                                   () => {
                                     openModal({
@@ -859,7 +1021,7 @@ function Shopping({ navigation }) {
                                 passedData={passedData}
                                 visible={modalIsVisible}
                                 closeModal={closeModal}
-                                /* editFoodInFridge={editInFridge}
+                                /* editFoodInFridge={editInFridge}*/
                               />
                             </View>
                           </View>
@@ -869,11 +1031,9 @@ function Shopping({ navigation }) {
                         </Pressable>
                       </ScrollView>
                     );
-                  } else if (selectedCat === "Allt") {
-                    setSelectedUserFilter(false);
                   }
                 }
-              })}*/}
+              })}
           </View>
         </View>
       </View>

@@ -21,14 +21,17 @@ router.put("/:id/updatediet", userController.updateUserDiet);
 router.put("/addfood/:id", userController.addFoodToFridge);
 
 router.put("/removefood/:id", userController.removeFoodFromFridge);
-router.put("/editfood/:id", userController.editFoodFromFridge);
+router.put("/editfridgeexpiration/:id", userController.editUserFoodExpiration);
+router.put("/editfridgequantity/:id", userController.editUserFoodQuantity);
+router.put("/editshoppingquantity/:id", userController.editShoppingQuantity);
+router.put("/editshoppingbio/:id", userController.editShoppingBio);
+
 router.put("/deletefood/:id", userController.deleteFoodFromFridge);
 router.put("/addtorecipe/:id", userController.addFoodToRecipe);
 
 router.put("/addtoshoppinglist/:id", userController.addFoodToShoppingList);
 router.put("/removeshoppinglist/:id", userController.removeShoppingList);
 router.put("/deleteshoppingitem/:id", userController.deleteShoppingItem);
-router.put("/editshoppingitem/:id", userController.editShoppingItem);
 router.put("/deleterecipefood/:id", userController.deleteRecipeFoodFilter);
 
 router.put("/addfavrecipe/:id", userController.addFavoriteRecipe);

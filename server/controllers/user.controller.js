@@ -193,7 +193,7 @@ module.exports.removeShoppingList = (req, res) => {
   try {
     UserModel.findByIdAndUpdate(
       req.params.id,
-      { $set: { shoppingList: "" } },
+      { $set: { shoppingList: [] } },
 
       (err, data) => {
         if (!err) res.status(201).json(data);
@@ -225,7 +225,7 @@ module.exports.removeFoodFromFridge = (req, res) => {
   }
 };
 
-module.exports.editFoodFromFridge = (req, res) => {
+module.exports.editUserFoodExpiration = (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
@@ -237,6 +237,28 @@ module.exports.editFoodFromFridge = (req, res) => {
 
       if (!theFood) return res.status(404).send("Food not found");
       theFood.foodExpirationDate = req.body.foodExpirationDate;
+
+      return data.save((err) => {
+        if (!err) return res.status(200).send(data);
+        return res.status(500).send(err);
+      });
+    });
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+};
+
+module.exports.editUserFoodQuantity = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    return UserModel.findById(req.params.id, (err, data) => {
+      const theFood = data.usersfood.find((food) =>
+        food._id.equals(req.body.foodId)
+      );
+
+      if (!theFood) return res.status(404).send("Food not found");
 
       theFood.foodQuantity = req.body.foodQuantity;
 
@@ -331,6 +353,7 @@ module.exports.addFoodToShoppingList = (req, res) => {
     UserModel.findByIdAndUpdate(
       req.params.id,
       {
+        /* $pull: { shoppingList },*/
         $addToSet: {
           shoppingList: {
             foodName: req.body.foodName,
@@ -393,7 +416,8 @@ module.exports.removeFavoriteRecipe = (req, res) => {
     return res.status(500).json({ message: err });
   }
 };
-module.exports.editShoppingItem = (req, res) => {
+
+module.exports.editShoppingQuantity = (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
@@ -404,9 +428,32 @@ module.exports.editShoppingItem = (req, res) => {
       );
 
       if (!theShoppingItem) return res.status(404).send("Food not found");
-      theShoppingItem.foodBioQuality = req.body.foodBioQuality;
 
       theShoppingItem.foodQuantity = req.body.foodQuantity;
+
+      return data.save((err) => {
+        if (!err) return res.status(200).send(data);
+        return res.status(500).send(err);
+      });
+    });
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+};
+
+module.exports.editShoppingBio = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    return UserModel.findById(req.params.id, (err, data) => {
+      const theShoppingItem = data.shoppingList.find((food) =>
+        food._id.equals(req.body.foodId)
+      );
+
+      if (!theShoppingItem) return res.status(404).send("Food not found");
+
+      theShoppingItem.foodBioQuality = req.body.foodBioQuality;
 
       return data.save((err) => {
         if (!err) return res.status(200).send(data);

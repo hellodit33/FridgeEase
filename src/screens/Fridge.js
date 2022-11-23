@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Colors from "../../constants/Colors";
 import { useFonts } from "expo-font";
 import {
@@ -16,6 +16,7 @@ import { getUser } from "../../store/redux/actions/user.actions";
 import EditModal from "../components/EditModalFridge";
 import {
   View,
+  RefreshControl,
   Image,
   Pressable,
   Button,
@@ -48,6 +49,21 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { fetchRecipes } from "../../store/redux/actions/recipe.actions";
 
 function Fridge({ props, navigation, route }) {
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
+  function dateDiff(item1, item2) {
+    let dateDiff = differenceInDays(Date.parse(item1), Date.parse(item2));
+    return dateDiff;
+  }
+
   const [itemToEdit, setItemToEdit] = useState();
   const [filteredData, setFilteredData] = useState([]);
   const searchFilterFunction = (text) => {
@@ -104,9 +120,25 @@ function Fridge({ props, navigation, route }) {
 
   const [passedData, setPassedData] = useState([]);
 
-  function openModal({ id, name, expiration, expirationDate, carbon, logo }) {
+  function openModal({
+    id,
+    name,
+    expiration,
+    expirationDate,
+    quantity,
+    carbon,
+    logo,
+  }) {
     setModalIsVisible(true);
-    setPassedData({ id, name, expiration, expirationDate, carbon, logo });
+    setPassedData({
+      id,
+      name,
+      expiration,
+      expirationDate,
+      quantity,
+      carbon,
+      logo,
+    });
   }
   function closeModal() {
     dispatch(getUser(userData._id));
@@ -253,6 +285,8 @@ function Fridge({ props, navigation, route }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   async function onUserFridgeCategory(category) {
     setSelectedUserFilter(true);
+    setSelectedFridgeFilter(false);
+
     setSelectedCategory(category.name);
     console.log(selectedCategory);
 
@@ -263,6 +297,8 @@ function Fridge({ props, navigation, route }) {
       setSelectedFridgeFilter(false);
     } else {
       setSelectedFridgeFilter(true);
+      setSelectedUserFilter(false);
+
       setSelectedCategory(category.name);
       console.log(selectedCategory);
     }
@@ -374,8 +410,6 @@ return(
 
   function renderMyFridge() {
     const editInFridge = () => {
-      dispatch(getUser(userData._id));
-
       closeModal();
     };
     const deleteInFridge = (item) => {
@@ -394,13 +428,13 @@ return(
     const renderFridge = ({ item }) => {
       /*   for (let i = 0; i < userData.usersfood.length; i++) {
         if (userData.usersfood[i] === item._id) */
-      function dateDiff() {
+      /* function dateDiff() {
         let dateDiff = differenceInDays(
           Date.parse(item.foodExpirationDate),
           Date.parse(today)
         );
         return dateDiff;
-      }
+      }*/
 
       const id = item._id;
       const name = item.foodName;
@@ -409,13 +443,25 @@ return(
 
       const carbon = item.foodCarbon;
       const logo = item.foodLogo;
-      const quantity = "";
+
+      function fetchQuantity() {
+        if (item.foodQuantity) {
+          return item.foodQuantity;
+        } else if (!item.foodQuantity) {
+          return 0;
+        }
+      }
+      const quantity = fetchQuantity();
 
       return (
         <>
           <FlashMessage position="top" />
 
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
             <Pressable
               onLongPress={() => {
                 openModal({
@@ -423,6 +469,7 @@ return(
                   name,
                   expiration,
                   expirationDate,
+                  quantity,
                   carbon,
                   logo,
                 });
@@ -448,7 +495,10 @@ return(
                   <Text style={styles.itemExp}>
                     {item.foodExpirationDate ? (
                       <Text>
-                        {dateDiff()} {dateDiff() > 1 ? "dagar" : " dag"}
+                        {dateDiff(item.foodExpirationDate, today)}
+                        {dateDiff(item.foodExpirationDate, today) > 1
+                          ? " dagar"
+                          : " dag"}
                       </Text>
                     ) : (
                       <Text>
@@ -512,6 +562,7 @@ return(
                         openModal({
                           id,
                           name,
+                          quantity,
                           expiration,
                           expirationDate,
                           carbon,
@@ -577,7 +628,7 @@ return(
     dispatch(fetchFood())
       .then(() => setIsLoading(false))
       .catch(() => setIsLoading(false));
-  }, [dispatch, userFood, userData]);
+  }, [dispatch, dateDiff(), userData]);
 
   if (!loaded || isLoading) {
     return <LoadingOverlay message="Ge oss en kort stund..." />;
@@ -714,15 +765,16 @@ return(
                 if (item.foodCategory === selectedCategory) {
                   console.log(item.foodName);
 
-                  function dateDiff() {
-                    let dateDiff = differenceInDays(
-                      Date.parse(item.foodExpirationDate),
-                      Date.parse(today)
-                    );
-                    return dateDiff;
-                  }
                   return (
-                    <ScrollView style={{ backgroundColor: Colors.blue }}>
+                    <ScrollView
+                      style={{ backgroundColor: Colors.blue }}
+                      refreshControl={
+                        <RefreshControl
+                          refreshing={refreshing}
+                          onRefresh={onRefresh}
+                        />
+                      }
+                    >
                       <Pressable onPress={() => handlePressToRecipe(item)}>
                         <View style={styles.userFridgeItem}>
                           <View style={styles.userImageView}>
@@ -743,8 +795,10 @@ return(
                             <Text style={styles.itemExp}>
                               {item.foodExpirationDate ? (
                                 <Text>
-                                  {dateDiff()}{" "}
-                                  {dateDiff() > 1 ? "dagar" : " dag"}
+                                  {dateDiff(item.foodExpirationDate, today)}
+                                  {dateDiff(item.foodExpirationDate, today) > 1
+                                    ? " dagar"
+                                    : " dag"}
                                 </Text>
                               ) : (
                                 <Text>
@@ -953,6 +1007,8 @@ const styles = StyleSheet.create({
   addFoodInput: {
     fontSize: 15,
     fontWeight: "bold",
+    flexDirection: "row",
+
     color: Colors.green,
   },
   addFoodIcon: {

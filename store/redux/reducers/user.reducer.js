@@ -1,11 +1,13 @@
 import {
   GET_USER,
   GET_USER_FOOD,
-  EDIT_FOOD,
+  EDIT_FOOD_EXPIRATION,
+  EDIT_FOOD_QUANTITY,
   DELETE_FOOD,
   GET_FOOD_TO_RECIPE,
   DELETE_SHOPPING_ITEM,
-  EDIT_SHOPPING_ITEM,
+  EDIT_SHOPPING_QUANTITY,
+  EDIT_SHOPPING_BIOQUALITY,
   DELETE_FAVORITE_RECIPE,
   UPDATE_ALLERGY,
 } from "../actions/user.actions";
@@ -28,7 +30,28 @@ export default function userReducer(state = initialState, action) {
           };
         } else return user;
       });
-    case EDIT_FOOD:
+    case EDIT_FOOD_QUANTITY:
+      return state.map((user) => {
+        if (user._id === action.payload.userId) {
+          return {
+            ...user,
+            usersfood: user.usersfood.map((food) => {
+              if (food._id === action.payload.foodId) {
+                return {
+                  ...usersfood,
+                  foodName: action.payload.foodName,
+                  /*  foodExpirationDate: action.payload.foodExpirationDate,
+                  foodQuantity: action.payload.foodQuantity,*/
+                };
+              } else {
+                return usersfood;
+              }
+            }),
+          };
+        }
+        return user;
+      });
+    case EDIT_FOOD_EXPIRATION:
       return state.map((user) => {
         if (user._id === action.payload.userId) {
           return {
@@ -50,7 +73,29 @@ export default function userReducer(state = initialState, action) {
         return user;
       });
 
-    case EDIT_SHOPPING_ITEM:
+    case EDIT_SHOPPING_QUANTITY:
+      return state.map((user) => {
+        if (user._id === action.payload.userId) {
+          return {
+            ...user,
+            shoppingList: user.shoppingList.map((food) => {
+              if (food._id === action.payload.foodId) {
+                return {
+                  ...shoppingList,
+                  foodName: action.payload.foodName,
+                  /* foodBioQuality: action.payload.foodBioQuality,
+                  foodQuantity: action.payload.foodQuantity,*/
+                };
+              } else {
+                return usersfood;
+              }
+            }),
+          };
+        }
+        return user;
+      });
+
+    case EDIT_SHOPPING_BIOQUALITY:
       return state.map((user) => {
         if (user._id === action.payload.userId) {
           return {

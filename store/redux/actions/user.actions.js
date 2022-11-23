@@ -2,8 +2,12 @@ import axios from "axios";
 
 export const GET_USER = "GET_USER";
 export const GET_USER_FOOD = "GET_USER_FOOD";
-export const EDIT_FOOD = "EDIT_FOOD";
-export const EDIT_SHOPPING_ITEM = "EDIT_SHOPPING_ITEM";
+export const EDIT_FOOD_QUANTITY = "EDIT_FOOD_QUANTITY";
+export const EDIT_FOOD_EXPIRATION = "EDIT_FOOD_EXPIRATION";
+
+export const EDIT_SHOPPING_QUANTITY = "EDIT_SHOPPING_QUANTITY";
+export const EDIT_SHOPPING_BIOQUALITY = "EDIT_SHOPPING_BIOQUALITY";
+
 export const DELETE_RECIPE_FOOD_FILTER = "DELETE_RECIPE_FOOD_FILTER";
 export const DELETE_FAVORITE_RECIPE = "DELETE_FAVORITE_RECIPE";
 
@@ -35,44 +39,68 @@ export const getUser = (uid) => {
   };
 };
 
-export const editFoodFromFridge = (
-  userId,
-  foodId,
-  foodExpirationDate,
-  foodQuantity
-) => {
+export const editFoodExpiration = (userId, foodId, foodExpirationDate) => {
   return (dispatch) => {
     return axios({
       method: "put",
-      url: `${BASE_URL}/api/user/editfood/${userId}`,
-      data: { foodId, foodExpirationDate, foodQuantity },
+      url: `${BASE_URL}/api/user/editfridgeexpiration/${userId}`,
+      data: { foodId, foodExpirationDate },
     })
       .then((res) => {
         dispatch({
-          type: EDIT_FOOD,
-          payload: { userId, foodId, foodExpirationDate, foodQuantity },
+          type: EDIT_FOOD_EXPIRATION,
+          payload: { foodId, foodExpirationDate },
         });
       })
       .catch((err) => console.log(err));
   };
 };
 
-export const editFoodFromShopping = (
-  userId,
-  foodId,
-  foodBioQuality,
-  foodQuantity
-) => {
+export const editFoodQuantity = (userId, foodId, foodQuantity) => {
   return (dispatch) => {
     return axios({
       method: "put",
-      url: `${BASE_URL}/api/user/editshoppingitem/${userId}`,
-      data: { foodId, foodBioQuality, foodQuantity },
+      url: `${BASE_URL}/api/user/editfridgequantity/${userId}`,
+      data: { foodId, foodQuantity },
     })
       .then((res) => {
         dispatch({
-          type: EDIT_SHOPPING_ITEM,
-          payload: { foodId, foodBioQuality, foodQuantity },
+          type: EDIT_FOOD_QUANTITY,
+          payload: { foodId, foodQuantity },
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+};
+
+export const editShoppingQuantity = (userId, foodId, foodQuantity) => {
+  return (dispatch) => {
+    return axios({
+      method: "put",
+      url: `${BASE_URL}/api/user/editshoppingquantity/${userId}`,
+      data: { foodId, foodQuantity },
+    })
+      .then((res) => {
+        dispatch({
+          type: EDIT_SHOPPING_QUANTITY,
+          payload: { foodId, foodQuantity },
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+};
+
+export const editShoppingBioQuality = (userId, foodId, foodBioQuality) => {
+  return (dispatch) => {
+    return axios({
+      method: "put",
+      url: `${BASE_URL}/api/user/editshoppingbio/${userId}`,
+      data: { foodId, foodBioQuality },
+    })
+      .then((res) => {
+        dispatch({
+          type: EDIT_SHOPPING_BIOQUALITY,
+          payload: { foodId, foodBioQuality },
         });
       })
       .catch((err) => console.log(err));

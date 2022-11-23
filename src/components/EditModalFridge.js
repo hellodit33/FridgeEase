@@ -18,7 +18,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  editFoodFromFridge,
+  editFoodExpiration,
+  editFoodQuantity,
   getUser,
 } from "../../store/redux/actions/user.actions";
 import DateTimePickerEvent from "@react-native-community/datetimepicker";
@@ -89,9 +90,55 @@ function EditModalFridge(props) {
   function expirationInputHandler(enteredExpiration) {
     setEnteredExpirationText(enteredExpiration);
   }
-
-  function editFoodInFridge() {
-    if (enteredQuantityText.length > 0 || enteredExpirationText) {
+  async function editFoodInFridge() {
+    if (enteredQuantityText.length > 0 && enteredExpirationText) {
+      dispatch(
+        editFoodQuantity(userData._id, props.passedData.id, enteredQuantityText)
+      );
+      dispatch(
+        editFoodExpiration(
+          userData._id,
+          props.passedData.id,
+          enteredExpirationFull
+        )
+      );
+      dispatch(getUser(userData._id));
+      setEnteredQuantityText("");
+      setEnteredExpirationText("");
+      console.log("edited");
+      props.closeModal();
+    } else if (enteredQuantityText.length > 0) {
+      dispatch(
+        editFoodQuantity(userData._id, props.passedData.id, enteredQuantityText)
+      );
+      dispatch(getUser(userData._id));
+      setEnteredQuantityText("");
+      setEnteredExpirationText("");
+      console.log("edited");
+      props.closeModal();
+    } else if (enteredExpirationText) {
+      dispatch(
+        editFoodExpiration(
+          userData._id,
+          props.passedData.id,
+          enteredExpirationFull
+        )
+      );
+      dispatch(getUser(userData._id));
+      setEnteredQuantityText("");
+      setEnteredExpirationText("");
+      console.log("edited");
+      props.closeModal();
+    } else {
+      Alert.alert(
+        "Oops!",
+        "Kvantité eller bäst före datum saknas. Fyll gärna i någon av dem för att kunna gå vidare. Annars avbryt.",
+        [{ text: "Okej", style: "default" }]
+      );
+    }
+  }
+  /*  function editFoodInFridge() {
+    if (enteredQuantityText.length > 0) {
       dispatch(
         editFoodFromFridge(
           userData._id,
@@ -112,7 +159,7 @@ function EditModalFridge(props) {
         [{ text: "Okej", style: "default" }]
       );
     }
-  }
+  }*/
   return (
     <Modal
       style={styles.modal}
@@ -136,46 +183,17 @@ function EditModalFridge(props) {
           <Text style={styles.foodText}>{props.passedData.name}</Text>
 
           <Text style={styles.foodExp}>{dateDiff()}</Text>
+
           <Pressable onPress={props.closeModal}>
             <Ionicons name="close" size={24} color={Colors.darkpink}></Ionicons>
           </Pressable>
         </View>
         <View styles={styles.moreInfoToChange}>
-          <View style={styles.foodChange}>
-            <TextInput
-              placeholder="Bäst före datum"
-              keyboardType="numbers-and-punctuation"
-              onChangeText={expirationInputHandler}
-              value={enteredExpirationText}
-            ></TextInput>
-
-            <Ionicons
-              name="calendar"
-              color={Colors.green}
-              size={20}
-              onPress={() => showMode()}
-            ></Ionicons>
-          </View>
-
-          {show && (
-            <DateTimePickerEvent
-              testID="dateTimePicker"
-              value={date}
-              mode="date"
-              display="default"
-              onChange={onChangeDate}
-            />
+          {props.passedData.quantity > 0 && (
+            <Text style={styles.foodQuantity}>
+              Nuvarande kvantité: {props.passedData.quantity}
+            </Text>
           )}
-          <View style={styles.foodChange}>
-            <TextInput
-              onChangeText={quantityInputHandler}
-              value={enteredQuantityText}
-              placeholder="Kvantité"
-              keyboardType="numeric"
-            ></TextInput>
-            <Ionicons name="create" color={Colors.green} size={20}></Ionicons>
-          </View>
-
           <View style={styles.carbonInfo}>
             <Text style={styles.recipesText}>
               {props.passedData.carbon === "A"
@@ -223,6 +241,40 @@ function EditModalFridge(props) {
             >
               {props.passedData.carbon}
             </Text>
+          </View>
+          <View style={styles.foodChange}>
+            <TextInput
+              placeholder="Ändra bäst före datum"
+              keyboardType="numbers-and-punctuation"
+              onChangeText={expirationInputHandler}
+              value={enteredExpirationText}
+            ></TextInput>
+
+            <Ionicons
+              name="calendar"
+              color={Colors.green}
+              size={20}
+              onPress={() => showMode()}
+            ></Ionicons>
+          </View>
+
+          {show && (
+            <DateTimePickerEvent
+              testID="dateTimePicker"
+              value={date}
+              mode="date"
+              display="default"
+              onChange={onChangeDate}
+            />
+          )}
+          <View style={styles.foodChange}>
+            <TextInput
+              onChangeText={quantityInputHandler}
+              value={enteredQuantityText}
+              placeholder="Ändra kvantité här"
+              keyboardType="numbers-and-punctuation"
+            ></TextInput>
+            <Ionicons name="create" color={Colors.green} size={20}></Ionicons>
           </View>
         </View>
         <View style={styles.buttons}>
@@ -280,7 +332,17 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-  moreInfoToChange: {},
+  foodQuantity: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderRadius: 10,
+    borderColor: Colors.green,
+    borderWidth: 2,
+    padding: 10,
+    marginHorizontal: 10,
+    marginTop: 10,
+  },
   foodChange: {
     flexDirection: "row",
     justifyContent: "space-between",

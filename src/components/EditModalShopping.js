@@ -15,13 +15,16 @@ import IcoButton from "../UI/IcoButton";
 import Colors from "../../constants/Colors";
 import PrimaryButton from "../UI/PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   deleteFoodFromShopping,
-  editFoodFromShopping,
+  editShoppingBioQuality,
+  editShoppingQuantity,
   getUser,
 } from "../../store/redux/actions/user.actions";
+import { fetchFood } from "../../store/redux/actions/fridge.actions";
 import { useSelector, useDispatch } from "react-redux";
+import LoadingOverlay from "../UI/LoadingOverlay";
 
 function EditModalShopping(props) {
   const [isChecked, setChecked] = useState(false);
@@ -36,9 +39,6 @@ function EditModalShopping(props) {
     setEnteredQuantityText(enteredQuantity);
   }
 
-  function bioInputHandler(enteredBio) {
-    setEnteredBioText(enteredBio);
-  }
   async function removeFoodInShopping() {
     dispatch(deleteFoodFromShopping(userData._id, props.passedData.id));
     dispatch(getUser(userData._id));
@@ -46,18 +46,39 @@ function EditModalShopping(props) {
   }
 
   async function editFoodInShopping() {
-    if (enteredQuantityText.length > 0 || isChecked || !isChecked) {
+    if (enteredQuantityText.length > 0 && (isChecked || !isChecked)) {
       dispatch(
-        editFoodFromShopping(
+        editShoppingQuantity(
           userData._id,
           props.passedData.id,
-          isChecked,
+          enteredQuantityText
+        )
+      );
+
+      dispatch(
+        editShoppingBioQuality(userData._id, props.passedData.id, isChecked)
+      );
+      dispatch(getUser(userData._id));
+      setEnteredQuantityText("");
+      console.log("edited");
+      props.closeModal();
+    } else if (enteredQuantityText.length > 0) {
+      dispatch(
+        editShoppingQuantity(
+          userData._id,
+          props.passedData.id,
           enteredQuantityText
         )
       );
       dispatch(getUser(userData._id));
-
-      setEnteredBioText("");
+      setEnteredQuantityText("");
+      console.log("edited");
+      props.closeModal();
+    } else if (isChecked || !isChecked) {
+      dispatch(
+        editShoppingBioQuality(userData._id, props.passedData.id, isChecked)
+      );
+      dispatch(getUser(userData._id));
       setEnteredQuantityText("");
       console.log("edited");
       props.closeModal();
