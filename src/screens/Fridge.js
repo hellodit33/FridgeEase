@@ -343,7 +343,7 @@ function Fridge({ props, navigation, route }) {
         data={categories}
         horizontal
         showsHorizontalScrollIndicator={true}
-        keyExtractor={(item) => `${item.id}`}
+        keyExtractor={(item) => Math.random(item.id)}
         renderItem={renderItem}
         contentContainerStyle={{}}
       ></FlatList>
@@ -387,7 +387,7 @@ function Fridge({ props, navigation, route }) {
         data={categories}
         horizontal
         showsHorizontalScrollIndicator={true}
-        keyExtractor={(item) => `${item.id}`}
+        keyExtractor={(item) => Math.random(item.id)}
         renderItem={renderItem}
         contentContainerStyle={{}}
       ></FlatList>
@@ -463,6 +463,7 @@ return(
           <FlashMessage position="top" />
 
           <ScrollView
+            key={() => Math.random(userData._id)}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
@@ -608,7 +609,7 @@ return(
       <FlatList
         data={userData.usersfood}
         extraData={userData.usersfood}
-        keyExtractor={(item) => `${item._id}`}
+        keyExtractor={() => Math.random(userData._id)}
         renderItem={renderFridge}
         contentContainerStyle={{}}
       ></FlatList>
@@ -782,6 +783,7 @@ return(
 
                   return (
                     <ScrollView
+                      key={item._id}
                       style={{ backgroundColor: Colors.blue }}
                       refreshControl={
                         <RefreshControl
@@ -909,7 +911,7 @@ return(
                     numColumns={3}
                     data={foodsLists}
                     extraData={foodsLists}
-                    keyExtractor={(item) => item._id}
+                    keyExtractor={(item) => Math.random(item._id)}
                     renderItem={({ item }) => (
                       <TouchableOpacity onPress={() => handlePress(item)}>
                         <View style={styles.food}>
@@ -946,7 +948,7 @@ return(
                 numColumns={3}
                 data={foodsLists}
                 extraData={foodsLists}
-                keyExtractor={(item) => Math.random(item._id)}
+                keyExtractor={(item) => Math.random(item._id + userData._id)}
                 renderItem={({ item }) => {
                   if (item.category === selectedCategory) {
                     return (

@@ -15,7 +15,6 @@ import LoadingOverlay from "../UI/LoadingOverlay";
 import { getUser, updateAllergy } from "../../store/redux/actions/user.actions";
 import { useDispatch, useSelector } from "react-redux";
 import Checkbox from "expo-checkbox";
-import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
 
 function Allergies(props) {

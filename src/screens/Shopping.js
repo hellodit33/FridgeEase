@@ -357,7 +357,7 @@ function Shopping({ navigation }) {
             return (
               <>
                 <ScrollView
-                  key={() => Math.random(id)}
+                  key={() => Math.random(userData._id)}
                   style={styles.shoppingListScroll}
                   refreshControl={
                     <RefreshControl
