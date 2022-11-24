@@ -13,7 +13,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
-
+import PrimaryButton from "../UI/PrimaryButton";
 import Colors from "../../constants/Colors";
 import { useContext, useEffect, useState } from "react";
 import AuthContent from "../components/Auth/AuthContent";
@@ -180,14 +180,29 @@ function Recipes({ navigation }) {
       }
     };
 
-    //if there picked ingredients, show the recipes that match them
+    //if there picked ingredients, show the recipes that match them, if not show info box
     if (userIngredients.length > 0) {
       return (
         <>
           {selectedRecipes.length === 0 && (
-            <View style={styles.noRecipe}>
-              <Text>Tyvärr har vi inga recept som matchar dina önskemål</Text>
-            </View>
+            <>
+              <View style={styles.noFavs}>
+                <View style={styles.deleteTitle}>
+                  <Ionicons name="alert-circle-outline" size={30}></Ionicons>
+                  <Text style={styles.infoTitle}>
+                    Det finns inga recept som matchar dina matvaror just nu.
+                  </Text>
+                </View>
+                <View style={styles.infoView}>
+                  <Text styles={styles.infoText}>
+                    Välj fler ingredienser i ditt kylskåp och försök igen.
+                  </Text>
+                </View>
+                <PrimaryButton onPress={() => navigation.navigate("MyFridge")}>
+                  Mitt kylskåp
+                </PrimaryButton>
+              </View>
+            </>
           )}
 
           <FlatList
@@ -369,7 +384,7 @@ function Recipes({ navigation }) {
         </>
       );
 
-      //if there are no ingredients
+      //if there are no ingredients, show all recipes
     } else if (userIngredients.length === 0) {
       return (
         <FlatList
@@ -913,8 +928,36 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     width: 300,
     height: 460,
-
     borderRadius: 30,
+  },
+  noFavs: {
+    borderColor: Colors.darkgreen,
+    borderWidth: 2,
+    borderRadius: 30,
+    backgroundColor: "white",
+    marginVertical: 50,
+    marginHorizontal: 40,
+    padding: 30,
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  infoTitle: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: Colors.darkgreen,
+    marginLeft: 20,
+  },
+  infoView: {
+    marginVertical: 10,
+  },
+  infoText: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  deleteTitle: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   recipeView: {
     marginBottom: 2,
