@@ -65,7 +65,7 @@ function FavoriteRecipes({ route, navigation }) {
                 <>
                   <View style={styles.ingredientsItem}>
                     <View style={styles.ingredientsItemText}>
-                      <Text key={() => Math.random()}>{item.name}</Text>
+                      <Text key={() => Math.random(8)}>{item.name}</Text>
                     </View>
                   </View>
                 </>
