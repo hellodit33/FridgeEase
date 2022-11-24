@@ -30,7 +30,7 @@ import LoadingOverlay from "../UI/LoadingOverlay";
 import { useDispatch, useSelector } from "react-redux";
 import IcoButton from "../UI/IcoButton";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import FoodToPick from "../components/FoodToPick";
+import FoodToFridge from "../components/FoodToFridge";
 import { faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { differenceInDays, parseISO } from "date-fns";
 import FlashMessage from "react-native-flash-message";
@@ -69,6 +69,7 @@ function MyFridge({ props, navigation, route }) {
 
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+  //utils to pass data to modal
   const [modalIsVisible, setModalIsVisible] = useState(false);
   const [today, setToday] = useState(new Date());
   const [passedData, setPassedData] = useState([]);
@@ -140,12 +141,11 @@ function MyFridge({ props, navigation, route }) {
   };
 
   //function to select user fridge category
-  async function onUserFridgeCategory(category) {
+  async function onSelectedCategory(category) {
     setSelectedUserFilter(true);
     setSelectedFridgeFilter(false);
     setSelectedCategory(category.name);
     console.log(selectedCategory);
-    const newArray = [];
   }
 
   //function to delete in fridge
@@ -370,7 +370,7 @@ function MyFridge({ props, navigation, route }) {
       <View style={{ flex: 1, backgroundColor: Colors.blue }}>
         {!foodComponents && (
           <UserFridgeCat
-            onUserFridgeCategory={onUserFridgeCategory}
+            onSelectedCategory={onSelectedCategory}
             selectedCategory={selectedCategory}
           />
         )}
@@ -420,7 +420,7 @@ function MyFridge({ props, navigation, route }) {
           </View>
         </View>
 
-        {foodComponents && <FoodToPick selectedCategory={selectedCategory} />}
+        {foodComponents && <FoodToFridge selectedCategory={selectedCategory} />}
         {!addedFood &&
           !foodComponents &&
           (!selectedUserFilter || selectedCategory === "Allt") && (

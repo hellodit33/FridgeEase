@@ -6,7 +6,10 @@ import {
   fetchFood,
 } from "../../store/redux/actions/fridge.actions";
 
-import { getUser } from "../../store/redux/actions/user.actions";
+import {
+  addFromFridgeToShopping,
+  getUser,
+} from "../../store/redux/actions/user.actions";
 import {
   View,
   Image,
@@ -25,7 +28,7 @@ import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import FridgeCat from "./FridgeCat";
 
-function FoodToPick({ props, navigation, route }) {
+function FoodToShopping({ props, navigation, route }) {
   //redux store
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userReducer);
@@ -65,44 +68,25 @@ function FoodToPick({ props, navigation, route }) {
   }
 
   //function to pick food and add to user fridge
-  const addToUserFridge = async (food) => {
-    findCommonElement(selectedNames, selectedCatItems);
-    if (
-      selectedItems.includes(food._id) ||
-      selectedNames.includes(food.title) ||
-      !findCommonElement
-    ) {
+  const addToShoppingList = (food) => {
+    if (selectedItems.includes(food._id)) {
       const newSelect = selectedItems.filter((foodId) => foodId !== food._id);
       showMessage({
-        duration: 3000,
-        message: "Denna vara finns redan i ditt kylskåp.",
+        duration: 4000,
+        message: "Denna vara är redan i din shoppinglista.",
         backgroundColor: Colors.green,
         color: "white",
       });
       return setSelectedItems(newSelect);
     }
     setSelectedItems([...selectedItems, food._id]);
-    setSelectedNames([...selectedNames, food.title]);
-    setSelectedCatItems([...selectedCatItems, food.title]);
-
     showMessage({
       duration: 4000,
-      message:
-        'Denna vara har lagts till ditt kylskåp. För att ta bort den, klicka på knappen "Klar" för att gå tillbaka till ditt kylskåpsinnehåll. Klicka senare på krysset på den matvara som du vill ta bort.',
+      message: "Denna vara har lagts till din shoppinglista.",
       backgroundColor: Colors.green,
       color: "white",
     });
-    dispatch(
-      addFoodToFridge(
-        userData._id,
-        food._id,
-        food.title,
-        food.logo,
-        food.carbon,
-        food.category,
-        food.expiration
-      )
-    );
+    dispatch(addFromFridgeToShopping(userData._id, food.title));
     dispatch(getUser(userData._id));
   };
 
@@ -156,7 +140,7 @@ function FoodToPick({ props, navigation, route }) {
                 extraData={foodsLists}
                 keyExtractor={() => Math.random(userData._id * 5)}
                 renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => addToUserFridge(item)}>
+                  <TouchableOpacity onPress={() => addToShoppingList(item)}>
                     <View style={styles.food}>
                       <View style={styles.imageContainer}>
                         <Image
@@ -226,7 +210,7 @@ function FoodToPick({ props, navigation, route }) {
   );
 }
 
-export default FoodToPick;
+export default FoodToShopping;
 const deviceWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({

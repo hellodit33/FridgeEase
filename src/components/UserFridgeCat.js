@@ -1,17 +1,9 @@
 import { useState } from "react";
-import {
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-  View,
-} from "react-native";
+import { Text, TouchableOpacity, FlatList, View } from "react-native";
 import Colors from "../../constants/Colors";
 
 function UserFridgeCat(props) {
   function renderUserFridgeCategories() {
-    const [selectedCategory, setSelectedCategory] = useState(null);
-
     const categoryData = [
       {
         id: 1,
@@ -58,7 +50,7 @@ function UserFridgeCat(props) {
             alignItems: "center",
             justifyContent: "center",
           }}
-          onPress={() => props.onUserFridgeCategory(item)}
+          onPress={() => props.onSelectedCategory(item)}
           key={() => Math.random(item.id)}
         >
           <Text

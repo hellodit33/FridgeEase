@@ -276,14 +276,6 @@ function Fridge({ props, navigation, route }) {
     dispatch(fetchRecipes());
   };
 
-  /*
-  const handlePress = () => {
-    dispatch(addFoodToFridge(userData._id, foodIdToAdd));
-    setIsAdded(true);
-
-    console.log(isAdded);
-  };*/
-
   const [categories, setCategories] = useState(categoryData);
   const [selectedCategory, setSelectedCategory] = useState(null);
   async function onUserFridgeCategory(category) {
@@ -292,8 +284,6 @@ function Fridge({ props, navigation, route }) {
 
     setSelectedCategory(category.name);
     console.log(selectedCategory);
-
-    const newArray = [];
   }
   async function onFridgeCategory(category) {
     if (category.name === "Allt") {

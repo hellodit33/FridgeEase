@@ -1,4 +1,5 @@
 import {
+  FlatList,
   StyleSheet,
   View,
   Text,
@@ -6,7 +7,9 @@ import {
   ScrollView,
   Image,
   TextInput,
+  TouchableOpacity,
   RefreshControl,
+  Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../UI/LoadingOverlay.js";
@@ -16,29 +19,24 @@ import React, { useEffect, useState } from "react";
 import IcoButton from "../UI/IcoButton.js";
 import EditModalShopping from "../components/EditModalShopping.js";
 import { useDispatch } from "react-redux";
-import { showMessage } from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 import {
+  addFromFridgeToShopping,
   getUser,
   deleteFoodFromShopping,
+  editFoodFromShopping,
 } from "../../store/redux/actions/user.actions.js";
 import {
+  addFoodToFridge,
   addItemsToFridge,
   fetchFood,
 } from "../../store/redux/actions/fridge.actions.js";
 import { Ionicons } from "@expo/vector-icons";
+import { removeShoppingList } from "../../store/redux/actions/user.actions.js";
 import ShoppingDoneModal from "../components/ShoppingDoneModal.js";
-import FoodToShopping from "../components/FoodToShopping.js";
-import UserFridgeCat from "../components/UserFridgeCat.js";
 
 function Shopping({ navigation }) {
-  //redux
-  const dispatch = useDispatch();
-  const foodsLists = useSelector((state) => state.intoFridgeReducer);
-  const userData = useSelector((state) => state.userReducer);
-  const fridge = useSelector((state) => state.intoFridgeReducer);
-  const userShopping = userData.shoppingList;
-
-  //Refresh utils for scrollview
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
@@ -49,32 +47,199 @@ function Shopping({ navigation }) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  //utils to select a category in the user fridge
-  const [selectedUserFilter, setSelectedUserFilter] = useState(false);
-  const [selectedFridgeFilter, setSelectedFridgeFilter] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedShoppingFilter, setSelectedShoppingFilter] = useState(false);
-
-  //show food to pick or not
+  const handlePressToShoppingList = (food) => {
+    if (selectedItems.includes(food._id)) {
+      const newSelect = selectedItems.filter((foodId) => foodId !== food._id);
+      /* dispatch(removeFoodFromFridge(userData._id, food._id));*/
+      showMessage({
+        duration: 4000,
+        message: "Denna vara är redan i din shoppinglista.",
+        backgroundColor: Colors.green,
+        color: "white",
+      });
+      return setSelectedItems(newSelect);
+    }
+    setSelectedItems([...selectedItems, food._id]);
+    showMessage({
+      duration: 4000,
+      message: "Denna vara har lagts till din shoppinglista.",
+      backgroundColor: Colors.green,
+      color: "white",
+    });
+    dispatch(addFromFridgeToShopping(userData._id, food.title));
+    dispatch(getUser(userData._id));
+  };
+  const foodsLists = useSelector((state) => state.intoFridgeReducer);
+  const [foodlist, setFoodlist] = useState(foodsLists);
   const [foodComponents, setFoodComponents] = useState(false);
+  const [hideFood, setHideFood] = useState(false);
+  const [showShopping, setShowShopping] = useState(true);
 
+  const [selectedItems, setSelectedItems] = useState([]);
   function showFoodComponents() {
     setFoodComponents(true);
+    setHideFood(true);
   }
 
-  const readyFunction = () => {
-    setSelectedCategory("Allt");
+  const hello = () => {
+    setHideFood(false);
     setFoodComponents(false);
   };
+  const categoryData = [
+    {
+      id: 1,
+      name: "Allt",
+    },
+    {
+      id: 2,
+      name: "Grönsaker",
+    },
+    {
+      id: 3,
+      name: "Frukt",
+    },
+    {
+      id: 4,
+      name: "Mejeri",
+    },
+    {
+      id: 5,
+      name: "Kött & Fisk",
+    },
+    {
+      id: 6,
+      name: "Bageri & Spannmål",
+    },
+    {
+      id: 7,
+      name: "Fryst",
+    },
+    {
+      id: 8,
+      name: "Kryddor",
+    },
+    {
+      id: 9,
+      name: "Pasta & Ris",
+    },
+    {
+      id: 10,
+      name: "Desserter",
+    },
+  ];
 
-  //function to select shopping category
-  async function onSelectedCategory(category) {
-    setSelectedUserFilter(true);
-    setSelectedFridgeFilter(false);
-    setSelectedCategory(category.name);
-    console.log(selectedCategory);
+  const [categories, setCategories] = useState(categoryData);
+  const [selectedCat, setSelectedCat] = useState(null);
+  const [selectedShoppingFilter, setSelectedShoppingFilter] = useState(false);
+  const [selectedShoppingFridgeFilter, setSelectedShoppingFridgeFilter] =
+    useState(false);
+
+  async function onShoppingCategory(category) {
+    setSelectedShoppingFilter(true);
+    setSelectedShoppingFridgeFilter(false);
+
+    setSelectedCat(category.name);
+    console.log(selectedCat);
   }
 
+  function onFridgeCategory(category) {
+    setSelectedShoppingFridgeFilter(true);
+    setSelectedShoppingFilter(false);
+
+    setSelectedCat(category.name);
+    console.log(selectedCat);
+  }
+
+  function renderFridgeCategories() {
+    const renderItem = ({ item }) => {
+      return (
+        <TouchableOpacity
+          style={{
+            padding: 4,
+            marginTop: 20,
+            backgroundColor: Colors.blue,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onPress={() => onFridgeCategory(item)}
+          key={() => Math.random(item._id * 10)}
+        >
+          <Text
+            style={{
+              paddingLeft: 5,
+              marginRight: 12,
+              fontSize: 18,
+              fontWeight: "bold",
+              color: Colors.green,
+              textDecorationStyle: "solid",
+              textDecorationColor:
+                selectedCat === item.name ? Colors.darkpink : "none",
+              textDecorationLine:
+                selectedCat === item.name ? "underline" : "none",
+            }}
+          >
+            {item.name}
+          </Text>
+        </TouchableOpacity>
+      );
+    };
+    return (
+      <FlatList
+        data={categories}
+        horizontal
+        showsHorizontalScrollIndicator={true}
+        keyExtractor={(item) => Math.random(item.id + item.id)}
+        renderItem={renderItem}
+        contentContainerStyle={{}}
+      ></FlatList>
+    );
+  }
+
+  function renderShoppingCategories() {
+    const renderItem = ({ item }) => {
+      return (
+        <TouchableOpacity
+          style={{
+            padding: 4,
+            marginTop: 20,
+            backgroundColor: Colors.blue,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onPress={() => onShoppingCategory(item)}
+          key={() => Math.random(item._id * 20)}
+        >
+          <Text
+            style={{
+              paddingLeft: 5,
+              marginRight: 12,
+              fontSize: 18,
+              fontWeight: "bold",
+              color: Colors.green,
+              textDecorationStyle: "solid",
+              textDecorationColor:
+                selectedCat === item.name ? Colors.darkpink : "none",
+              textDecorationLine:
+                selectedCat === item.name ? "underline" : "none",
+            }}
+          >
+            {item.name}
+          </Text>
+        </TouchableOpacity>
+      );
+    };
+    return (
+      <FlatList
+        data={categories}
+        horizontal
+        showsHorizontalScrollIndicator={true}
+        keyExtractor={(item) => Math.random(item.id)}
+        renderItem={renderItem}
+        contentContainerStyle={{}}
+      ></FlatList>
+    );
+  }
+  const dispatch = useDispatch();
   const [selectToShopping, setSelectToShopping] = useState([]);
 
   const [modalIsVisible, setModalIsVisible] = useState(false);
@@ -115,6 +280,10 @@ function Shopping({ navigation }) {
     setModalIsVisible(false);
   }
 
+  const userData = useSelector((state) => state.userReducer);
+  const fridge = useSelector((state) => state.intoFridgeReducer);
+  const userShopping = userData.shoppingList;
+
   function renderShoppingFridge() {
     const editInShopping = (item) => {
       dispatch(getUser(userData._id));
@@ -152,7 +321,7 @@ function Shopping({ navigation }) {
             dispatch(deleteFoodFromShopping(userData._id, id));
             dispatch(getUser(userData._id));
           };
-          const handlePressToFridge = async (food) => {
+          const handlePressToShopping = async (food) => {
             if (selectToShopping.includes(food._id)) {
               const newListItem = selectToShopping.filter(
                 (foodId) => foodId !== food._id
@@ -186,12 +355,12 @@ function Shopping({ navigation }) {
               await dispatch(getUser(userData._id));
             }
           };
-          if (!selectedShoppingFilter || selectedCategory === "Allt")
+          if (!selectedShoppingFilter || selectedCat === "Allt")
             return (
               <>
                 <ScrollView
                   key={() => Math.random(userData._id)}
-                  contentContainerStyle={styles.shoppingListScroll}
+                  style={styles.shoppingListScroll}
                   refreshControl={
                     <RefreshControl
                       refreshing={refreshing}
@@ -201,7 +370,7 @@ function Shopping({ navigation }) {
                 >
                   <Pressable
                     onPress={() =>
-                      handlePressToFridge(fridge)
+                      handlePressToShopping(fridge)
                     } /*onPress={() => handlePressToRecipe(item)}*/
                   >
                     <View
@@ -320,14 +489,12 @@ function Shopping({ navigation }) {
               </>
             );
           else if (selectedShoppingFilter) {
-            if (
-              selectedCategory === fridge.category &&
-              selectedCategory !== "Allt"
-            )
+            if (selectedCat === fridge.category && selectedCat !== "Allt")
               return (
                 <>
                   <ScrollView
                     key={() => Math.random(id * 30)}
+                    style={styles.shoppingListScroll}
                     refreshControl={
                       <RefreshControl
                         refreshing={refreshing}
@@ -337,7 +504,7 @@ function Shopping({ navigation }) {
                   >
                     <Pressable
                       onPress={() =>
-                        handlePressToFridge(fridge)
+                        handlePressToShopping(fridge)
                       } /*onPress={() => handlePressToRecipe(item)}*/
                     >
                       <View
@@ -585,14 +752,21 @@ function Shopping({ navigation }) {
 
   return (
     <>
-      <View style={{ flex: 1, backgroundColor: Colors.blue }}>
-        {!foodComponents && (
-          <UserFridgeCat
-            onSelectedCategory={onSelectedCategory}
-            selectedCategory={selectedCategory}
-          />
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        {userData.shoppingList && !hideFood && (
+          <View>
+            <View style={styles.main}>{renderShoppingCategories()}</View>
+          </View>
         )}
-
+        {foodComponents && hideFood && (
+          <View>
+            <View style={styles.main}>{renderFridgeCategories()}</View>
+          </View>
+        )}
         <View
           style={[
             {
@@ -602,9 +776,7 @@ function Shopping({ navigation }) {
             },
           ]}
         >
-          <View
-            style={[{ marginTop: foodComponents ? 20 : null }, styles.fridge]}
-          >
+          <View style={styles.fridge}>
             <View style={styles.addKlar}>
               <View
                 style={[
@@ -623,27 +795,109 @@ function Shopping({ navigation }) {
                     keyboardType="default"
                     multiline={false}
                     onTouchStart={showFoodComponents}
+                    /* onChangeText={(e) => searchFilterFunction(e.nativeEvent.text)}*/
                   />
                 </View>
               </View>
               {foodComponents && hideFood && (
                 <View style={styles.readyView}>
-                  <Pressable
-                    style={styles.readyButton}
-                    onPress={() => readyFunction()}
-                  >
+                  <Pressable style={styles.readyButton} onPress={() => hello()}>
                     <Text style={styles.readyText}>Klar</Text>
                   </Pressable>
                 </View>
               )}
             </View>
           </View>
-          {foodComponents && (
-            <FoodToShopping selectedCategory={selectedCategory} />
-          )}
+          {foodComponents &&
+            hideFood &&
+            (!selectedShoppingFridgeFilter || selectedCat === "Allt") && (
+              <View style={{ flex: 1 }}>
+                <View>
+                  <View>
+                    <FlatList
+                      legacyImplementation={true}
+                      contentContainerStyle={styles.foodList}
+                      numColumns={3}
+                      data={foodlist}
+                      extraData={foodlist}
+                      keyExtractor={(item) => Math.random(item._id * 10)}
+                      renderItem={({ item }) => (
+                        <Pressable
+                          /* onLongPress={FoodDetails}*/
+                          onPress={() => handlePressToShoppingList(item)}
+                        >
+                          <View style={styles.food}>
+                            <View style={styles.imageContainer}>
+                              <Image
+                                accessibilityLabel={item.logo}
+                                style={styles.image}
+                                source={{
+                                  uri:
+                                    "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                                    item.logo,
+                                }}
+                              ></Image>
+                            </View>
+                            <View style={styles.textContainer}>
+                              <Text style={styles.item}>{item.title}</Text>
+                            </View>
+                          </View>
+                          {selectedItems.includes(item._id) && (
+                            <View style={styles.overlay} />
+                          )}
+                        </Pressable>
+                      )}
+                    ></FlatList>
+                  </View>
+                </View>
+              </View>
+            )}
+
+          {foodComponents &&
+            hideFood &&
+            (selectedShoppingFridgeFilter || selectedCat !== "Allt") && (
+              <View /*style={{flex:1}}*/>
+                <FlatList
+                  contentContainerStyle={styles.selectedFoodList}
+                  numColumns={3}
+                  data={foodlist}
+                  extraData={foodlist}
+                  keyExtractor={(item) => Math.random(item._id + userData._id)}
+                  renderItem={({ item }) => {
+                    if (item.category === selectedCat) {
+                      return (
+                        <Pressable
+                          onPress={() => handlePressToShoppingList(item)}
+                        >
+                          <View style={styles.food}>
+                            <View style={styles.imageContainer}>
+                              <Image
+                                accessibilityLabel={item.logo}
+                                style={styles.image}
+                                source={{
+                                  uri:
+                                    "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                                    item.logo,
+                                }}
+                              ></Image>
+                            </View>
+                            <View style={styles.textContainer}>
+                              <Text style={styles.item}>{item.title}</Text>
+                            </View>
+                          </View>
+                          {selectedItems.includes(item._id) && (
+                            <View style={styles.overlay} />
+                          )}
+                        </Pressable>
+                      );
+                    }
+                  }}
+                ></FlatList>
+              </View>
+            )}
 
           <View style={styles.fridgeView}>
-            {!foodComponents && (
+            {!foodComponents && !hideFood && (
               <>
                 {userData.shoppingList.length > 0 && (
                   <>
@@ -667,11 +921,12 @@ function Shopping({ navigation }) {
             )}
 
             {userData.shoppingList &&
+              !hideFood &&
               selectedShoppingFilter &&
               fridge.map((item) => {
                 let fridgeLength = fridge.length;
                 for (let i = 0; i < fridgeLength; i++) {
-                  if (item.foodCategory === selectedCategory) {
+                  if (item.foodCategory === selectedCat) {
                     console.log(item.foodName);
 
                     function dateDiff() {
@@ -1029,4 +1284,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textDecorationLine: "underline",
   },
+  shoppingListScroll: {},
 });
