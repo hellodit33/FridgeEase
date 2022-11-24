@@ -207,6 +207,7 @@ function Shopping({ navigation }) {
             justifyContent: "center",
           }}
           onPress={() => onShoppingCategory(item)}
+          key={() => Math.random(item._id * 20)}
         >
           <Text
             style={{
@@ -861,7 +862,7 @@ function Shopping({ navigation }) {
                   numColumns={3}
                   data={foodlist}
                   extraData={foodlist}
-                  keyExtractor={(item) => Math.random(item._id)}
+                  keyExtractor={(item) => Math.random(item._id + userData._id)}
                   renderItem={({ item }) => {
                     if (item.category === selectedCat) {
                       return (
@@ -936,7 +937,10 @@ function Shopping({ navigation }) {
                       return dateDiff;
                     }
                     return (
-                      <ScrollView style={{ backgroundColor: Colors.blue }}>
+                      <ScrollView
+                        style={{ backgroundColor: Colors.blue }}
+                        key={() => Math.random(item._id * 11)}
+                      >
                         <Pressable onPress={() => handlePressToRecipe(item)}>
                           <View style={styles.userFridgeItem}>
                             <View style={styles.userImageView}>

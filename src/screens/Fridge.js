@@ -343,7 +343,7 @@ function Fridge({ props, navigation, route }) {
         data={categories}
         horizontal
         showsHorizontalScrollIndicator={true}
-        keyExtractor={(item) => Math.random(item.id)}
+        keyExtractor={(item) => Math.random(categories.length * 5)}
         renderItem={renderItem}
         contentContainerStyle={{}}
       ></FlatList>
@@ -387,7 +387,7 @@ function Fridge({ props, navigation, route }) {
         data={categories}
         horizontal
         showsHorizontalScrollIndicator={true}
-        keyExtractor={(item) => Math.random(item.id)}
+        keyExtractor={() => Math.random(userData._id * 8)}
         renderItem={renderItem}
         contentContainerStyle={{}}
       ></FlatList>
@@ -609,7 +609,7 @@ return(
       <FlatList
         data={userData.usersfood}
         extraData={userData.usersfood}
-        keyExtractor={() => Math.random(userData._id)}
+        keyExtractor={() => Math.random(userData._id * 19)}
         renderItem={renderFridge}
         contentContainerStyle={{}}
       ></FlatList>
@@ -783,7 +783,7 @@ return(
 
                   return (
                     <ScrollView
-                      key={item._id}
+                      key={() => item._id * 3}
                       style={{ backgroundColor: Colors.blue }}
                       refreshControl={
                         <RefreshControl
@@ -911,7 +911,7 @@ return(
                     numColumns={3}
                     data={foodsLists}
                     extraData={foodsLists}
-                    keyExtractor={(item) => Math.random(item._id)}
+                    keyExtractor={() => Math.random(userData._id * 5)}
                     renderItem={({ item }) => (
                       <TouchableOpacity onPress={() => handlePress(item)}>
                         <View style={styles.food}>
@@ -948,7 +948,9 @@ return(
                 numColumns={3}
                 data={foodsLists}
                 extraData={foodsLists}
-                keyExtractor={(item) => Math.random(item._id + userData._id)}
+                keyExtractor={() =>
+                  Math.random(userData._id + userData._id * 2)
+                }
                 renderItem={({ item }) => {
                   if (item.category === selectedCategory) {
                     return (
@@ -987,6 +989,8 @@ return(
 
 export default Fridge;
 
+const deviceWidth = Dimensions.get("window").width;
+
 const styles = StyleSheet.create({
   main: {
     backgroundColor: Colors.blue,
@@ -1004,7 +1008,7 @@ const styles = StyleSheet.create({
     fontFamily: "Interbold",
     color: Colors.green,
     textAlign: "center",
-    width: "80%",
+    width: deviceWidth < 350 ? "70%" : "80%",
     flexDirection: "row",
   },
   fridge: {
@@ -1016,21 +1020,20 @@ const styles = StyleSheet.create({
   },
   addFood: {
     backgroundColor: "white",
-    paddingVertical: 10,
+    paddingVertical: deviceWidth < 450 ? 10 : 15,
     paddingHorizontal: 10,
-    borderRadius: 120,
-    marginHorizontal: 20,
-    marginVertical: 5,
+    borderRadius: 60,
+    marginHorizontal: deviceWidth < 450 ? 20 : 25,
+    marginVertical: deviceWidth < 450 ? 5 : 10,
     borderWidth: 4,
     borderColor: Colors.green,
     flexDirection: "row",
     fontFamily: "Interlight",
   },
   addFoodInput: {
-    fontSize: 15,
+    fontSize: deviceWidth < 450 ? 15 : 20,
     fontWeight: "bold",
     flexDirection: "row",
-
     color: Colors.green,
   },
   addFoodIcon: {

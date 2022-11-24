@@ -80,7 +80,7 @@ function BottomNav() {
         headerTitleAlign: "center",
 
         headerStyle: { backgroundColor: Colors.blue },
-        headerTintColor: "white",
+
         tabBarStyle: {
           backgroundColor: Colors.blue,
         },
@@ -88,6 +88,8 @@ function BottomNav() {
           fontWeight: "bold",
           fontSize: 12,
         },
+        contentStyle: { backgroundColor: Colors.blue },
+
         tabBarActiveTintColor: Colors.green,
         tabBarInactiveTintColor: Colors.green,
         tabBarActiveBackgroundColor: Colors.darkblue,
@@ -98,6 +100,8 @@ function BottomNav() {
         component={Fridge}
         options={{
           title: "Mitt kylskåp",
+          contentStyle: { backgroundColor: Colors.blue },
+
           headerTitle: () => <Header title="Mitt kylskåp" />,
           headerStyle: { backgroundColor: Colors.blue },
           tabBarIcon: () => (
@@ -114,6 +118,7 @@ function BottomNav() {
         component={Recipes}
         options={{
           title: "Mina recept",
+          contentStyle: { backgroundColor: Colors.blue },
 
           headerTitle: () => <Header title="Mina recept" />,
           tabBarIcon: () => (
@@ -126,6 +131,8 @@ function BottomNav() {
         name="Shopping"
         component={Shopping}
         options={{
+          contentStyle: { backgroundColor: Colors.blue },
+
           title: "Min inköpslista",
 
           headerTitle: () => <Header title="Min inköpslista" />,
@@ -144,6 +151,7 @@ function BottomNav() {
         component={User}
         options={{
           title: "Min profil",
+          contentStyle: { backgroundColor: Colors.blue },
 
           headerTitle: () => <Header title="Min sida" />,
           tabBarIcon: ({ color, size }) => (
@@ -152,42 +160,6 @@ function BottomNav() {
         }}
       ></BottomTabs.Screen>
     </BottomTabs.Navigator>
-  );
-}
-function DrawerNavigator() {
-  return (
-    <Drawer.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: Colors.blue },
-        headerTintColor: "grey",
-        sceneContainerStyle: { backgroundColor: "white" },
-        drawerContentStyle: { backgroundColor: "white" },
-        drawerInactiveTintColor: "purple",
-        drawerActiveTintColor: "black",
-        drawerActiveBackgroundColor: "purple",
-      }}
-    >
-      <Drawer.Screen
-        name="Shopping"
-        component={Shopping}
-        options={{
-          title: "Inköpslista",
-          drawerIcon: ({ color, size }) => (
-            <Ionicons name="calendar" color={color} size={size}></Ionicons>
-          ),
-        }}
-      ></Drawer.Screen>
-      <Drawer.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          title: "Min sida",
-          drawerIcon: ({ color, size }) => (
-            <Ionicons name="book" color={color} size={size}></Ionicons>
-          ),
-        }}
-      ></Drawer.Screen>
-    </Drawer.Navigator>
   );
 }
 
@@ -209,13 +181,6 @@ function AuthenticatedStack() {
         }}
       />
 
-      <Stack.Screen
-        name="Drawer"
-        component={DrawerNavigator}
-        options={{
-          headerShown: false,
-        }}
-      />
       <Stack.Screen name="RecipeInDetail" component={RecipeInDetail} />
 
       <Stack.Screen

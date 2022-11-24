@@ -121,7 +121,7 @@ function Recipes({ navigation }) {
         data={categories}
         horizontal
         showsHorizontalScrollIndicator={true}
-        keyExtractor={(item) => `${item.id}`}
+        keyExtractor={() => Math.random(categories.length)}
         renderItem={renderItem}
         contentContainerStyle={{}}
       ></FlatList>
@@ -304,7 +304,7 @@ function Recipes({ navigation }) {
           horizontal
           data={selectedRecipes}
           extraData={selectedRecipes}
-          keyExtractor={() => Math.random(item._id + item._id)}
+          keyExtractor={() => Math.random(selectedRecipes.length)}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.recipes}
@@ -493,7 +493,7 @@ function Recipes({ navigation }) {
                       data={item.ingredients2}
                       numColumns={3}
                       contentContainerStyle={styles.centerItems}
-                      keyExtractor={() => Math.random(item._id)}
+                      keyExtractor={() => Math.random(item.ingredients2.length)}
                       renderItem={({ item }) => (
                         <View style={styles.ingredientsItemText}>
                           <Text style={styles.recipesText}>{item.name}</Text>
@@ -703,7 +703,7 @@ function Recipes({ navigation }) {
                       data={item.ingredients2}
                       numColumns={3}
                       contentContainerStyle={styles.centerItems}
-                      keyExtractor={() => Math.random(item.quantity)}
+                      keyExtractor={() => Math.random(500 * 2)}
                       renderItem={({ item }) => (
                         <View style={styles.ingredientsItemText}>
                           <Text style={styles.recipesText}>{item.name}</Text>
@@ -1185,8 +1185,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 5,
     backgroundColor: "white",
-    borderRadius: 30,
     margin: 2,
+    borderRadius: 30,
   },
   recipesText: {
     fontFamily: "Intermedium",

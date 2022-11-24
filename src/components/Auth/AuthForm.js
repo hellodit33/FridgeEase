@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  Dimensions,
 } from "react-native";
 
 import FlatButton from "../../UI/FlatButton";
@@ -67,46 +68,49 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
           <Text style={styles.title}>Bli medlem</Text>
         )}
       </View>
-      <ScrollView>
-        <Input
-          style={styles.input}
-          label="E-mail*"
-          onUpdateValue={updateInputValueHandler.bind(this, "email")}
-          value={enteredEmail}
-          keyboardType="email-address"
-          isInvalid={emailIsInvalid}
-          placeholder="exempel@gmail.com"
-          placeholderTextColor={Colors.green}
-        />
+      <ScrollView contentContainerStyle={styles.auth}>
+        <View style={styles.authHorizontal}>
+          <Input
+            style={styles.input}
+            label="E-mail*"
+            onUpdateValue={updateInputValueHandler.bind(this, "email")}
+            value={enteredEmail}
+            keyboardType="email-address"
+            isInvalid={emailIsInvalid}
+            placeholder="exempel@gmail.com"
+            placeholderTextColor={Colors.green}
+          />
 
-        <Input
-          style={styles.input}
-          label="Lösenord*"
-          onUpdateValue={updateInputValueHandler.bind(this, "password")}
-          secure
-          value={enteredPassword}
-          isInvalid={passwordIsInvalid}
-          placeholder="Lösenord"
-          placeholderTextColor={Colors.green}
-        />
+          <Input
+            style={styles.input}
+            label="Lösenord*"
+            onUpdateValue={updateInputValueHandler.bind(this, "password")}
+            secure
+            value={enteredPassword}
+            isInvalid={passwordIsInvalid}
+            placeholder="Lösenord"
+            placeholderTextColor={Colors.green}
+          />
+
+          {!isLogin && (
+            <Input
+              label="Bekräfta ditt lösenord*"
+              onUpdateValue={updateInputValueHandler.bind(
+                this,
+                "confirmPassword"
+              )}
+              secure
+              placeholder="Lösenord"
+              value={enteredConfirmPassword}
+              isInvalid={passwordsDontMatch}
+              placeholderTextColor={Colors.green}
+            />
+          )}
+        </View>
         {isLogin && (
           <View style={styles.flat}>
             <FlatButton>Glömt lösenordet?</FlatButton>
           </View>
-        )}
-        {!isLogin && (
-          <Input
-            label="Bekräfta ditt lösenord*"
-            onUpdateValue={updateInputValueHandler.bind(
-              this,
-              "confirmPassword"
-            )}
-            secure
-            placeholder="Lösenord"
-            value={enteredConfirmPassword}
-            isInvalid={passwordsDontMatch}
-            placeholderTextColor={Colors.green}
-          />
         )}
         <View style={styles.buttons}>
           <TouchableOpacity onPress={submitHandler} style={styles.flatbutton}>
@@ -122,10 +126,13 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
 
 export default AuthForm;
 
+const deviceWidth = Dimensions.get("window").width;
+const deviceHeight = Dimensions.get("window").height;
+
 const styles = StyleSheet.create({
   titleContainer: {
-    maxHeight: 300,
-    marginTop: 10,
+    maxHeight: deviceHeight < 400 ? 100 : 300,
+    marginTop: deviceHeight < 400 ? 2 : 10,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -133,7 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: Colors.green,
     fontWeight: "bold",
-    marginBottom: 30,
+    marginBottom: deviceHeight < 400 ? 2 : 30,
   },
   imageTitle: {
     width: "50%",
@@ -141,22 +148,26 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     marginTop: 0,
   },
+  auth: {
+    flexDirection: deviceHeight < 400 ? "row" : "column",
+    justifyContent: deviceHeight < 400 ? "space-between" : "space-around",
+  },
+  input: {},
   flat: {
-    alignItems: "flex-end",
+    alignItems: deviceHeight < 400 ? "flex-start" : "flex-end",
     paddingVertical: 0,
     marginVertical: 0,
-    justifyContent: "flex-end",
+    justifyContent: deviceHeight < 400 ? "flex-start" : "flex-end",
   },
   buttons: {
     backgroundColor: Colors.greywhite,
     borderRadius: 120,
     paddingVertical: 10,
-
     borderColor: "black",
     borderWidth: 1,
   },
   flatbutton: {
-    paddingVertical: 6,
+    paddingVertical: deviceHeight < 400 ? 2 : 6,
     paddingHorizontal: 12,
     justifyContent: "center",
   },
