@@ -190,10 +190,12 @@ function EditModalFridge(props) {
           </Pressable>
         </View>
         <View styles={styles.moreInfoToChange}>
-          {props.passedData.quantity > 0 && (
+          {props.passedData.quantity && props.passedData.quantity.length > 0 ? (
             <Text style={styles.foodQuantity}>
               Nuvarande kvantité: {props.passedData.quantity}
             </Text>
+          ) : (
+            <Text style={styles.foodQuantity}>Ingen nuvarande kvantité</Text>
           )}
           <View style={styles.carbonInfo}>
             <Text style={styles.recipesText}>

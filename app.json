@@ -3,7 +3,7 @@
     "name": "FridgeEase",
     "slug": "FridgeEase",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "portrait",
     "backgroundColor": "#A0C4FF",
     "icon": "./assets/icon.png",
     "splash": {

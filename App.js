@@ -96,8 +96,8 @@ function BottomNav() {
       })}
     >
       <BottomTabs.Screen
-        name="Fridge"
-        component={Fridge}
+        name="MyFridge"
+        component={MyFridge}
         options={{
           title: "Mitt kylskåp",
           contentStyle: { backgroundColor: Colors.blue },
@@ -332,6 +332,7 @@ import { fetchRecipes } from "./store/redux/actions/recipe.actions";
 import FavoritesContextProvider from "./store/context/favorites-context";
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import MyFridge from "./src/screens/MyFridge";
 
 const store = configureStore({ reducer: rootReducer });
 
