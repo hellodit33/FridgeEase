@@ -10,7 +10,6 @@ import Colors from "../../constants/Colors";
 
 function FridgeCat(props) {
   function renderFridgeCategories() {
-    // const [categories, setCategories] = useState(categoryData);
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     const categoryData = [
@@ -70,9 +69,9 @@ function FridgeCat(props) {
               color: Colors.green,
               textDecorationStyle: "solid",
               textDecorationColor:
-                selectedCategory === item.name ? Colors.darkpink : "none",
+                props.selectedCategory === item.name ? Colors.darkpink : "none",
               textDecorationLine:
-                selectedCategory === item.name ? "underline" : "none",
+                props.selectedCategory === item.name ? "underline" : "none",
             }}
           >
             {item.name}
@@ -85,7 +84,7 @@ function FridgeCat(props) {
         data={categoryData}
         horizontal
         showsHorizontalScrollIndicator={true}
-        keyExtractor={(item) => Math.random(categoryData.length * 5)}
+        keyExtractor={() => Math.random(categoryData.length * 5)}
         renderItem={renderItem}
         contentContainerStyle={{}}
       ></FlatList>
@@ -93,5 +92,4 @@ function FridgeCat(props) {
   }
   return <View>{renderFridgeCategories()}</View>;
 }
-
 export default FridgeCat;

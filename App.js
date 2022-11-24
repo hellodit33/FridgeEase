@@ -75,7 +75,7 @@ function BottomNav() {
 
   return (
     <BottomTabs.Navigator
-      initialRouteName="Fridge"
+      initialRouteName="MyFridge"
       screenOptions={({ navigation }) => ({
         headerTitleAlign: "center",
 
@@ -331,7 +331,6 @@ import { StatusBar } from "expo-status-bar";
 import { fetchRecipes } from "./store/redux/actions/recipe.actions";
 import FavoritesContextProvider from "./store/context/favorites-context";
 import FlashMessage from "react-native-flash-message";
-import { showMessage, hideMessage } from "react-native-flash-message";
 import MyFridge from "./src/screens/MyFridge";
 
 const store = configureStore({ reducer: rootReducer });

@@ -8,10 +8,10 @@ import {
 } from "react-native";
 import Colors from "../../constants/Colors";
 
-function UserFridgeCat(props) {
-  function renderUserFridgeCategories() {
-    const [selectedCategory, setSelectedCategory] = useState(null);
+function RecipesCat(props) {
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
+  function renderRecipesCategories() {
     const categoryData = [
       {
         id: 1,
@@ -19,32 +19,31 @@ function UserFridgeCat(props) {
       },
       {
         id: 2,
-        name: "Grönsaker",
+        name: "Snabbt",
       },
       {
         id: 3,
-        name: "Frukt",
+        name: "Enkelt",
       },
       {
         id: 4,
-        name: "Mejeri",
+        name: "Billigt",
       },
       {
         id: 5,
-        name: "Kött & Fisk",
+        name: "Lagom",
       },
-
       {
         id: 6,
-        name: "Skafferi",
+        name: "Ambitiöst",
       },
       {
         id: 7,
-        name: "Pasta & Ris",
+        name: "Dejt",
       },
       {
         id: 8,
-        name: "Kryddor",
+        name: "Festligt",
       },
     ];
 
@@ -54,12 +53,12 @@ function UserFridgeCat(props) {
           style={{
             padding: 4,
             marginTop: 20,
+            marginHorizontal: 10,
             backgroundColor: Colors.blue,
             alignItems: "center",
             justifyContent: "center",
           }}
-          onPress={() => props.onUserFridgeCategory(item)}
-          key={() => Math.random(item.id)}
+          onPress={() => props.onRecipeCategory(item)}
         >
           <Text
             style={{
@@ -85,13 +84,13 @@ function UserFridgeCat(props) {
         data={categoryData}
         horizontal
         showsHorizontalScrollIndicator={true}
-        keyExtractor={(item) => Math.random(categoryData.length * 5)}
+        keyExtractor={() => Math.random(categoryData.length * 5)}
         renderItem={renderItem}
         contentContainerStyle={{}}
       ></FlatList>
     );
   }
-  return <View>{renderUserFridgeCategories()}</View>;
+  return <View>{renderRecipesCategories()}</View>;
 }
 
-export default UserFridgeCat;
+export default RecipesCat;

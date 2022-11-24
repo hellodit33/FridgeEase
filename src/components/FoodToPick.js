@@ -139,7 +139,10 @@ function FoodToPick({ props, navigation, route }) {
 
   return (
     <>
-      <FridgeCat onFridgeCategory={onFridgeCategory}></FridgeCat>
+      <FridgeCat
+        onFridgeCategory={onFridgeCategory}
+        selectedCategory={selectedCategory}
+      />
       {!selectedFridgeFilter && (
         <View style={{ flex: 1 }}>
           <FlashMessage position="top" />

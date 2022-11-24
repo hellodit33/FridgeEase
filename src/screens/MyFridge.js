@@ -181,7 +181,6 @@ function MyFridge({ props, navigation, route }) {
         <>
           <FlashMessage position="top" />
           <ScrollView
-            key={() => Math.random(userData._id)}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
@@ -370,7 +369,10 @@ function MyFridge({ props, navigation, route }) {
     <>
       <View style={{ flex: 1, backgroundColor: Colors.blue }}>
         {!foodComponents && (
-          <UserFridgeCat onUserFridgeCategory={onUserFridgeCategory} />
+          <UserFridgeCat
+            onUserFridgeCategory={onUserFridgeCategory}
+            selectedCategory={selectedCategory}
+          />
         )}
 
         <View
