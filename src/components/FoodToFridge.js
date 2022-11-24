@@ -22,10 +22,10 @@ import LoadingOverlay from "../UI/LoadingOverlay";
 import { useDispatch, useSelector } from "react-redux";
 
 import FlashMessage from "react-native-flash-message";
-import { showMessage, hideMessage } from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 import FridgeCat from "./FridgeCat";
 
-function FoodToFridge({ props, navigation, route }) {
+function FoodToFridge({}) {
   //redux store
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userReducer);

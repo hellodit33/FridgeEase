@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   Alert,
   StyleSheet,
-  View,
   KeyboardAvoidingView,
   ScrollView,
   Platform,
@@ -10,7 +9,6 @@ import {
 
 import FlatButton from "../../UI/FlatButton";
 import AuthForm from "./AuthForm";
-import Colors from "../../../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 
 function AuthContent({ isLogin, onAuthenticate }) {

@@ -8,10 +8,8 @@ import {
   Image,
   Alert,
   Platform,
-  Button,
   KeyboardAvoidingView,
 } from "react-native";
-import IcoButton from "../UI/IcoButton";
 import Colors from "../../constants/Colors";
 import PrimaryButton from "../UI/PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";

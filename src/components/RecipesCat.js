@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-  View,
-} from "react-native";
+import { Text, TouchableOpacity, FlatList, View } from "react-native";
 import Colors from "../../constants/Colors";
 
 function RecipesCat(props) {

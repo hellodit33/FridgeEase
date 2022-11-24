@@ -1,4 +1,3 @@
-//controller requirements
 const RecipeModel = require("../models/recipe.model");
 const ObjectID = require("mongoose").Types.ObjectId;
 
@@ -12,7 +11,6 @@ module.exports.selectRecipe = (req, res) => {
     return res.status(400).send("ID unknown: " + req.params.id);
 
   try {
-    //add to the food list
     RecipeModel.findByIdAndUpdate(
       req.params.id,
       {

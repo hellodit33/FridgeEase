@@ -14,16 +14,13 @@ import {
   RefreshControl,
   Image,
   Pressable,
-  Button,
   Text,
   FlatList,
   Dimensions,
   StyleSheet,
   TextInput,
-  SafeAreaView,
   TouchableOpacity,
   ScrollView,
-  Modal,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import LoadingOverlay from "../UI/LoadingOverlay";
@@ -32,13 +29,13 @@ import IcoButton from "../UI/IcoButton";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import FoodToFridge from "../components/FoodToFridge";
 import { faUtensils } from "@fortawesome/free-solid-svg-icons";
-import { differenceInDays, parseISO } from "date-fns";
+import { differenceInDays } from "date-fns";
 import FlashMessage from "react-native-flash-message";
-import { showMessage, hideMessage } from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 import { fetchRecipes } from "../../store/redux/actions/recipe.actions";
 import UserFridgeCat from "../components/UserFridgeCat";
 
-function MyFridge({ props, navigation, route }) {
+function MyFridge({ navigation }) {
   //redux store
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userReducer);
@@ -180,139 +177,135 @@ function MyFridge({ props, navigation, route }) {
       return (
         <>
           <FlashMessage position="top" />
-          <ScrollView
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          >
-            <Pressable
-              onLongPress={() => {
-                openModal({
-                  id,
-                  name,
-                  expiration,
-                  expirationDate,
-                  quantity,
-                  carbon,
-                  logo,
-                });
-              }}
-              onPress={() => handlePressToRecipe(item)}
-            >
-              <View style={styles.userFridgeItem}>
-                <View style={styles.userImageView}>
-                  <Image
-                    accessibilityLabel={item.foodLogo}
-                    style={styles.userImage}
-                    source={{
-                      uri:
-                        "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
-                        item.foodLogo,
-                    }}
-                  ></Image>
-                </View>
-                <View style={styles.itemView}>
-                  <Text style={styles.itemName}>{item.foodName}</Text>
-                </View>
 
-                <View style={styles.expView}>
-                  <Text style={styles.itemExp}>
-                    {item.foodExpirationDate ? (
-                      <Text>
-                        {dateDiff(item.foodExpirationDate, today)}
-                        {dateDiff(item.foodExpirationDate, today) > 1
-                          ? " dagar"
-                          : " dag"}
-                      </Text>
-                    ) : (
-                      <Text>
-                        {item.foodExpiration}
-                        {item.foodExpiration > 1 ? " dagar" : " dag"}
-                      </Text>
-                    )}
-                  </Text>
-                </View>
-                <View
+          <Pressable
+            key={() => Math.random(id)}
+            onLongPress={() => {
+              openModal({
+                id,
+                name,
+                expiration,
+                expirationDate,
+                quantity,
+                carbon,
+                logo,
+              });
+            }}
+            onPress={() => handlePressToRecipe(item)}
+          >
+            <View style={styles.userFridgeItem}>
+              <View style={styles.userImageView}>
+                <Image
+                  accessibilityLabel={item.foodLogo}
+                  style={styles.userImage}
+                  source={{
+                    uri:
+                      "https://raw.githubusercontent.com/hellodit33/FridgeEase/main/assets/logos/" +
+                      item.foodLogo,
+                  }}
+                ></Image>
+              </View>
+              <View style={styles.itemView}>
+                <Text style={styles.itemName}>{item.foodName}</Text>
+              </View>
+
+              <View style={styles.expView}>
+                <Text style={styles.itemExp}>
+                  {item.foodExpirationDate ? (
+                    <Text>
+                      {dateDiff(item.foodExpirationDate, today)}
+                      {dateDiff(item.foodExpirationDate, today) > 1
+                        ? " dagar"
+                        : " dag"}
+                    </Text>
+                  ) : (
+                    <Text>
+                      {item.foodExpiration}
+                      {item.foodExpiration > 1 ? " dagar" : " dag"}
+                    </Text>
+                  )}
+                </Text>
+              </View>
+              <View
+                style={[
+                  {
+                    backgroundColor:
+                      item.foodCarbon === "A"
+                        ? Colors.darkgreen
+                        : item.foodCarbon === "B"
+                        ? Colors.lightgreen
+                        : item.foodCarbon === "C"
+                        ? Colors.lightorange
+                        : item.foodCarbon === "D"
+                        ? Colors.orange
+                        : item.foodCarbon === "E"
+                        ? Colors.red
+                        : null,
+                  },
+                  styles.carbonView,
+                ]}
+              >
+                <Text
                   style={[
+                    styles.itemCarbon,
                     {
-                      backgroundColor:
+                      color:
                         item.foodCarbon === "A"
-                          ? Colors.darkgreen
+                          ? "white"
                           : item.foodCarbon === "B"
-                          ? Colors.lightgreen
+                          ? "white"
                           : item.foodCarbon === "C"
-                          ? Colors.lightorange
+                          ? "black"
                           : item.foodCarbon === "D"
-                          ? Colors.orange
+                          ? "black"
                           : item.foodCarbon === "E"
-                          ? Colors.red
+                          ? "white"
                           : null,
                     },
-                    styles.carbonView,
                   ]}
                 >
-                  <Text
-                    style={[
-                      styles.itemCarbon,
-                      {
-                        color:
-                          item.foodCarbon === "A"
-                            ? "white"
-                            : item.foodCarbon === "B"
-                            ? "white"
-                            : item.foodCarbon === "C"
-                            ? "black"
-                            : item.foodCarbon === "D"
-                            ? "black"
-                            : item.foodCarbon === "E"
-                            ? "white"
-                            : null,
-                      },
-                    ]}
-                  >
-                    {item.foodCarbon}
-                  </Text>
-                </View>
-                <View style={styles.editItem}>
-                  <IcoButton
-                    icon="create-outline"
-                    size={24}
-                    color={Colors.green}
-                    onPress={() => {
-                      openModal({
-                        id,
-                        name,
-                        quantity,
-                        expiration,
-                        expirationDate,
-                        carbon,
-                        logo,
-                      });
-                    }}
-                  />
-                </View>
-
-                <View style={styles.deleteItem}>
-                  <IcoButton
-                    icon="close"
-                    size={24}
-                    color={Colors.darkpink}
-                    onPress={() => deleteInFridge(item)}
-                  />
-
-                  <EditModal
-                    passedData={passedData}
-                    visible={modalIsVisible}
-                    closeModal={closeModal}
-                    editFoodInFridge={editInFridge}
-                  />
-                </View>
+                  {item.foodCarbon}
+                </Text>
               </View>
-              {selectToRecipe.includes(item._id) && (
-                <View style={styles.overlayToRecipe} />
-              )}
-            </Pressable>
-          </ScrollView>
+              <View style={styles.editItem}>
+                <IcoButton
+                  icon="create-outline"
+                  size={24}
+                  color={Colors.green}
+                  onPress={() => {
+                    openModal({
+                      id,
+                      name,
+                      quantity,
+                      expiration,
+                      expirationDate,
+                      carbon,
+                      logo,
+                    });
+                  }}
+                />
+              </View>
+
+              <View style={styles.deleteItem}>
+                <IcoButton
+                  icon="close"
+                  size={24}
+                  color={Colors.darkpink}
+                  onPress={() => deleteInFridge(item)}
+                />
+
+                <EditModal
+                  passedData={passedData}
+                  visible={modalIsVisible}
+                  closeModal={closeModal}
+                  editFoodInFridge={editInFridge}
+                />
+              </View>
+            </View>
+            {selectToRecipe.includes(item._id) && (
+              <View style={styles.overlayToRecipe} />
+            )}
+          </Pressable>
         </>
       );
     };
@@ -463,42 +456,35 @@ function MyFridge({ props, navigation, route }) {
           </View>
         )}
 
-        {!foodComponents &&
-          selectedUserFilter &&
-          userFood.map((item) => {
-            let userFoodLength = userFood.length;
-            for (let i = 0; i < userFoodLength; i++) {
-              if (item.foodCategory === selectedCategory) {
-                console.log(item.foodName);
-                const id = item._id;
-                const name = item.foodName;
-                const expiration = item.foodExpiration;
-                const expirationDate = item.foodExpirationDate;
+        {!foodComponents && selectedUserFilter && (
+          <ScrollView
+            key={() => Math.random(id * 9)}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
+            {userFood.map((item) => {
+              let userFoodLength = userFood.length;
+              for (let i = 0; i < userFoodLength; i++) {
+                if (item.foodCategory === selectedCategory) {
+                  console.log(item.foodName);
+                  const id = item._id;
+                  const name = item.foodName;
+                  const expiration = item.foodExpiration;
+                  const expirationDate = item.foodExpirationDate;
 
-                const carbon = item.foodCarbon;
-                const logo = item.foodLogo;
-                function fetchQuantity() {
-                  if (item.foodQuantity) {
-                    return item.foodQuantity;
-                  } else if (!item.foodQuantity) {
-                    return 0;
-                  }
-                }
-                const quantity = fetchQuantity();
-                return (
-                  <ScrollView
-                    style={{ backgroundColor: Colors.blue }}
-                    refreshControl={
-                      <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                      />
+                  const carbon = item.foodCarbon;
+                  const logo = item.foodLogo;
+                  function fetchQuantity() {
+                    if (item.foodQuantity) {
+                      return item.foodQuantity;
+                    } else if (!item.foodQuantity) {
+                      return 0;
                     }
-                  >
-                    <Pressable
-                      /*  key={() => userData._id * 3}*/
-                      onPress={() => handlePressToRecipe(item)}
-                    >
+                  }
+                  const quantity = fetchQuantity();
+                  return (
+                    <Pressable onPress={() => handlePressToRecipe(item)}>
                       <View style={styles.userFridgeItem}>
                         <View style={styles.userImageView}>
                           <Image
@@ -594,13 +580,14 @@ function MyFridge({ props, navigation, route }) {
                         <View style={styles.overlayToRecipe} />
                       )}
                     </Pressable>
-                  </ScrollView>
-                );
-              } else if (selectedCategory === "Allt") {
-                setSelectedUserFilter(false);
+                  );
+                } else if (selectedCategory === "Allt") {
+                  setSelectedUserFilter(false);
+                }
               }
-            }
-          })}
+            })}
+          </ScrollView>
+        )}
       </View>
     </>
   );

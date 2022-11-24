@@ -100,9 +100,9 @@ export const AuthProvider = ({ children }) => {
       .catch((err) => console.log(err));
   };
 
-  const addFood = () => {
+  /*const addFood = () => {
     setUserFood(true);
-  };
+  };*/
 
   useEffect(() => {
     isLoggedIn();
@@ -113,7 +113,6 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         register,
-        addFood,
         userFoodTrue,
         uid,
         isLoading,

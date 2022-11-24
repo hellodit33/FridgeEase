@@ -1,22 +1,6 @@
-//user controller requiremments
-
 const UserModel = require("../models/user.model");
 const ObjectID = require("mongoose").Types.ObjectId;
 
-/**
- *
- * @desc getAllUsers finds all users
- */
-
-module.exports.getAllUsers = async (req, res) => {
-  const users = await UserModel.find().select("-password");
-  res.status(200).json(users);
-};
-
-/**
- *
- * @returns userInfo for the profile
- */
 module.exports.userInfo = (req, res) => {
   console.log(req.params);
   if (!ObjectID.isValid(req.params.id))
@@ -48,56 +32,6 @@ module.exports.getFoodToRecipe = (req, res) => {
     if (!err) res.send(data.foodToRecipe);
     else console.log("ID unknown : " + err);
   });
-};
-
-/**
- *
- * @returns new information about user into db, while onboarding or changing info on profile
- */
-module.exports.updateUserAllergy = (req, res) => {
-  if (!ObjectID.isValid(req.params.id))
-    return res.status(400).send("ID unknown : " + req.params.id);
-
-  try {
-    UserModel.findOneAndUpdate(
-      { _id: req.params.id },
-      {
-        $set: {
-          allergy: req.body.allergy,
-        },
-      },
-      { new: true, upsert: true, setDefaultsOnInsert: true },
-      (err, data) => {
-        if (!err) return res.send(data);
-        if (err) return res.status(500).send({ message: err });
-      }
-    );
-  } catch (err) {
-    return res.status(500).json({ message: err });
-  }
-};
-
-module.exports.updateUserDiet = (req, res) => {
-  if (!ObjectID.isValid(req.params.id))
-    return res.status(400).send("ID unknown : " + req.params.id);
-
-  try {
-    UserModel.findOneAndUpdate(
-      { _id: req.params.id },
-      {
-        $set: {
-          diet: req.body.diet,
-        },
-      },
-      { new: true, upsert: true },
-      (err, data) => {
-        if (!err) return res.send(data);
-        if (err) return res.status(500).send({ message: err });
-      }
-    );
-  } catch (err) {
-    return res.status(500).json({ message: err });
-  }
 };
 
 module.exports.addFoodToRecipe = (req, res) => {
@@ -462,5 +396,51 @@ module.exports.editShoppingBio = (req, res) => {
     });
   } catch (err) {
     return res.status(400).send(err);
+  }
+};
+
+module.exports.updateUserAllergy = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    UserModel.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          allergy: req.body.allergy,
+        },
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true },
+      (err, data) => {
+        if (!err) return res.send(data);
+        if (err) return res.status(500).send({ message: err });
+      }
+    );
+  } catch (err) {
+    return res.status(500).json({ message: err });
+  }
+};
+
+module.exports.updateUserDiet = (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+  try {
+    UserModel.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          diet: req.body.diet,
+        },
+      },
+      { new: true, upsert: true },
+      (err, data) => {
+        if (!err) return res.send(data);
+        if (err) return res.status(500).send({ message: err });
+      }
+    );
+  } catch (err) {
+    return res.status(500).json({ message: err });
   }
 };

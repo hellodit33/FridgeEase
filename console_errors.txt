@@ -1,3 +1,5 @@
 Console Warning:
 "ImmutableStateInvariantMiddleware took 80ms which is more than the warning threshold..."
-- Felt säger att den här middleware är "disabled" in production builds" så jag behöver "inte oroa mig över detta".
+- Felet säger att den här middleware är senare "disabled" in production builds" så jag behöver "inte oroa mig över detta".
+
+"SerializableStateInvariantMiddleware" är ett annat fel jag får, och det har samma innehåll som det första. Det är ett fel som kommer försvinna när man väl använder production builds.

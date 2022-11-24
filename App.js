@@ -1,11 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import axios from "axios";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Ionicons } from "@expo/vector-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 import {
@@ -15,21 +12,11 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Button,
-  Dimensions,
-  Image,
-} from "react-native";
+import { StyleSheet } from "react-native";
 import Colors from "./constants/Colors";
-
 import Shopping from "./src/screens/Shopping";
 import Recipes from "./src/screens/Recipes";
 import RecipeInDetail from "./src/screens/RecipeInDetail";
-import IcoButton from "./src/UI/IcoButton";
 
 import User from "./src/screens/User";
 import LoginScreen from "./src/screens/LoginScreen";
@@ -41,7 +28,7 @@ import Diets from "./src/screens/Diets";
 import Allergies from "./src/screens/Allergies";
 import LoadingOverlay from "./src/UI/LoadingOverlay";
 import { AuthContext, AuthProvider } from "./src/components/AppContext";
-import { getUser, getUserFood } from "./store/redux/actions/user.actions";
+import { getUser } from "./store/redux/actions/user.actions";
 import { useDispatch } from "react-redux";
 
 const Stack = createNativeStackNavigator();
@@ -167,6 +154,7 @@ function AuthenticatedStack() {
     <Stack.Navigator
       screenOptions={{
         headerStyle: { backgroundColor: Colors.blue },
+        cardStyle: { height: "100%" },
 
         contentStyle: { backgroundColor: Colors.blue },
       }}
@@ -214,7 +202,7 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
-  const { isLoading, userToken, uid, userFoodTrue } = useContext(AuthContext);
+  const { isLoading, userToken, uid } = useContext(AuthContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -228,94 +216,21 @@ function Navigation() {
   if (isLoading) {
     return <LoadingOverlay message="Ge oss en kort stund..." />;
   }
-  /* const authCtx = useContext(AuthContext);*/
-  /* const [uid, setUid] = useState(null);
 
-  const loadProfile = async () => {
-    const token = await AsyncStorage.getItem("token");
-    const tokenJson = await token.toString();
-
-    await setUid(tokenJson);
-    console.log(tokenJson);
-    console.log("true");
-  };
-
-  loadProfile();
-
-  /* 
-  const [login, setLogIn] = useState(false);
-  const dispatch = useDispatch();
-
-  const fetchToken = async () => {
-    
-
-const token = await AsyncStorage.getItem("token")
-
-      .then(() => {
-        setUid(token);
-        console.log(uid);
-        console.log("hello");
-      })
-      .catch((err) => console.log("No token"));
-  };
-  useEffect(() => {
-    fetchToken();
-    if (uid) {
-      setLogIn(true);
-    }
-  }, [uid]);
-  /* const fetchToken = async () => {
-      await axios({
-        method: "get",
-        url: "https://de63-213-163-151-83.eu.ngrok.io",
-        withCredentials: true,
-      })
-        .then((res) => {
-          setUid(res.data);
-          console.log(uid);
-          console.log("hello");
-        })
-        .catch((err) => console.log("No token"));
-    };
-    fetchToken();
-    if (uid) {
-      dispatch(getUser(uid));
-      setLogIn(true);
-    }
-  }, [uid, dispatch]);*/
   return (
     <NavigationContainer>
       {userToken !== null ? (
         <FavoritesContextProvider>
-          <AuthenticatedStack /*value={uid} */ />
+          <AuthenticatedStack />
         </FavoritesContextProvider>
       ) : (
         <AuthStack />
       )}
-
-      {/*!authCtx.isAuthenticated && <AuthStack />*/}
     </NavigationContainer>
   );
 }
 
 function Root() {
-  /* const [isTryingLogin, setIsTryingLogin] = useState(true);
-  const authCtx = useContext(AuthContext);
-  useEffect(() => {
-    async function fetchToken() {
-      const storedToken = await AsyncStorage.getItem("token");
-      if (storedToken) {
-        authCtx.authenticate(storedToken);
-        console.log(authCtx);
-      }
-      setIsTryingLogin(false);
-    }
-
-    fetchToken();
-  }, [authCtx]);
-  if (isTryingLogin) {
-    return <LoadingOverlay />;
-  }*/
   return (
     <AuthProvider>
       <Navigation />
@@ -337,10 +252,6 @@ const store = configureStore({ reducer: rootReducer });
 store.dispatch(fetchFood());
 store.dispatch(fetchRecipes());
 
-/*
-if (uid) {
-  store.dispatch(getUserFood(uid));
-}*/
 export default function App() {
   return (
     <>

@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Colors from "../../constants/Colors";
 import { useFonts } from "expo-font";
-import {
-  addFoodToFridge,
-  fetchFood,
-} from "../../store/redux/actions/fridge.actions";
+import { fetchFood } from "../../store/redux/actions/fridge.actions";
 
 import {
   addFromFridgeToShopping,
@@ -28,7 +25,7 @@ import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import FridgeCat from "./FridgeCat";
 
-function FoodToShopping({ props, navigation, route }) {
+function FoodToShopping({}) {
   //redux store
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userReducer);

@@ -10,21 +10,17 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import Checkbox from "expo-checkbox";
-
-import IcoButton from "../UI/IcoButton";
 import Colors from "../../constants/Colors";
 import PrimaryButton from "../UI/PrimaryButton";
 import { Ionicons } from "@expo/vector-icons";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   deleteFoodFromShopping,
   editShoppingBioQuality,
   editShoppingQuantity,
   getUser,
 } from "../../store/redux/actions/user.actions";
-import { fetchFood } from "../../store/redux/actions/fridge.actions";
 import { useSelector, useDispatch } from "react-redux";
-import LoadingOverlay from "../UI/LoadingOverlay";
 
 function EditModalShopping(props) {
   const [isChecked, setChecked] = useState(false);
@@ -32,7 +28,6 @@ function EditModalShopping(props) {
   const dispatch = useDispatch();
 
   const [enteredQuantityText, setEnteredQuantityText] = useState("");
-  const [enteredBioText, setEnteredBioText] = useState(false);
   const userData = useSelector((state) => state.userReducer);
 
   function quantityInputHandler(enteredQuantity) {
