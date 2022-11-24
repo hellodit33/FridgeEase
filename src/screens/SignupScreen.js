@@ -4,8 +4,7 @@ import AuthContent from "../components/Auth/AuthContent";
 import { useNavigation } from "@react-navigation/native";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import { useDispatch } from "react-redux";
-import * as authAction from "../../store/redux/actions/auth.actions";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { AuthContext } from "../components/AppContext";
 
 function SignupScreen(props) {
