@@ -35,6 +35,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import IcoButton from "../UI/IcoButton";
 import RecipesCat from "../components/RecipesCat";
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 function Recipes({ navigation }) {
   //redux
   const dispatch = useDispatch();
@@ -60,6 +62,12 @@ function Recipes({ navigation }) {
 
   //function to remove an ingredient from recipes filter
   function removeFoodRecipeFilter(filter) {
+    showMessage({
+      duration: 4000,
+      message: "Denna vara har tagits bort från dina valda ingredienser.",
+      backgroundColor: Colors.green,
+      color: "white",
+    });
     dispatch(deleteRecipeFoodFilter(userData._id, filter));
     dispatch(getUser(userData._id));
     dispatch(getFoodToRecipe());
@@ -151,7 +159,7 @@ function Recipes({ navigation }) {
   }
   selectRecipeFunction();
 
-  function showRecipe() {
+  function showMatchingRecipes() {
     //show recipes that are true (=matching ingredients)
     const selectedRecipes = recipesData.filter(
       (recipe) => recipe.selectRecipe === true
@@ -487,39 +495,6 @@ function Recipes({ navigation }) {
                         }
                       ></Text>
                     </View>
-
-                    {/* <Text>Svårighetsgrad</Text> 
-                  <View style={styles.difficultyView}>
-                    {item.difficulty === "Simple" ? (
-                      <>
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant-outline" />
-                        <Ionicons size={20} name="restaurant-outline" />
-                      </>
-                    ) : null}
-                    {item.difficulty === "Normal" ? (
-                      <>
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant-outline" />
-                      </>
-                    ) : null}
-                    {item.difficulty === "Difficult" ? (
-                      <>
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant" />
-                      </>
-                    ) : null}
-                  </View>*/}
-                    {/*   <Text
-                    style={{
-                      color: item.difficulty === "Enkelt" ? "blue" : "black",
-                    }}
-                  >
-                    {item.difficulty}
-                  </Text>*/}
-
                     <View>
                       <Text style={[styles.levelText, styles.recipesText]}>
                         Pris
@@ -595,6 +570,7 @@ function Recipes({ navigation }) {
           )}
         />
       );
+      //show all recipes for selected category
     } else if (userIngredients.length === 0 && selectedRecipeFilter) {
       return (
         <FlatList
@@ -681,39 +657,6 @@ function Recipes({ navigation }) {
                             }
                           ></Text>
                         </View>
-
-                        {/* <Text>Svårighetsgrad</Text> 
-                  <View style={styles.difficultyView}>
-                    {item.difficulty === "Simple" ? (
-                      <>
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant-outline" />
-                        <Ionicons size={20} name="restaurant-outline" />
-                      </>
-                    ) : null}
-                    {item.difficulty === "Normal" ? (
-                      <>
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant-outline" />
-                      </>
-                    ) : null}
-                    {item.difficulty === "Difficult" ? (
-                      <>
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant" />
-                      </>
-                    ) : null}
-                  </View>*/}
-                        {/*   <Text
-                    style={{
-                      color: item.difficulty === "Enkelt" ? "blue" : "black",
-                    }}
-                  >
-                    {item.difficulty}
-                  </Text>*/}
-
                         <View>
                           <Text style={[styles.levelText, styles.recipesText]}>
                             Pris
@@ -796,6 +739,7 @@ function Recipes({ navigation }) {
     }
   }
 
+  //loading fonts
   const [loaded] = useFonts({
     Intermedium: require("../../assets/fonts/Inter-Medium.ttf"),
     Interbold: require("../../assets/fonts/Inter-Bold.ttf"),
@@ -804,6 +748,7 @@ function Recipes({ navigation }) {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  //use effect to reload ingredients and update recipes matching user
   useEffect(() => {
     setIsLoading(true);
     dispatch(getUser());
@@ -831,66 +776,9 @@ function Recipes({ navigation }) {
           <View style={styles.foodToRecipe}>{renderFoodToRecipe()}</View>
         </View>
       )}
-      {/*<View>{renderIngredientsObject()}</View>*/}
 
       <View style={{ flex: 1 }}>
-        {/* <FlatList
-          legacyImplementation={true}
-          contentContainerStyle={styles.foodList}
-          data={userData.foodToRecipe}
-          extraData={userData.foodToRecipe}
-          keyExtractor={(item) => Math.random(item._id)}
-          renderItem={({ item }) => (
-            <View>
-              <Text>{item}</Text>
-            </View>
-          )}
-        />*/}
-        <View>{showRecipe()}</View>
-        {/* <FlatList
-          legacyImplementation={true}
-          contentContainerStyle={styles.foodList}
-          data={userIngredients}
-          extraData={userIngredients}
-          keyExtractor={() => Math.random()}
-          renderItem={({ item }) => (
-            <View>
-              <Text>{item}</Text>
-            </View>
-          )}
-        />*/}
-        {/*<FlatList
-          legacyImplementation={true}
-          contentContainerStyle={styles.foodList}
-          data={commonElements}
-          extraData={commonElements}
-          keyExtractor={() => Math.random()}
-          renderItem={({ item }) => (
-            <View>
-              <Text>{item}</Text>
-            </View>
-          )}
-        />*/}
-        {/* <FlatList
-          legacyImplementation={true}
-          contentContainerStyle={styles.foodList}
-          data={ingredients}
-          extraData={ingredients}
-          keyExtractor={() => Math.random()}
-          renderItem={({ item }) => (
-            <View>
-              <FlatList
-                data={item}
-                keyExtractor={() => Math.random()}
-                renderItem={({ item }) => (
-                  <View>
-                    <Text>{item}</Text>
-                  </View>
-                )}
-              />
-            </View>
-          )}
-        />*/}
+        <View>{showMatchingRecipes()}</View>
       </View>
     </View>
   );
@@ -1055,14 +943,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 5,
     borderBottomColor: Colors.middlepink,
   },
-
   foodToRecipeView: {
     borderRadius: 30,
     borderColor: Colors.green,
     backgroundColor: "white",
     borderWidth: 2,
     marginHorizontal: 5,
-
     height: 40,
     alignItems: "center",
     justifyContent: "space-evenly",
