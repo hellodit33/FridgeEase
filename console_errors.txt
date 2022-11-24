@@ -1,0 +1,3 @@
+Console Warning:
+"ImmutableStateInvariantMiddleware took 80ms which is more than the warning threshold..."
+- Felt säger att den här middleware är "disabled" in production builds" så jag behöver "inte oroa mig över detta".

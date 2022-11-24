@@ -29,7 +29,6 @@ import Colors from "./constants/Colors";
 import Shopping from "./src/screens/Shopping";
 import Recipes from "./src/screens/Recipes";
 import RecipeInDetail from "./src/screens/RecipeInDetail";
-import Fridge from "./src/screens/Fridge";
 import IcoButton from "./src/UI/IcoButton";
 
 import User from "./src/screens/User";

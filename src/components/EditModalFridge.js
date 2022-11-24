@@ -137,29 +137,7 @@ function EditModalFridge(props) {
       );
     }
   }
-  /*  function editFoodInFridge() {
-    if (enteredQuantityText.length > 0) {
-      dispatch(
-        editFoodFromFridge(
-          userData._id,
-          props.passedData.id,
-          enteredExpirationFull,
-          enteredQuantityText
-        )
-      );
-      dispatch(getUser(userData._id));
-      setEnteredExpirationText("");
-      setEnteredQuantityText("");
-      console.log("edited");
-      props.closeModal();
-    } else {
-      Alert.alert(
-        "Oops!",
-        "Kvantité eller bäst-före-datum saknas. Fyll gärna i någon av dem för att kunna gå vidare",
-        [{ text: "Okej", style: "default" }]
-      );
-    }
-  }*/
+
   return (
     <Modal
       style={styles.modal}

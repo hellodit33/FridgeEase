@@ -40,8 +40,6 @@ export default function userReducer(state = initialState, action) {
                 return {
                   ...usersfood,
                   foodName: action.payload.foodName,
-                  /*  foodExpirationDate: action.payload.foodExpirationDate,
-                  foodQuantity: action.payload.foodQuantity,*/
                 };
               } else {
                 return usersfood;
@@ -61,8 +59,6 @@ export default function userReducer(state = initialState, action) {
                 return {
                   ...usersfood,
                   foodName: action.payload.foodName,
-                  /*  foodExpirationDate: action.payload.foodExpirationDate,
-                  foodQuantity: action.payload.foodQuantity,*/
                 };
               } else {
                 return usersfood;
@@ -83,8 +79,6 @@ export default function userReducer(state = initialState, action) {
                 return {
                   ...shoppingList,
                   foodName: action.payload.foodName,
-                  /* foodBioQuality: action.payload.foodBioQuality,
-                  foodQuantity: action.payload.foodQuantity,*/
                 };
               } else {
                 return usersfood;
@@ -105,8 +99,6 @@ export default function userReducer(state = initialState, action) {
                 return {
                   ...shoppingList,
                   foodName: action.payload.foodName,
-                  /* foodBioQuality: action.payload.foodBioQuality,
-                  foodQuantity: action.payload.foodQuantity,*/
                 };
               } else {
                 return usersfood;
@@ -153,8 +145,7 @@ export default function userReducer(state = initialState, action) {
 
         return user;
       });
-    /*case DELETE_ALL_SHOPPING_ITEMS:
-      return action.payload;*/
+
     default:
       return state;
   }

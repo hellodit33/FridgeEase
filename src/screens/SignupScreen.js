@@ -16,34 +16,6 @@ function SignupScreen(props) {
 
   const signupHandler = async ({ email, password }) => {
     register({ email, password });
-
-    /*
-    setIsAuthenticating(true);
-
-    dispatch(authAction.registerUser({ email, password }))
-      .then(async (result) => {
-        console.log(result);
-        if (result.success) {
-          try {
-            await AsyncStorage.setItem("token", result.token);
-            console.log(result.success);
-          } catch (err) {
-            console.log(err);
-          }
-        } else {
-          Alert.alert(
-            "Sign up failed.",
-            "Could not create user, please check your input or try again later"
-          );
-          setIsAuthenticating(false);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-
-  if (isAuthenticating) {
-    return <LoadingOverlay message="Vi skapar ditt konto..." />;
-  }*/
   };
   return <AuthContent onAuthenticate={signupHandler} />;
 }

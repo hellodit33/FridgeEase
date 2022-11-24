@@ -4,6 +4,8 @@ import Colors from "../../constants/Colors";
 
 function UserFridgeCat(props) {
   function renderUserFridgeCategories() {
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
     const categoryData = [
       {
         id: 1,

@@ -41,20 +41,6 @@ function FavoriteRecipes({ route, navigation }) {
       });
     }
 
-    /* const handlePressToShopping = (food) => {
-      if (selectToShopping.includes(food._id)) {
-        const newListItem = selectToShopping.filter(
-          (foodId) => foodId !== food._id
-        );
-
-        return setSelectToShopping(newListItem);
-      }
-
-      setSelectToShopping([...selectToShopping, food._id]);
-      /* dispatch(addFoodToRecipe(userData._id, food.foodName));
-    dispatch(getUser(userData._id));
-      console.log(selectToShopping);
-    };*/
     const renderDuration = (duration) => {
       function toHoursAndMinutes(totalMinutes) {
         const hours = Math.floor(totalMinutes / 60);
@@ -190,38 +176,6 @@ function FavoriteRecipes({ route, navigation }) {
                         ></Text>
                       </View>
 
-                      {/* <Text>Svårighetsgrad</Text> 
-                  <View style={styles.difficultyView}>
-                    {item.difficulty === "Simple" ? (
-                      <>
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant-outline" />
-                        <Ionicons size={20} name="restaurant-outline" />
-                      </>
-                    ) : null}
-                    {item.difficulty === "Normal" ? (
-                      <>
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant-outline" />
-                      </>
-                    ) : null}
-                    {item.difficulty === "Difficult" ? (
-                      <>
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant" />
-                        <Ionicons size={20} name="restaurant" />
-                      </>
-                    ) : null}
-                  </View>*/}
-                      {/*   <Text
-                    style={{
-                      color: item.difficulty === "Enkelt" ? "blue" : "black",
-                    }}
-                  >
-                    {item.difficulty}
-                  </Text>*/}
-
                       <View>
                         <Text style={[styles.levelText, styles.recipesText]}>
                           Pris
@@ -281,17 +235,6 @@ function FavoriteRecipes({ route, navigation }) {
                       Du behöver bland annat:
                     </Text>
                     <View>{renderIngredients()}</View>
-                    {/*<FlatList
-                            data={item.ingredients}
-                            numColumns={3}
-                            contentContainerStyle={styles.centerItems}
-                            keyExtractor={() => Math.random()}
-                            renderItem={({ item }) => (
-                              <View style={styles.ingredientsItemText}>
-                                <Text style={styles.recipesText}>{item}</Text>
-                              </View>
-                            )}
-                          />*/}
                   </View>
                 </View>
               </TouchableOpacity>

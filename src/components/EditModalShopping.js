@@ -152,11 +152,7 @@ function EditModalShopping(props) {
                 <Text>Ekologisk</Text>
               )}
             </View>
-            {/*<TextInput
-              onChangeText={bioInputHandler}
-              value={enteredBioText}
-              placeholder="Ekologisk eller icke-ekologisk"
-            ></TextInput>*/}
+
             <Ionicons name="create" color={Colors.green} size={20}></Ionicons>
           </View>
 

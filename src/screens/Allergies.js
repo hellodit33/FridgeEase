@@ -1,21 +1,13 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Pressable,
-  Button,
-} from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import Colors from "../../constants/Colors";
 import MultiSelect from "react-native-multiple-select";
-import { Component, useState } from "react";
+import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import { getUser, updateAllergy } from "../../store/redux/actions/user.actions";
 import { useDispatch, useSelector } from "react-redux";
-import Checkbox from "expo-checkbox";
-import { showMessage, hideMessage } from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 import UpdateButton from "../UI/UpdateButton";
 
 function Allergies(props) {
@@ -35,7 +27,6 @@ function Allergies(props) {
   const [selectedAllergies, setSelectedAllergies] = useState([]);
 
   const onSelectedItemsChange = (selectedAllergies) => {
-    // Set Selected Items
     setSelectedAllergies([...selectedAllergies], selectedAllergies);
     console.log(selectedAllergies);
   };
@@ -59,7 +50,7 @@ function Allergies(props) {
   });
 
   if (!loaded) {
-    return <LoadingOverlay message="Ge oss en kort stund" />;
+    return <LoadingOverlay message="Ge oss en kort stund..." />;
   }
   return (
     <>
@@ -79,14 +70,7 @@ function Allergies(props) {
         <UpdateButton onPress={() => updateAllergies()}>
           Uppdatera dina allergier
         </UpdateButton>
-        {/*<View style={styles.updateView}>
-          <Pressable
-            style={styles.updateButton}
-            onPress={() => updateAllergies()}
-          >
-            <Text style={styles.updateText}>Uppdatera dina allergier</Text>
-          </Pressable>
-        </View>*/}
+
         <View style={styles.selectAllergy}>
           <MultiSelect
             hideTags

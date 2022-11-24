@@ -1,20 +1,13 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Pressable,
-  Button,
-} from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import Colors from "../../constants/Colors";
 import MultiSelect from "react-native-multiple-select";
-import { Component, useState } from "react";
+import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import { getUser, updateDiet } from "../../store/redux/actions/user.actions";
 import { useDispatch, useSelector } from "react-redux";
-import { showMessage, hideMessage } from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 import UpdateButton from "../UI/UpdateButton";
 
 function Diets(props) {
@@ -45,7 +38,6 @@ function Diets(props) {
   const [selectedDiets, setSelectedDiets] = useState([]);
 
   const onSelectedItemsChange = (selectedDiets) => {
-    // Set Selected Items
     setSelectedDiets([...selectedDiets], selectedDiets);
     console.log(selectedDiets);
   };
@@ -69,7 +61,7 @@ function Diets(props) {
   });
 
   if (!loaded) {
-    return <LoadingOverlay message="Ge oss en kort stund" />;
+    return <LoadingOverlay message="Ge oss en kort stund..." />;
   }
   return (
     <>

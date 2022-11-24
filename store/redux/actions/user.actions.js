@@ -25,6 +25,7 @@ export const UPDATE_DIET = "UPDATE_DIET";
 export const UPDATE_ALLERGY = "UPDATE_ALLERGY";
 
 export const DELETE_ALL_SHOPPING_ITEMS = "DELETE_ALL_SHOPPING_ITEMS";
+
 const BASE_URL = "https://fridgeease-app.herokuapp.com";
 
 export const getUser = (uid) => {
@@ -276,26 +277,6 @@ export const updateAllergy = (userId, allergy) => {
       .catch((err) => console.log(err));
   };
 };
-
-/*export const getFoodToRecipe = (userId, foodName) => {
-  return (dispatch) => {
-    return axios({
-      method: "get",
-      url:
-        `https://07c7-213-163-151-83.eu.ngrok.io/api/user/gettorecipe/` +
-        userId,
-    })
-      .then((res) => {
-        dispatch({
-          type: GET_FOOD_TO_RECIPE,
-          payload: {
-            foodName,
-          },
-        });
-      })
-      .catch((err) => console.log(err));
-  };
-};*/
 
 export const getFoodToRecipe = (userId) => {
   return (dispatch) => {
