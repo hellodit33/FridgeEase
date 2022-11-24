@@ -115,14 +115,13 @@ function RecipeInDetail({ route, navigation }) {
   }, [recipeToShow, navigation, addToFavoriteRecipes]);
 
   const [loaded] = useFonts({
-    alk: require("../../assets/fonts/Alkalami-Regular.ttf"),
     Intermedium: require("../../assets/fonts/Inter-Medium.ttf"),
     Interbold: require("../../assets/fonts/Inter-Bold.ttf"),
     Interlight: require("../../assets/fonts/Inter-Light.ttf"),
   });
 
   if (!loaded) {
-    return <LoadingOverlay message="Ge oss en kort stund" />;
+    return <LoadingOverlay message="Ge oss en kort stund..." />;
   }
 
   const renderDuration = (duration) => {

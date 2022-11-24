@@ -393,7 +393,7 @@ function Recipes({ navigation }) {
       );
 
       //if there are no ingredients, show all recipes
-    } else if (userIngredients.length === 0) {
+    } else if (userIngredients.length === 0 && !selectedRecipeFilter) {
       return (
         <FlatList
           legacyImplementation={true}

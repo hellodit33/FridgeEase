@@ -1,17 +1,7 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
-import { useContext, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useContext } from "react";
 import Colors from "../../constants/Colors";
 import IcoButton from "../UI/IcoButton";
-import cookie from "js-cookie";
-import LoadingOverlay from "../UI/LoadingOverlay";
 import { AuthContext } from "../components/AppContext";
 function User(props) {
   const { logout } = useContext(AuthContext);
@@ -25,11 +15,6 @@ function User(props) {
     props.navigation.navigate("Allergies");
   }
 
-  //const [isLoggingOut, setIsLoggingOut] = useState(false);
-
-  /* if (isLoggingOut) {
-    return <LoadingOverlay message="Vi loggar ut dig..." />;
-  }*/
   return (
     <>
       <View style={styles.main}>
