@@ -4,7 +4,7 @@ export const LOGIN_USER_SUCCESS = "LOGIN_USER_SUCCESS";
 export const LOGIN_USER_FAIL = "LOGIN_USER_FAIL";
 export const LOG_OUT = LOG_OUT;
 
-const BASE_URL = "https://fridgeease-app.herokuapp.com";
+const BASE_URL = "https://dced-213-163-151-83.eu.ngrok.io";
 export const registerUser = (authData) => {
   const { email, password } = authData;
   return async (dispatch) => {

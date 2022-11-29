@@ -527,7 +527,7 @@ function Shopping({ navigation }) {
               <>
                 <View>
                   <View>
-                    {userData.shoppingList.length > 0 && (
+                    {userData.shoppingList?.length > 0 && (
                       <>
                         <Pressable
                           onPress={openDoneModal}
@@ -543,7 +543,7 @@ function Shopping({ navigation }) {
                         />
                       </>
                     )}
-                    {userData.shoppingList.length === 0 &&
+                    {userData.shoppingList?.length === 0 &&
                       (!selectedShoppingFilter || selectedShoppingFilter) && (
                         <View style={styles.noFavs}>
                           <View style={styles.deleteTitle}>
@@ -568,7 +568,7 @@ function Shopping({ navigation }) {
               </>
             )}
 
-          {!foodComponents && userData.shoppingList.length > 0 && (
+          {!foodComponents && userData.shoppingList?.length > 0 && (
             <ScrollView
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

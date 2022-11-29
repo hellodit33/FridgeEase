@@ -26,7 +26,7 @@ export const UPDATE_ALLERGY = "UPDATE_ALLERGY";
 
 export const DELETE_ALL_SHOPPING_ITEMS = "DELETE_ALL_SHOPPING_ITEMS";
 
-const BASE_URL = "https://fridgeease-app.herokuapp.com";
+const BASE_URL = "https://dced-213-163-151-83.eu.ngrok.io";
 
 export const getUser = (uid) => {
   return (dispatch) => {

@@ -26,15 +26,14 @@ export const AuthProvider = ({ children }) => {
           try {
             setUserToken(resultData.token);
             setUid(resultData.id);
-
             console.log(resultData.id);
             AsyncStorage.setItem("userToken", resultData.token);
             AsyncStorage.setItem("uid", resultData.id);
 
-            console.log(resultData.usersfood);
+            /*    console.log(resultData.usersfood);
             if (resultData.usersfood > 0) {
               setUserFoodTrue(true);
-            }
+            }*/
             setIsLoading(false);
           } catch (err) {
             console.log(err);
@@ -54,7 +53,9 @@ export const AuthProvider = ({ children }) => {
     /* dispatch(authAction.logoutUser());*/
     setIsLoading(true);
     setUserToken(null);
+    setUid(null);
     AsyncStorage.removeItem("userToken");
+    AsyncStorage.removeItem("uid");
     setIsLoading(false);
     console.log("logged out");
   };
@@ -79,11 +80,10 @@ export const AuthProvider = ({ children }) => {
       .then((resultData) => {
         if (resultData.success) {
           try {
+            AsyncStorage.setItem("uid", resultData.id);
+            AsyncStorage.setItem("userToken", resultData.token);
             setUserToken(resultData.token);
             setUid(resultData.id);
-
-            AsyncStorage.setItem("userToken", resultData.token);
-            console.log(resultData.usersfood);
             setIsLoading(false);
           } catch (err) {
             console.log(err);

@@ -116,7 +116,8 @@ function Recipes({ navigation }) {
     var common = []; // Array to contain common elements
     let arr1Length = arr1.length;
 
-    let arr2Length = arr2.length;
+    let arr2Length = arr2?.length;
+
     for (var i = 0; i < arr2Length; ++i) {
       for (var j = 0; j < arr1Length; ++j) {
         if (arr2[i] == arr1[j]) {
@@ -189,7 +190,7 @@ function Recipes({ navigation }) {
     };
 
     //if there picked ingredients, show the recipes that match them, if not show info box
-    if (userIngredients.length > 0) {
+    if (userIngredients?.length > 0) {
       return (
         <>
           {selectedRecipes.length === 0 && (
@@ -393,7 +394,10 @@ function Recipes({ navigation }) {
       );
 
       //if there are no ingredients, show all recipes
-    } else if (userIngredients.length === 0 && !selectedRecipeFilter) {
+    } else if (
+      (userIngredients?.length === 0 && !selectedRecipeFilter) ||
+      !userIngredients
+    ) {
       return (
         <FlatList
           legacyImplementation={true}
@@ -571,7 +575,7 @@ function Recipes({ navigation }) {
         />
       );
       //show all recipes for selected category
-    } else if (userIngredients.length === 0 && selectedRecipeFilter) {
+    } else if (userIngredients?.length === 0 && selectedRecipeFilter) {
       return (
         <FlatList
           legacyImplementation={true}
@@ -763,7 +767,7 @@ function Recipes({ navigation }) {
 
   return (
     <View style={styles.firstScreen}>
-      {userData.foodToRecipe.length === 0 && (
+      {(userData.foodToRecipe?.length === 0 || !userIngredients) && (
         <View>
           <RecipesCat
             onRecipeCategory={onRecipeCategory}
@@ -771,7 +775,7 @@ function Recipes({ navigation }) {
           />
         </View>
       )}
-      {userData.foodToRecipe.length > 0 && (
+      {userData.foodToRecipe?.length > 0 && (
         <View>
           <View style={styles.foodToRecipe}>{renderFoodToRecipe()}</View>
         </View>

@@ -463,7 +463,7 @@ function MyFridge({ navigation }) {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
           >
-            {userFood.map((item) => {
+            {userFood?.map((item) => {
               let userFoodLength = userFood.length;
               for (let i = 0; i < userFoodLength; i++) {
                 if (item.foodCategory === selectedCategory) {

@@ -1,10 +1,10 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+
 const foodRoutes = require("./routes/food.routes");
 const userRoutes = require("./routes/user.routes");
 const recipeRoutes = require("./routes/recipe.routes");
-const requireAuth = require("./middleware/requireAuth");
 
 require("dotenv").config();
 require("./config/database");

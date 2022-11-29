@@ -34,7 +34,7 @@ module.exports.signIn = async (req, res) => {
   try {
     const user = await UserModel.login(email, password);
     const token = await generateToken(user);
-    res.header("auth-token", token).send({
+    res.status(201).send({
       email: user.email,
       id: user._id,
       success: true,

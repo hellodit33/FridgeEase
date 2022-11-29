@@ -246,7 +246,7 @@ function FavoriteRecipes({ route, navigation }) {
   }
   return (
     <>
-      {userData.favoriteRecipe.length > 0 && (
+      {userData.favoriteRecipe?.length > 0 && (
         <>
           <ScrollView
             contentContainerStyle={{
@@ -261,27 +261,28 @@ function FavoriteRecipes({ route, navigation }) {
         </>
       )}
 
-      {userData.favoriteRecipe.length === 0 && (
-        <>
-          <View style={styles.noFavs}>
-            <View style={styles.deleteTitle}>
-              <Ionicons name="alert-circle-outline" size={30}></Ionicons>
-              <Text style={styles.infoTitle}>
-                Du har inga favoritrecept ännu.
-              </Text>
+      {userData.favoriteRecipe?.length === 0 ||
+        (!userData.favoriteRecipe && (
+          <>
+            <View style={styles.noFavs}>
+              <View style={styles.deleteTitle}>
+                <Ionicons name="alert-circle-outline" size={30}></Ionicons>
+                <Text style={styles.infoTitle}>
+                  Du har inga favoritrecept ännu.
+                </Text>
+              </View>
+              <View style={styles.infoView}>
+                <Text styles={styles.infoText}>
+                  Gå till alla recept och markera dem du vill ha som favoriter
+                  med ett hjärta.
+                </Text>
+              </View>
+              <PrimaryButton onPress={() => navigation.navigate("Recipes")}>
+                Alla recept
+              </PrimaryButton>
             </View>
-            <View style={styles.infoView}>
-              <Text styles={styles.infoText}>
-                Gå till alla recept och markera dem du vill ha som favoriter med
-                ett hjärta.
-              </Text>
-            </View>
-            <PrimaryButton onPress={() => navigation.navigate("Recipes")}>
-              Alla recept
-            </PrimaryButton>
-          </View>
-        </>
-      )}
+          </>
+        ))}
     </>
   );
 }

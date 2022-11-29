@@ -3,13 +3,14 @@ const router = require("express").Router();
 const authController = require("../controllers/auth.controller");
 
 const userController = require("../controllers/user.controller");
+const requireAuth = require("../middleware/requireAuth");
 
 router.post("/register", authController.signUp);
 
 router.post("/login", authController.signIn);
 router.get("/logout", authController.logout);
 router.get("/:id", userController.userInfo);
-router.get("/:id/userfood", userController.userFood);
+router.get("/:id/userfood", requireAuth, userController.userFood);
 router.get("/gettorecipe/:id", userController.getFoodToRecipe);
 
 router.put("/:id/updateallergy", userController.updateUserAllergy);
