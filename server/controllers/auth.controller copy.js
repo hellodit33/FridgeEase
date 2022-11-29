@@ -19,6 +19,9 @@ module.exports.signUp = async (req, res) => {
 
     res.status(201).send({
       success: true,
+      id: user._id,
+      email: user.email,
+
       data: { id: user._id, email: user.email },
       token,
     });
