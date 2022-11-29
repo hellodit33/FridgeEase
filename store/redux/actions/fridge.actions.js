@@ -5,7 +5,7 @@ export const ADD_FOOD_TO_FRIDGE = "ADD_FOOD_TO_FRIDGE";
 export const ADD_SHOPPING_TO_FRIDGE = "ADD_SHOPPING_TO_FRIDGE";
 export const REMOVE_FOOD_FROM_FRIDGE = "REMOVE_FOOD_FROM_FRIDGE";
 
-const BASE_URL = "https://dced-213-163-151-83.eu.ngrok.io";
+const BASE_URL = "https://fridgeease-app.herokuapp.com";
 export const fetchFood = () => {
   return (dispatch) => {
     return axios
